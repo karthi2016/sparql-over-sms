@@ -23,7 +23,7 @@ class AsteriskConnector:
 
     def send_sms(self, contactid, content):
         contactnr = self.contacts[contactid]['phonenumber']
-        command = 'dongle sms dongle0 {0} {1}'.format(self.dongleid, contactnr, content)
+        command = 'dongle sms dongle0 {0} {1}'.format(contactnr, content)
         return self.send_command(command)
 
     def send_command(self, command):
@@ -32,6 +32,7 @@ class AsteriskConnector:
 
     def send_request(self, parameters):
         url = 'http://{0}:{1}/rawman'.format(self.host, self.port)
+        print(parameters)
         return self.session.get(url, params=parameters)
 
 
