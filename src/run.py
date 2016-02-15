@@ -20,7 +20,7 @@ def sms():
 
     try:
         asterisk = AsteriskConnector(config, contacts)
-        response = asterisk.send_sms('ovalkering', 'hello world')
+        response = asterisk.send_sms('lyca01', 'hello world')
         return response.content
     except Exception as e:
         return e
