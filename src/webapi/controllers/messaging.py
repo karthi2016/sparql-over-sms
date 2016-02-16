@@ -5,7 +5,7 @@ from connectors import AsteriskConnector, SPARQLConnector
 
 
 @app.route('/outgoing-message', methods=['POST'])
-def send_message():
+def outgoing_message():
     receiver = request.form.get('receiver')
     message = request.form.get('message')
 
@@ -15,9 +15,9 @@ def send_message():
 
 
 @app.route('/incoming-message', methods=['POST'])
-def receive_message():
+def incoming_message():
     sender = request.form.get('sender')
-    message = b64decode(request.form.get('message'))
+    message = b64decode(request.form.get('message').replace(' ', '+')).decode("utf-8")
 
     sub, pred, obj = message.split(' ', 2)
     print('{0}: {1}'.format(sender, '{0} {1} {2}'.format(sub, pred, obj)))
