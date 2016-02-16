@@ -1,8 +1,8 @@
 from SPARQLWrapper import SPARQLWrapper
 
 
-class SPARQLConnector:
-    """Connector used for performing SPARQL queries"""
+class TripleStoreConnector:
+    """Connector used for interfacing with triple stores"""
 
     def __init__(self, config):
         self.config = config

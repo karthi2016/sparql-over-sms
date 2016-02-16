@@ -1,2 +1,2 @@
 from connectors.asterisk import AsteriskConnector
-from connectors.sparql import SPARQLConnector
+from connectors.triplestore import TripleStoreConnector
