@@ -1,6 +1,6 @@
 from flask import request
 from webapi import app
-from connectors import AsteriskConnector
+from connectors import AsteriskConnector, SPARQLConnector
 
 
 @app.route('/outgoing-message', methods=['POST'])
@@ -15,11 +15,14 @@ def send_message():
 
 @app.route('/incoming-message', methods=['POST'])
 def receive_message():
-    unqueid = request.form.get('uniqueid')
     sender = request.form.get('sender')
     message = request.form.get('message')
 
-    print('{0}: {1}'.format(sender, message))
+    sub, pred, obj = message.split('|')
+    print('{0}: {1}'.format(sender, '{0} {1} {2}'.format(sub, pred, obj)))
+
+    sparql = SPARQLConnector(app.config['c_triplestore'])
+    sparql.insert(sub, pred, obj)
 
     # TODO: proper response object with status code, etc.
     return 'accepted'
