@@ -1,3 +1,4 @@
+from base64 import b64decode
 from flask import request
 from webapi import app
 from connectors import AsteriskConnector, SPARQLConnector
@@ -16,9 +17,9 @@ def send_message():
 @app.route('/incoming-message', methods=['POST'])
 def receive_message():
     sender = request.form.get('sender')
-    message = request.form.get('message')
+    message = b64decode(request.form.get('message'))
 
-    sub, pred, obj = message.split('|')
+    sub, pred, obj = message.split(' ', 2)
     print('{0}: {1}'.format(sender, '{0} {1} {2}'.format(sub, pred, obj)))
 
     sparql = SPARQLConnector(app.config['c_triplestore'])
