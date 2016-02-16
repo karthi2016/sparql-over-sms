@@ -11,8 +11,9 @@ for file in configuration:
     config.read(file)
 
     # use filename as key
-    key = 'c_{0}'.format(os.path.splitext(os.path.basename(file))[0])
-    app.config[key] = config
+    filename = os.path.splitext(os.path.basename(file))[0]
+    app.config['c_{0}'.format(filename)] = config
+    app.config['f_{0}'.format(filename)] = file
 
 # start application
-app.run()
+app.run(debug=True)
