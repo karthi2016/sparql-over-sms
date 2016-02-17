@@ -1,7 +1,9 @@
 import configparser
 import glob
 import os
+import services
 
+from flask.ext.injector import FlaskInjector, singleton
 from webapi import app
 
 # load configuration
@@ -15,5 +17,13 @@ for file in configuration:
     app.config['c_{0}'.format(filename)] = config
     app.config['f_{0}'.format(filename)] = file
 
-# start application
+
+# register dependencies
+def configure(binder):
+    addressbook = services.AddressBook(app.config['c_contacts'], app.config['f_contacts'])
+    binder.bind(services.AddressBook, to=addressbook, scope=singleton)
+
+
+# bootstrap application
+FlaskInjector(app=app, modules=[configure])
 app.run(debug=True)
