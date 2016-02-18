@@ -1,9 +1,9 @@
-import json
 import services
 
 from injector import inject
 from webapi import app
-from flask import Response, request
+from flask import request
+from webapi.helpers.responses import *
 
 
 @inject(addressbook=services.AddressBook)
@@ -11,7 +11,7 @@ from flask import Response, request
 def retreive_contacts(addressbook):
     contacts = addressbook.get_contacts()
 
-    return Response(json.dumps(contacts), mimetype='application/json')
+    return ok(contacts)
 
 
 @inject(addressbook=services.AddressBook)
@@ -19,7 +19,7 @@ def retreive_contacts(addressbook):
 def retreive_contact(contactid, addressbook):
     contact = addressbook.get_contact(contactid)
 
-    return Response(json.dumps(contact), mimetype='application/json')
+    return ok(contact)
 
 
 @inject(addressbook=services.AddressBook)
@@ -28,7 +28,7 @@ def create_contact(addressbook):
     contactinfo = request.get_json()
     addressbook.add_contact(contactinfo)
 
-    return Response(status=201)
+    return created()
 
 
 @inject(addressbook=services.AddressBook)
@@ -37,7 +37,7 @@ def update_contact(contactid, addressbook):
     contactinfo = request.get_json()
     addressbook.update_contact(contactid, contactinfo)
 
-    return Response(status=204)
+    return nocontent()
 
 
 @inject(addressbook=services.AddressBook)
@@ -45,5 +45,5 @@ def update_contact(contactid, addressbook):
 def delete_contact(contactid, addressbook):
     addressbook.remove_contact(contactid)
 
-    return Response(status=204)
+    return nocontent()
 
