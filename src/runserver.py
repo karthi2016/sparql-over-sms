@@ -29,4 +29,4 @@ def configure(binder):
 
 # bootstrap application
 FlaskInjector(app=app, modules=[configure])
-app.run(debug=True)
+app.run(host='0.0.0.0', debug=True)
