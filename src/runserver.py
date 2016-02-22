@@ -23,6 +23,9 @@ def configure(binder):
     addressbook = services.AddressBook(app.config['c_contacts'], app.config['f_contacts'])
     binder.bind(services.AddressBook, to=addressbook, scope=singleton)
 
+    configmanager = services.ConfigManager(app.config)
+    binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
+
 
 # bootstrap application
 FlaskInjector(app=app, modules=[configure])
