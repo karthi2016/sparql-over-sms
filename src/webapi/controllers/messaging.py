@@ -4,15 +4,21 @@ from base64 import b64decode
 from flask import Response, request
 from webapi import app
 from connectors import AsteriskConnector, TripleStoreConnector
+from webapi.helpers.crossdomain import crossdomain
 
 
-@app.route('/outgoing-message', methods=['POST'])
+@app.route('/outgoing-message', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*', headers='Content-Type')
 def outgoing_message():
-    receiver = request.form.get('receiver')
-    message = request.form.get('message')
+    message = request.get_json()
+
+    # compose sms
+    receiver = message['receiver']
+    triple = message['triple']
+    sms = '{0} {1} {2}'.format(triple['subject'], triple['predicate'], triple['object'])
 
     asterisk = AsteriskConnector(app.config['c_asterisk'], app.config['c_contacts'])
-    outcome = asterisk.send_sms(receiver, message).content.decode('utf-8')
+    outcome = asterisk.send_sms(receiver, sms).content.decode('utf-8')
 
     response = {'outcome': outcome}
     return Response(json.dumps(response), mimetype='application/json')
