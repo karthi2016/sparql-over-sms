@@ -18,3 +18,7 @@ def accepted():
 def nocontent():
     return Response(status=204)
 
+
+def notimplemented():
+    return Response(status=501)
+
