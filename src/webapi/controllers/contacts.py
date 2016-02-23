@@ -15,6 +15,15 @@ def retreive_contacts(addressbook):
 
 
 @inject(addressbook=services.AddressBook)
+@app.route('/contacts/find', methods=['GET'])
+def find_contacts(addressbook):
+    phonenumber = request.args.get('phonenumber')
+    contacts = addressbook.find_contact(phonenumber)
+
+    return ok(contacts) if len(contacts) is not 0 else notfound()
+
+
+@inject(addressbook=services.AddressBook)
 @app.route('/contact/<contactid>', methods=['GET'])
 def retreive_contact(contactid, addressbook):
     contact = addressbook.get_contact(contactid)

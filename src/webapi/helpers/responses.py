@@ -19,6 +19,10 @@ def nocontent():
     return Response(status=204)
 
 
+def notfound():
+    return Response(status=404)
+
+
 def notimplemented():
     return Response(status=501)
 
