@@ -4,6 +4,7 @@ from base64 import b64decode
 from flask import request
 from injector import inject
 from services.messenger import SPARQL_QUERY
+from SPARQLWrapper import SPARQLWrapper
 from webapi import app
 from webapi.helpers.responses import *
 
@@ -18,6 +19,11 @@ def incoming(messenger, sparqlprocessor):
     # process message
     message = messenger.receive(sender, body)
     if message['category'] == SPARQL_QUERY:
-        print(sparqlprocessor.unpack(message['body']))
+        sparql = SPARQLWrapper(app.config['c_triplestore']['endpoints']['query'])
+        query = sparqlprocessor.unpack(message['body'])
+
+        sparql.returnFormat = 'json'
+        sparql.setQuery(query)
+        print(sparql.query().convert())
 
     return accepted()
