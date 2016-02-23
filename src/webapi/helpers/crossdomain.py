@@ -7,6 +7,11 @@ from functools import update_wrapper
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
                 automatic_options=True):
+
+    # allow everything by default
+    origin = origin if origin is not None else '*'
+    headers = headers if headers is not None else 'Content-Type'
+
     if methods is not None:
         methods = ', '.join(sorted(x.upper() for x in methods))
     if headers is not None and not isinstance(headers, str):
