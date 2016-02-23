@@ -5,7 +5,6 @@ app = Flask(__name__)
 import webapi.controllers.configuration
 import webapi.controllers.contacts
 import webapi.controllers.incoming
-import webapi.controllers.messaging
 import webapi.controllers.system
 import webapi.controllers.query
 

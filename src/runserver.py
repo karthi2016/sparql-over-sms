@@ -2,6 +2,7 @@ import configparser
 import glob
 import os
 import services
+from connectors import AsteriskConnector
 
 from flask.ext.injector import FlaskInjector, singleton
 from webapi import app
@@ -26,14 +27,14 @@ def configure(binder):
     configmanager = services.ConfigManager(app.config)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
 
-    messenger = services.Messenger(app.config['c_messaging'])
+    messenger = services.Messenger(app.config['c_messaging'], addressbook, AsteriskConnector(app.config['c_asterisk']))
     binder.bind(services.Messenger, to=messenger, scope=singleton)
 
-    rdfcompressor = services.RdfCompressor(app.config['c_compression'])
-    binder.bind(services.RdfCompressor, to=rdfcompressor, scope=singleton)
+    rdfcompressor = services.RdfProcessor(app.config['c_compression'])
+    binder.bind(services.RdfProcessor, to=rdfcompressor, scope=singleton)
 
-    sparqlcompressor = services.SparqlCompressor(app.config['c_compression'])
-    binder.bind(services.SparqlCompressor, to=sparqlcompressor, scope=singleton)
+    sparqlcompressor = services.SparqlProcessor(app.config['c_compression'])
+    binder.bind(services.SparqlProcessor, to=sparqlcompressor, scope=singleton)
 
 
 # bootstrap application

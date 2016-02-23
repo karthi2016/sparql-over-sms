@@ -4,26 +4,23 @@ import requests
 class AsteriskConnector:
     """Connector used for communication with Asterisk"""
 
-    def __init__(self, config, contacts):
-        self.config = config
-        self.contacts = contacts
+    def __init__(self, asteriskconfig):
         self.session = requests.Session()
 
-        general = config['general']
+        general = asteriskconfig['general']
         self.host = general['host']
         self.port = general['port']
         self.dongleid = general['dongleid']
 
-        credentials = config['credentials']
+        credentials = asteriskconfig['credentials']
         self.authenticate(credentials['username'], credentials['secret'])
 
     def authenticate(self, username, secret):
         parameters = {'action': 'login', 'username': username, 'secret': secret}
         self.send_request(parameters)
 
-    def send_sms(self, contactid, content):
-        contactnr = self.contacts[contactid]['phonenumber']
-        command = 'dongle sms dongle0 {0} {1}'.format(contactnr, content)
+    def send_sms(self, phonenumber, content):
+        command = 'dongle sms dongle0 {0} {1}'.format(phonenumber, content)
         return self.send_command(command)
 
     def send_command(self, command):
@@ -32,7 +29,6 @@ class AsteriskConnector:
 
     def send_request(self, parameters):
         url = 'http://{0}:{1}/rawman'.format(self.host, self.port)
-        print(parameters)
         return self.session.get(url, params=parameters)
 
 
