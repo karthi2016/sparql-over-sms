@@ -1,6 +1,6 @@
 
 class ZipCompression:
-    """A pipeline link for zip compression"""
+    """A zip compression filter"""
 
     def compress(self):
         pass
