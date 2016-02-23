@@ -30,9 +30,7 @@ def retreive_configurationsection(configmanager, name, section):
 @inject(configmanager=services.ConfigManager)
 @app.route('/configuration/<name>/<section>', methods=['PUT'])
 def update_configuration(configmanager, name, section):
-    print('ok')
     keyvaluepairs = request.get_json()
-    print(keyvaluepairs)
     configmanager.update_configuration(name, section, keyvaluepairs)
 
     return nocontent()

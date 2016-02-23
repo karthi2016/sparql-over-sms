@@ -1,8 +1,8 @@
 import services
 
+from flask import request
 from injector import inject
 from webapi import app
-from flask import request
 from webapi.helpers.responses import *
 
 

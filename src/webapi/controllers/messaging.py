@@ -1,9 +1,9 @@
 import json
 
 from base64 import b64decode
+from connectors import AsteriskConnector, TripleStoreConnector
 from flask import Response, request
 from webapi import app
-from connectors import AsteriskConnector, TripleStoreConnector
 from webapi.helpers.crossdomain import crossdomain
 
 

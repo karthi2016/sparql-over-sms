@@ -12,11 +12,11 @@ class AddressBook:
 
     def get_contact(self, contactid):
         contactinfo = self.contactstore[contactid]
-        return {
-            'contactid': contactid,
-            'fullname': contactinfo['fullname'],
-            'phonenumber': contactinfo['phonenumber']
-        }
+
+        contact = {k: contactinfo[k] for k in contactinfo.keys()}
+        contact['contactid'] = contactid
+
+        return contact
 
     def add_contact(self, contactinfo):
         contactid = contactinfo['contactid']

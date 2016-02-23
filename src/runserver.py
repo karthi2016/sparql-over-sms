@@ -18,7 +18,7 @@ for file in configuration:
     app.config['f_{0}'.format(filename)] = file
 
 
-# register dependencies
+# bind dependencies
 def configure(binder):
     addressbook = services.AddressBook(app.config['c_contacts'], app.config['f_contacts'])
     binder.bind(services.AddressBook, to=addressbook, scope=singleton)
@@ -26,7 +26,16 @@ def configure(binder):
     configmanager = services.ConfigManager(app.config)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
 
+    messenger = services.Messenger(app.config['c_messaging'])
+    binder.bind(services.Messenger, to=messenger, scope=singleton)
+
+    rdfcompressor = services.RdfCompressor(app.config['c_compression'])
+    binder.bind(services.RdfCompressor, to=rdfcompressor, scope=singleton)
+
+    sparqlcompressor = services.SparqlCompressor(app.config['c_compression'])
+    binder.bind(services.SparqlCompressor, to=sparqlcompressor, scope=singleton)
+
 
 # bootstrap application
 FlaskInjector(app=app, modules=[configure])
-app.run(host='0.0.0.0', debug=True)
+app.run(host='127.0.0.1', debug=True)
