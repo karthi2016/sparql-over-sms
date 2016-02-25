@@ -1,0 +1,2 @@
+from pipelines.sendsparqlquery import SendSparqlQuery
+from pipelines.sendsparqlupdate import SendSparqlUpdate

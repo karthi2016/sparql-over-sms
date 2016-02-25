@@ -1,7 +1,9 @@
+import pipelines
 import services
 
 from flask import request
 from injector import inject
+from pipelines.wrappers.message import Message
 from services.messenger import SPARQL_QUERY, SPARQL_UPDATE
 from webapi import app
 from webapi.helpers.crossdomain import crossdomain
@@ -29,28 +31,30 @@ def get_queryendpoints(addressbook):
 
 
 @crossdomain()
-@inject(sparqlprocessor=services.SparqlProcessor, messenger=services.Messenger)
+@inject(pipeline=pipelines.SendSparqlQuery)
 @app.route('/query/<contactid>/sparql', methods=['GET', 'OPTIONS'])
-def outgoing_sparql(sparqlprocessor, messenger, contactid):
+def outgoing_sparql(pipeline, contactid):
     query = request.args.get('query')
 
-    # send query (packed) to contact
-    packed = sparqlprocessor.pack(query)
-    messenger.send(contactid, SPARQL_QUERY, packed)
+    # send sparql query to contact
+    message = Message(SPARQL_QUERY, query, receiver=contactid)
+    result = pipeline.handle(message)
 
+    print(result)
     return accepted()
 
 
 @crossdomain()
-@inject(sparqlprocessor=services.SparqlProcessor, messenger=services.Messenger)
+@inject(pipeline=pipelines.SendSparqlUpdate)
 @app.route('/query/<contactid>/sparql/update', methods=['POST', 'OPTIONS'])
-def outgoing_sparqlupdate(sparqlprocessor, messenger, contactid):
+def outgoing_sparqlupdate(pipeline, contactid):
     update = request.form.get('update')
 
-    # send update (packed) to contact
-    packed = sparqlprocessor.pack(update)
-    messenger.send(contactid, SPARQL_UPDATE, packed)
+    # send sparql update to contact
+    message = Message(SPARQL_UPDATE, update, receiver=contactid)
+    result = pipeline.handle(message)
 
+    print(result)
     return accepted()
 
 
