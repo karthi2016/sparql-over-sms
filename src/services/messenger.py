@@ -29,7 +29,7 @@ class Messenger:
 
     def receive(self, phonenumber, message):
         category, body = message.split(' ', 2)
-        sender = self.addressbook.find_contact(phonenumber)[0]
+        sender = self.addressbook.find_contact(phonenumber)
 
         message = {
             'sender': sender['contactid'],

@@ -29,7 +29,8 @@ class AddressBook:
         self.save()
 
     def find_contact(self, phonenumber):
-        return [c for c in self.get_contacts() if c['phonenumber'] == phonenumber]
+        result = [c for c in self.get_contacts() if c['phonenumber'] == phonenumber]
+        return result[0] if len(result) > 0 else None
 
     def update_contact(self, contactid, contactinfo):
         contact = self.contactstore[contactid]

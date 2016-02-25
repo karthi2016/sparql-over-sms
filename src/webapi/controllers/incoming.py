@@ -3,27 +3,38 @@ import services
 from base64 import b64decode
 from flask import request
 from injector import inject
-from services.messenger import SPARQL_QUERY
+from pipelines.receivesparqlquery import ReceiveSparqlQuery
+from pipelines.receivesparqlupdate import ReceiveSparqlUpdate
+from pipelines.wrappers.message import Message
+from services.messenger import SPARQL_QUERY, Messenger, SPARQL_UPDATE
 from SPARQLWrapper import SPARQLWrapper
 from webapi import app
 from webapi.helpers.responses import *
 
 
-@inject(messenger=services.Messenger, sparqlprocessor=services.SparqlProcessor)
+@inject(addressbook=services.AddressBook)
 @app.route('/incoming', methods=['POST'])
-def incoming(messenger, sparqlprocessor):
+def incoming(addressbook):
     payload = request.get_json()
-    sender = payload['sender']
-    body = b64decode(payload['body']).decode('utf-8')
+    phonenumber = payload['sender']
+    content = b64decode(payload['body']).decode('utf-8').strip()
 
     # process message
-    message = messenger.receive(sender, body)
-    if message['category'] == SPARQL_QUERY:
-        sparql = SPARQLWrapper(app.config['c_triplestore']['endpoints']['query'])
-        query = sparqlprocessor.unpack(message['body'])
+    categoryid, body = content.split(' ', 2)
+    sender = addressbook.find_contact(phonenumber)
+    category = {'{0}'.format(value): key for key, value in Messenger.categories.items()}[categoryid]
 
-        sparql.returnFormat = 'json'
-        sparql.setQuery(query)
-        print(sparql.query().convert())
+    message = Message(category, body, sender=sender['contactid'])
+    pipeline = None
+    if category is SPARQL_QUERY:
+        pipeline = ReceiveSparqlQuery()
+    elif category is SPARQL_UPDATE:
+        pipeline = ReceiveSparqlUpdate()
+
+    if pipeline is not None:
+        result = pipeline.handle(message)
+        print(result)
+    else:
+        print('No suitable pipeline found..')
 
     return accepted()
