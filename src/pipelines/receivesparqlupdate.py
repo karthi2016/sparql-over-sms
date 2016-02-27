@@ -1,10 +1,12 @@
+from pipelines.actions import RunSparqlUpdate
 from pipelines.filters import Base64Decode
 
 
 class ReceiveSparqlUpdate:
     """Pipeline that handles incoming SPARQL updates"""
     chain = [
-        Base64Decode
+        Base64Decode,
+        RunSparqlUpdate
     ]
 
     def handle(self, message):

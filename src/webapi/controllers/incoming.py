@@ -20,7 +20,7 @@ def incoming(addressbook):
     content = b64decode(payload['body']).decode('utf-8').strip()
 
     # process message
-    categoryid, body = content.split(' ', 2)
+    categoryid, body = content.split(' ', 1)
     sender = addressbook.find_contact(phonenumber)
     category = {'{0}'.format(value): key for key, value in Messenger.categories.items()}[categoryid]
 
