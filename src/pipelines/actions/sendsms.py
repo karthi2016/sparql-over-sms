@@ -4,24 +4,26 @@ from services import AddressBook, Messenger
 
 class SendSms:
     """Sends a sms"""
+    name = "SendSms"
+    description = "Send a sms"
 
     @staticmethod
-    def execute(message):
+    def execute(token):
         from webapi import app
 
         # lookup receiver
         addressbook = AddressBook(app.config['c_contacts'], app.config['f_contacts'])
-        contact = addressbook.get_contact(message.receiver)
+        contact = addressbook.get_contact(token.message.receiver)
 
         # compose sms
-        categoryid = Messenger.categories[message.category]
-        content = '{0} {1}'.format(categoryid, message.body)
+        categoryid = Messenger.categories[token.message.category]
+        content = '{0} {1}'.format(categoryid, token.message.body)
 
         # send sms
         asterisk = AsteriskConnector(app.config['c_asterisk'])
-        response = asterisk.send_sms(contact['phonenumber'], content)
+        token.result = asterisk.send_sms(contact['phonenumber'], content)
 
-        return response
+
 
 
 
