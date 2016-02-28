@@ -11,10 +11,21 @@ class BasePipeline:
         token = PipelineToken(message)
 
         for link in self.chain:
-            start = timer()
-            link.execute(token)
-            finish = timer()
+            self.execute(link, token)
 
-            print('Executed "{0}" in {1}'.format(link.name, finish - start))
-
+        print('Total time: {0:5f}s'.format(token.report.get_totaltime()))
         return token
+
+    def execute(self, link, token):
+        # capture start time
+        started = timer()
+
+        link.execute(token)
+
+        # calculate elapsed time
+        finished = timer()
+        elapsed = finished - started
+
+        # record execution
+        token.report.add_record(link.name, link.description, elapsed)
+
