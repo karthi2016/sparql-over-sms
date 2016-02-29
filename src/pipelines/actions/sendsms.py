@@ -16,8 +16,7 @@ class SendSms:
         contact = addressbook.get_contact(token.message.receiver)
 
         # compose sms
-        categoryid = Messenger.categories[token.message.category]
-        content = '{0} {1}'.format(categoryid, token.message.body)
+        content = '{0} {1}'.format(token.message.category, token.message.body)
 
         # send sms
         asterisk = AsteriskConnector(app.config['c_asterisk'])

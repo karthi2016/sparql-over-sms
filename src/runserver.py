@@ -27,12 +27,6 @@ def configure(binder):
     configmanager = services.ConfigManager(app.config)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
 
-    sendsparqlquery = pipelines.SendSparqlQuery()
-    binder.bind(pipelines.SendSparqlQuery, to=sendsparqlquery, scope=singleton)
-
-    sendsparqlupdate = pipelines.SendSparqlUpdate()
-    binder.bind(pipelines.SendSparqlUpdate, to=sendsparqlupdate, scope=singleton)
-
 
 # bootstrap application
 FlaskInjector(app=app, modules=[configure])

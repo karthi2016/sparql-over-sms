@@ -1,18 +1,22 @@
 
 # message categories
-SYSTEM = 'system'
-SPARQL_QUERY = 'sparql-query'
-SPARQL_UPDATE = 'sparql-update'
-SPARQL_RESPONSE = 'sparql-response'
+SYSTEM = 0
+SYSTEM_RESPONSE = 1
+SPARQL_QUERY = 2
+SPARQL_QUERY_RESPONSE = 3
+SPARQL_UPDATE = 4
+SPARQL_UPDATE_RESPONSE = 5
 
 
 class Messenger:
     """Proxy for messaging"""
     categories = {
-        SYSTEM: 0,
-        SPARQL_QUERY: 1,
-        SPARQL_UPDATE: 2,
-        SPARQL_RESPONSE: 3
+        SYSTEM: 'system',
+        SYSTEM_RESPONSE: 'system-response',
+        SPARQL_QUERY: 'sparql-query',
+        SPARQL_QUERY_RESPONSE: 'sparql-query-response',
+        SPARQL_UPDATE: 'sparql-update',
+        SPARQL_UPDATE_RESPONSE: 'sparql-update-response'
     }
 
     def __init__(self, messagingconfig, addressbook, asterisk):
@@ -33,7 +37,7 @@ class Messenger:
 
         message = {
             'sender': sender['contactid'],
-            'category': {'{0}'.format(value): key for key, value in self.categories.items()}[category],
+            'category': category,
             'body': body
         }
         return message

@@ -5,9 +5,10 @@ from flask import request
 from injector import inject
 from pipelines.receivesparqlquery import ReceiveSparqlQuery
 from pipelines.receivesparqlupdate import ReceiveSparqlUpdate
+from pipelines.wrappers import PipelineToken
 from pipelines.wrappers.message import Message
-from services.messenger import SPARQL_QUERY, Messenger, SPARQL_UPDATE
-from SPARQLWrapper import SPARQLWrapper
+from pipelines.wrappers.pipelinetoken import INCOMING_TOKEN
+from services.messenger import SPARQL_QUERY, SPARQL_UPDATE
 from webapi import app
 from webapi.helpers.responses import *
 
@@ -20,20 +21,19 @@ def incoming(addressbook):
     content = b64decode(payload['body']).decode('utf-8').strip()
 
     # process message
-    categoryid, body = content.split(' ', 1)
+    category, body = content.split(' ', 1)
     sender = addressbook.find_contact(phonenumber)
-    category = {'{0}'.format(value): key for key, value in Messenger.categories.items()}[categoryid]
 
-    message = Message(category, body, sender=sender['contactid'])
+    message = Message(int(category), body, sender=sender['contactid'])
     pipeline = None
-    if category is SPARQL_QUERY:
-        pipeline = ReceiveSparqlQuery()
-    elif category is SPARQL_UPDATE:
-        pipeline = ReceiveSparqlUpdate()
+    if message.category is SPARQL_QUERY:
+        pipeline = ReceiveSparqlQuery
+    elif message.category is SPARQL_UPDATE:
+        pipeline = ReceiveSparqlUpdate
 
     if pipeline is not None:
-        result = pipeline.handle(message)
-        print(result)
+        token = pipeline.execute(PipelineToken(message, INCOMING_TOKEN))
+        print('Total time: {0:5f}s'.format(token.report.get_totaltime()))
     else:
         print('No suitable pipeline found..')
 

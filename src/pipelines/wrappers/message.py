@@ -1,4 +1,5 @@
 
+
 class Message:
     """A wrapper for a pipeline-able message"""
 
