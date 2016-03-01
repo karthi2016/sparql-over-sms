@@ -1,7 +1,7 @@
 import configparser
 import glob
 import os
-import pipelines
+import repositories
 import services
 
 from flask.ext.injector import FlaskInjector, singleton
@@ -26,6 +26,9 @@ def configure(binder):
 
     configmanager = services.ConfigManager(app.config)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
+
+    messagesrepo = repositories.MessageRepo(app.config['c_messages'], app.config['f_messages'])
+    binder.bind(repositories.MessageRepo, to=messagesrepo, scope=singleton)
 
 
 # bootstrap application
