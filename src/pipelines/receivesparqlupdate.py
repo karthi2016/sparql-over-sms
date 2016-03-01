@@ -15,5 +15,5 @@ class ReceiveSparqlUpdate(Pipeline):
 
     @staticmethod
     def execute(token):
-        Pipeline.handle(ReceiveSparqlUpdate.chain, token)
+        return Pipeline.handle(ReceiveSparqlUpdate.chain, token)
 

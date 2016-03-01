@@ -15,4 +15,4 @@ class ReceiveSparqlResponse(Pipeline):
 
     @staticmethod
     def execute(token):
-        Pipeline.handle(ReceiveSparqlResponse.chain, token)
+        return Pipeline.handle(ReceiveSparqlResponse.chain, token)
