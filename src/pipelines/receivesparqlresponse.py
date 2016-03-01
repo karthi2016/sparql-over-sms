@@ -1,3 +1,4 @@
+from pipelines.actions.storemessage import StoreMessage
 from pipelines.basepipeline import Pipeline
 from pipelines.filters import Base64Decode
 
@@ -8,7 +9,8 @@ class ReceiveSparqlResponse(Pipeline):
     description = 'Receives a SPARQL query/update response'
 
     chain = {
-        Base64Decode
+        Base64Decode,
+        StoreMessage
     }
 
     @staticmethod
