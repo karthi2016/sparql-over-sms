@@ -1,12 +1,11 @@
 import repositories
-
 from flask import request
 from injector import inject
 from pipelines import SendSparqlQuery, SendSparqlUpdate
 from pipelines.wrappers import PipelineToken
-from pipelines.wrappers.message import Message
 from pipelines.wrappers.pipelinetoken import OUTGOING_TOKEN
 from services.messenger import SPARQL_QUERY, SPARQL_UPDATE
+from transfer.wrappers.message import Message
 from webapi import app
 from webapi.helpers.crossdomain import crossdomain
 from webapi.helpers.responses import *

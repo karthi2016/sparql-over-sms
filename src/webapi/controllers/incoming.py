@@ -1,5 +1,4 @@
 import repositories
-
 from base64 import b64decode
 from flask import request
 from injector import inject
@@ -7,9 +6,9 @@ from pipelines.receivesparqlquery import ReceiveSparqlQuery
 from pipelines.receivesparqlresponse import ReceiveSparqlResponse
 from pipelines.receivesparqlupdate import ReceiveSparqlUpdate
 from pipelines.wrappers import PipelineToken
-from pipelines.wrappers.message import Message
 from pipelines.wrappers.pipelinetoken import INCOMING_TOKEN
 from services.messenger import SPARQL_QUERY, SPARQL_UPDATE, SPARQL_QUERY_RESPONSE, SPARQL_UPDATE_RESPONSE
+from transfer.wrappers.message import Message
 from webapi import app
 from webapi.helpers.responses import *
 

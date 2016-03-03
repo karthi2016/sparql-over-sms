@@ -2,7 +2,7 @@ from uuid import uuid4
 
 
 class Message:
-    """A wrapper for a pipeline-able message"""
+    """Represents a incoming or outgoing message"""
 
     def __init__(self, category, body, sender=None, receiver=None, correlationid=None):
         self.category = category
@@ -11,7 +11,7 @@ class Message:
         self.receiver = receiver
 
         # generate a correlation id
-        self.correlationid = correlationid if correlationid is not None else uuid4().hex[:8]
+        self.correlationid = correlationid if correlationid is not None else uuid4().hex[:4]
 
     def __str__(self):
         incoming = self.sender is not None
