@@ -1,4 +1,4 @@
-import services
+import repositories
 
 from flask import request
 from injector import inject
@@ -13,10 +13,10 @@ from webapi.helpers.responses import *
 
 
 @crossdomain()
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/query/endpoints', methods=['GET', 'OPTIONS'])
-def get_queryendpoints(addressbook):
-    contacts = [c for c in addressbook.get_contacts() if c['sparqlenabled'] == 'yes']
+def get_queryendpoints(contactrepo):
+    contacts = [c for c in contactrepo.get_contacts() if c['sparqlenabled'] == 'yes']
 
     endpoints = []
     for contact in contacts:

@@ -1,5 +1,5 @@
 from connectors import AsteriskConnector
-from services import AddressBook, Messenger
+from repositories import ContactRepo
 
 
 class SendSms:
@@ -12,8 +12,8 @@ class SendSms:
         from webapi import app
 
         # lookup receiver
-        addressbook = AddressBook(app.config['c_contacts'], app.config['f_contacts'])
-        contact = addressbook.get_contact(token.message.receiver)
+        contactrepo = ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
+        contact = contactrepo.get_contact(token.message.receiver)
 
         # compose sms
         content = '{0} {1}'.format(token.message.category, token.message.body)

@@ -1,4 +1,4 @@
-import services
+import repositories
 
 from flask import request
 from injector import inject
@@ -6,53 +6,53 @@ from webapi import app
 from webapi.helpers.responses import *
 
 
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/contacts', methods=['GET'])
-def retreive_contacts(addressbook):
-    contacts = addressbook.get_contacts()
+def retreive_contacts(contactrepo):
+    contacts = contactrepo.get_contacts()
 
     return ok(contacts)
 
 
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/contacts/find', methods=['GET'])
-def find_contacts(addressbook):
+def find_contacts(contactrepo):
     phonenumber = request.args.get('phonenumber')
-    contacts = addressbook.find_contact(phonenumber)
+    contacts = contactrepo.find_contact(phonenumber)
 
     return ok(contacts) if len(contacts) is not 0 else notfound()
 
 
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/contact/<contactid>', methods=['GET'])
-def retreive_contact(contactid, addressbook):
-    contact = addressbook.get_contact(contactid)
+def retreive_contact(contactid, contactrepo):
+    contact = contactrepo.get_contact(contactid)
 
     return ok(contact)
 
 
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/contacts', methods=['POST'])
-def create_contact(addressbook):
+def create_contact(contactrepo):
     contactinfo = request.get_json()
-    addressbook.add_contact(contactinfo)
+    contactrepo.add_contact(contactinfo)
 
     return created()
 
 
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/contact/<contactid>', methods=['PUT'])
-def update_contact(contactid, addressbook):
+def update_contact(contactid, contactrepo):
     contactinfo = request.get_json()
-    addressbook.update_contact(contactid, contactinfo)
+    contactrepo.update_contact(contactid, contactinfo)
 
     return nocontent()
 
 
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/contact/<contactid>', methods=['DELETE'])
-def delete_contact(contactid, addressbook):
-    addressbook.remove_contact(contactid)
+def delete_contact(contactid, contactrepo):
+    contactrepo.remove_contact(contactid)
 
     return nocontent()
 

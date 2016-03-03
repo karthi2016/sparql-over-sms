@@ -1,4 +1,4 @@
-import services
+import repositories
 
 from base64 import b64decode
 from flask import request
@@ -14,16 +14,16 @@ from webapi import app
 from webapi.helpers.responses import *
 
 
-@inject(addressbook=services.AddressBook)
+@inject(contactrepo=repositories.ContactRepo)
 @app.route('/incoming', methods=['POST'])
-def incoming(addressbook):
+def incoming(contactrepo):
     payload = request.get_json()
     phonenumber = payload['sender']
     content = b64decode(payload['body']).decode('utf-8').strip()
 
     # process message
     category, body = content.split(' ', 1)
-    sender = addressbook.find_contact(phonenumber)
+    sender = contactrepo.find_contact(phonenumber)
 
     message = Message(int(category), body, sender=sender['contactid'])
     pipeline = None

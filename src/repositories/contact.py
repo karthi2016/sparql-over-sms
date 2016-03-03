@@ -1,6 +1,6 @@
 
-class AddressBook:
-    """A wrapper around the contact store"""
+class ContactRepo:
+    """Repository for retreiving and restoring contacts"""
 
     def __init__(self, contactstore, filepath):
         self.contactstore = contactstore
@@ -49,6 +49,3 @@ class AddressBook:
     def save(self):
         with open(self.filepath, 'w') as file:
             self.contactstore.write(file)
-
-
-

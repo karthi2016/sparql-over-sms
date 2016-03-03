@@ -21,8 +21,8 @@ for file in configuration:
 
 # bind dependencies
 def configure(binder):
-    addressbook = services.AddressBook(app.config['c_contacts'], app.config['f_contacts'])
-    binder.bind(services.AddressBook, to=addressbook, scope=singleton)
+    contactrepo = repositories.ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
+    binder.bind(repositories.ContactRepo, to=contactrepo, scope=singleton)
 
     configmanager = services.ConfigManager(app.config)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)

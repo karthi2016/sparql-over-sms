@@ -18,26 +18,3 @@ class Messenger:
         SPARQL_UPDATE: 'sparql-update',
         SPARQL_UPDATE_RESPONSE: 'sparql-update-response'
     }
-
-    def __init__(self, messagingconfig, addressbook, asterisk):
-        self.messagingconfig = messagingconfig
-        self.addressbook = addressbook
-        self.asterisk = asterisk
-
-    def send(self, contactid, category, body):
-        contact = self.addressbook.get_contact(contactid)
-        phonenumber = contact['phonenumber']
-
-        message = '{0} {1}'.format(self.categories[category], body)
-        self.asterisk.send_sms(phonenumber, message)
-
-    def receive(self, phonenumber, message):
-        category, body = message.split(' ', 2)
-        sender = self.addressbook.find_contact(phonenumber)
-
-        message = {
-            'sender': sender['contactid'],
-            'category': category,
-            'body': body
-        }
-        return message
