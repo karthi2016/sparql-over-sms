@@ -1,4 +1,3 @@
-from pipelines.wrappers import Message
 from pipelines.wrappers.pipelinetoken import OUTGOING_TOKEN
 
 
