@@ -11,7 +11,7 @@ class RunSparqlUpdate:
         from webapi import app
 
         # initialize sparql endpoint
-        sparql = SPARQLWrapper(app.config['c_triplestore']['endpoints']['update'])
+        sparql = SPARQLWrapper(app.config['c_persistence']['triplestore']['update'])
 
         # prepare sparql update
         sparql.setQuery(token.message.body)
