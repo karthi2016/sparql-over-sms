@@ -28,6 +28,10 @@ class MessageRepo:
         # persist changes
         self.save()
 
+    def find_message(self, correlationid, category):
+        messageid = '{0}-{1}'.format(correlationid, category)
+        return self.get_message(messageid)
+
     def update_message(self, messageid, messageinfo):
         message = self.messagestore[messageid]
         message['sender'] = messageinfo['sender']

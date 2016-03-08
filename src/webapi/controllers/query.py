@@ -4,11 +4,12 @@ from injector import inject
 from pipelines import SendSparqlQuery, SendSparqlUpdate
 from pipelines.wrappers import PipelineToken
 from pipelines.wrappers.pipelinetoken import OUTGOING_TOKEN
-from services.messenger import SPARQL_QUERY, SPARQL_UPDATE
+from services.messenger import SPARQL_QUERY, SPARQL_UPDATE, SPARQL_QUERY_RESPONSE
 from transfer.wrappers.message import Message
 from webapi import app
 from webapi.helpers.crossdomain import crossdomain
 from webapi.helpers.responses import *
+from timeit import default_timer as timer
 
 
 @crossdomain()
@@ -33,15 +34,33 @@ def get_queryendpoints(contactrepo):
 
 @crossdomain()
 @app.route('/query/<contactid>/sparql', methods=['GET', 'OPTIONS'])
-def outgoing_sparql(contactid):
+@inject(messagerepo=repositories.MessageRepo)
+def outgoing_sparql(contactid, messagerepo):
     query = request.args.get('query')
 
     # send sparql query to contact
     message = Message(SPARQL_QUERY, query, receiver=contactid)
     result = SendSparqlQuery.execute(PipelineToken(message, OUTGOING_TOKEN))
-
     print(result)
-    return accepted()
+
+    # poll messages for response
+    correlationid = message.correlationid
+    reply = None
+
+    started = timer()
+    while reply is None:
+        reply = messagerepo.find_message(correlationid, SPARQL_QUERY_RESPONSE)
+
+        # stop if timeout is reached
+        elapsed = timer() - started
+        if elapsed > 30:
+            break
+
+    if reply is None:
+        return timeout()
+    else:
+        print(reply)
+        return accepted()
 
 
 @crossdomain()

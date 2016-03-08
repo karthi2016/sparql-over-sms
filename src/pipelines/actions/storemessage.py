@@ -1,6 +1,4 @@
-import uuid
-
-from repositories import MessageRepo
+import repositories
 
 
 class StoreMessage:
@@ -10,6 +8,14 @@ class StoreMessage:
 
     @staticmethod
     def execute(token):
-        print('message storing is not yet supported, but here is your message:')
-        print(token.message)
+        from webapi import app
+
+        messagerepo = app.injector.get(repositories.MessageRepo)
+        messageinfo = {
+            'messageid': '{0}-{1}'.format(token.message.correlationid, token.message.category),
+            'sender': token.message.sender,
+            'body': token.message.body
+        }
+
+        messagerepo.add_message(messageinfo)
 
