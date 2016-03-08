@@ -10,7 +10,7 @@ class StoreMessage:
     def execute(token):
         from webapi import app
 
-        messagerepo = app.injector.get(repositories.MessageRepo)
+        messagerepo = repositories.MessageRepo(app.config['c_messages'], app.config['f_messages'])
         messageinfo = {
             'messageid': '{0}-{1}'.format(token.message.correlationid, token.message.category),
             'sender': token.message.sender,

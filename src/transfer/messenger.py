@@ -37,7 +37,7 @@ class Messenger:
     def receive(self, address, body):
         sender = self.contactrepo.find_contact(address)
 
-        return Message(int(body[0]), body[5:], sender=sender['contactid'], correlationid=body[1:5])
+        return Message(int(body[0]), body[4:], sender=sender['contactid'], correlationid=body[1:4])
 
     def compose_body(self, message):
         return '{0}{1}{2}'.format(message.category, message.correlationid, message.body)
