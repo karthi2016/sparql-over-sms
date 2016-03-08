@@ -1,2 +1,1 @@
 from connectors.asterisk import AsteriskConnector
-from connectors.triplestore import TripleStoreConnector
