@@ -65,7 +65,7 @@ def outgoing_sparql(contactid, messagerepo):
         return timeout()
     else:
         print(reply)
-        return ok(reply.body)
+        return ok(reply['body'])
 
 
 @crossdomain()
