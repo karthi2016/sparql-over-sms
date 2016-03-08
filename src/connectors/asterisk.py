@@ -2,25 +2,32 @@ import requests
 
 
 class AsteriskConnector:
-    """Connector used for communication with Asterisk"""
+    """Connector used to interface with Asterisk"""
+    session = None
 
-    def __init__(self, asteriskconfig):
-        self.session = requests.Session()
+    def __init__(self, configmanager):
+        config = configmanager.get_configuration('asterisk')
 
-        general = asteriskconfig['general']
-        self.host = general['host']
-        self.port = general['port']
+        # relevant config sections
+        general = config['general']
+        credentials = config['credentials']
+
+        # configure Asterisk connector
+        self.username = credentials['username']
+        self.secret = credentials['secret']
+        self.url = 'http://{0}:{1}/rawman'.format(general['host'], general['port'])
         self.dongleid = general['dongleid']
 
-        credentials = asteriskconfig['credentials']
-        self.authenticate(credentials['username'], credentials['secret'])
+    def startsession(self):
+        self.session = requests.Session()
+        self.authenticate()
 
-    def authenticate(self, username, secret):
-        parameters = {'action': 'login', 'username': username, 'secret': secret}
+    def authenticate(self):
+        parameters = {'action': 'login', 'username': self.username, 'secret': self.secret}
         self.send_request(parameters)
 
     def send_sms(self, phonenumber, content):
-        command = 'dongle sms dongle0 {0} {1}'.format(phonenumber, content)
+        command = 'dongle sms {0} {1} {2}'.format(self.dongleid, phonenumber, content)
         return self.send_command(command)
 
     def send_command(self, command):
@@ -28,8 +35,7 @@ class AsteriskConnector:
         return self.send_request(parameters)
 
     def send_request(self, parameters):
-        url = 'http://{0}:{1}/rawman'.format(self.host, self.port)
-        return self.session.get(url, params=parameters)
+        return self.session.get(self.url, params=parameters)
 
 
 
