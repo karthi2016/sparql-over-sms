@@ -9,7 +9,6 @@ class HttpTransfer:
     def send_single(receiver, body):
         url = 'http://{0}:5000/incoming'.format(receiver['hostname'])
         response = requests.post(url, json={'sender': '+31626056615', 'body': body})
-        print(response)
 
     @staticmethod
     def send_multiple(messages):
