@@ -10,6 +10,7 @@ class SmsTransfer:
         from webapi import app
 
         asterisk = AsteriskConnector(app.config['c_asterisk'])
+        asterisk.startsession()
         asterisk.send_sms(phonenumber, body)
 
     @staticmethod
