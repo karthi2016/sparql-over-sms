@@ -43,7 +43,7 @@ def outgoing_sparql(contactid, messagerepo):
     # send sparql query to contact
     message = Message(MSG_SPARQL_QUERY, query, receiver=contactid)
     result = SendSparqlQuery.execute(PipelineToken(message, OUTGOING_TOKEN))
-    print(result)
+    print('SendSparqlQuery: {0}'.format(result))
 
     # poll messages for response
     correlationid = message.correlationid
@@ -58,6 +58,7 @@ def outgoing_sparql(contactid, messagerepo):
         if elapsed > 30:
             break
 
+        print('looking for {0}-{1}'.format(correlationid, MSG_SPARQL_QUERY_RESPONSE))
         time.sleep(1)
 
     if reply is None:
