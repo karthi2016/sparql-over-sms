@@ -2,3 +2,4 @@ from pipelines.sendsparqlquery import SendSparqlQuery
 from pipelines.sendsparqlupdate import SendSparqlUpdate
 from pipelines.receivesparqlquery import ReceiveSparqlQuery
 from pipelines.receivesparqlupdate import ReceiveSparqlUpdate
+from pipelines.receivesparqlresponse import ReceiveSparqlResponse

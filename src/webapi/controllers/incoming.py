@@ -1,15 +1,11 @@
 import repositories
-from base64 import b64decode
+
 from flask import request
 from injector import inject
-from pipelines.receivesparqlquery import ReceiveSparqlQuery
-from pipelines.receivesparqlresponse import ReceiveSparqlResponse
-from pipelines.receivesparqlupdate import ReceiveSparqlUpdate
-from pipelines.wrappers import PipelineToken
-from pipelines.wrappers.pipelinetoken import INCOMING_TOKEN
+from pipelines import ReceiveSparqlQuery, ReceiveSparqlResponse, ReceiveSparqlUpdate
+from pipelines.wrappers import PipelineToken, INCOMING_TOKEN
 from transfer.messenger import MSG_SPARQL_QUERY, MSG_SPARQL_UPDATE, MSG_SPARQL_QUERY_RESPONSE, MSG_SPARQL_UPDATE_RESPONSE
 from transfer import Messenger
-from transfer.wrappers.message import Message
 from webapi import app
 from webapi.helpers.responses import *
 
@@ -34,9 +30,8 @@ def incoming(contactrepo):
         pipeline = ReceiveSparqlResponse
 
     if pipeline is not None:
-        token = pipeline.execute(PipelineToken(message, INCOMING_TOKEN))
-        print('Total time: {0:5f}s'.format(token.report.get_totaltime()))
+        pipeline.execute(PipelineToken(message, INCOMING_TOKEN))
     else:
         print('No suitable pipeline found..')
 
-    return accepted()
+    return nocontent()
