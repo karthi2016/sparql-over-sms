@@ -23,6 +23,10 @@ def notfound():
     return Response(status=404)
 
 
+def timeout():
+    return Response(status=408)
+
+
 def notimplemented():
     return Response(status=501)
 
