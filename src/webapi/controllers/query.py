@@ -1,3 +1,5 @@
+import time
+
 import repositories
 from flask import request
 from injector import inject
@@ -55,6 +57,8 @@ def outgoing_sparql(contactid, messagerepo):
         elapsed = timer() - started
         if elapsed > 30:
             break
+
+        time.sleep(1)
 
     if reply is None:
         return timeout()

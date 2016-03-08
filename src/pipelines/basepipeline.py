@@ -8,6 +8,8 @@ class Pipeline:
     def handle(chain, token):
 
         for link in chain:
+            print(token.message)
+
             # capture start time
             started = timer()
 

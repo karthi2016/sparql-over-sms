@@ -8,6 +8,7 @@ from pipelines.receivesparqlupdate import ReceiveSparqlUpdate
 from pipelines.wrappers import PipelineToken
 from pipelines.wrappers.pipelinetoken import INCOMING_TOKEN
 from services.messenger import SPARQL_QUERY, SPARQL_UPDATE, SPARQL_QUERY_RESPONSE, SPARQL_UPDATE_RESPONSE
+from transfer import Messenger
 from transfer.wrappers.message import Message
 from webapi import app
 from webapi.helpers.responses import *
@@ -17,14 +18,13 @@ from webapi.helpers.responses import *
 @app.route('/incoming', methods=['POST'])
 def incoming(contactrepo):
     payload = request.get_json()
-    phonenumber = payload['sender']
-    content = b64decode(payload['body']).decode('utf-8').strip()
+    sender = payload['sender']
+    body = b64decode(payload['body']).decode('utf-8').strip()
 
     # process message
-    category, body = content.split(' ', 1)
-    sender = contactrepo.find_contact(phonenumber)
+    messenger = Messenger(contactrepo)
+    message = messenger.receive(sender, body)
 
-    message = Message(int(category), body, sender=sender['contactid'])
     pipeline = None
     if message.category is SPARQL_QUERY:
         pipeline = ReceiveSparqlQuery

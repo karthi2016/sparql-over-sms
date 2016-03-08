@@ -32,7 +32,7 @@ class Messenger:
         body = self.compose_body(message)
 
         transfer = self.determine_transfer(receiver)
-        transfer.send(receiver, body)
+        transfer.send_single(receiver, body)
 
     def receive(self, address, body):
         sender = self.contactrepo.find_contact(address)
@@ -50,3 +50,5 @@ class Messenger:
     @staticmethod
     def get_category_counterpart(messagecategory):
         return messagecategory + (1 if messagecategory % 2 is 0 else -1)
+
+

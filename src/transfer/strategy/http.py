@@ -1,11 +1,15 @@
+import requests
+
 
 class HttpTransfer:
     """Transfers messages with HTTP"""
     max_bodysize = 140000
 
     @staticmethod
-    def send_single(hostname, body):
-        raise NotImplementedError('Sending messages via http')
+    def send_single(receiver, body):
+        url = 'http://{0}:5000/incoming'.format(receiver['hostname'])
+        response = requests.post(url, json={'sender': 'unkown', 'body': body})
+        print(response)
 
     @staticmethod
     def send_multiple(messages):
