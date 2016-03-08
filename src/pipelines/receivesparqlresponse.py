@@ -8,10 +8,10 @@ class ReceiveSparqlResponse(Pipeline):
     name = 'ReceiveSparqlResponse'
     description = 'Receives a SPARQL query/update response'
 
-    chain = {
+    chain = [
         Base64Decode,
         StoreMessage
-    }
+    ]
 
     @staticmethod
     def execute(token):

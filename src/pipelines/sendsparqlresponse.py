@@ -8,10 +8,10 @@ class SendSparqlResponse(Pipeline):
     name = 'SendSparqlResponse'
     description = 'Sends a SPARQL query/update response'
 
-    chain = {
+    chain = [
         Base64Encode,
         SendSms
-    }
+    ]
 
     @staticmethod
     def execute(token):
