@@ -1,56 +1,49 @@
+from os import path
+from repositories import Repository
 
-class MessageRepo:
+
+class MessageRepo(Repository):
     """Repository for retreiving and restoring messages"""
 
-    def __init__(self, messagestore, filepath):
-        self.messagestore = messagestore
-        self.filepath = filepath
+    def __init__(self, filepath):
+        super().__init__(filepath)
+
+        if not path.isfile(filepath):
+            self.setup_storage()
 
     def get_messages(self):
-        messageids = self.messagestore.sections()
-        return [self.get_message(messageid) for messageid in messageids]
+        sql = 'SELECT * FROM messages'
+        result = self.execute(sql)
+
+        return [{'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': r[3]} for r in result]
 
     def get_message(self, messageid):
-        if not self.messagestore.has_section(messageid):
+        sql = 'SELECT * FROM messages WHERE messageid = ? LIMIT 1'
+        result = self.execute(sql, (messageid,))
+
+        if len(result) != 1:
             return None
 
-        messageinfo = self.messagestore[messageid]
-        message = {k: messageinfo[k] for k in messageinfo.keys()}
-        message['messageid'] = messageid
+        r = result[0]
+        return {'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': r[3]}
 
-        return message
-
-    def add_message(self, messageinfo):
-        messageid = messageinfo['messageid']
-
-        self.messagestore.add_section(messageid)
-        self.messagestore.set(messageid, 'sender', messageinfo['sender'])
-        self.messagestore.set(messageid, 'body', messageinfo['body'])
-
-        # persist changes
-        self.save()
+    def add_message(self, messageid, category, contactid, body):
+        sql = 'INSERT INTO messages VALUES (?, ?, ?, ?)'
+        self.execute(sql, (messageid, category, contactid, body,))
 
     def find_message(self, correlationid, category):
         messageid = '{0}-{1}'.format(correlationid, category)
         return self.get_message(messageid)
 
-    def update_message(self, messageid, messageinfo):
-        message = self.messagestore[messageid]
-        message['sender'] = messageinfo['sender']
-        message['body'] = messageinfo['body']
-
-        # persist changes
-        self.save()
-
     def remove_message(self, messageid):
-        self.messagestore.remove_section(messageid)
+        sql = 'DELETE FROM messages WHERE messageid = ?'
+        self.execute(sql, (messageid,))
 
-        # persist changes
-        self.save()
+    def setup_storage(self):
+        # create a empty file that will be used as storage
+        open(self.filepath, 'w').close()
 
-    def save(self):
-        with open(self.filepath, 'w') as file:
-            self.messagestore.write(file)
-
-
+        # create the required tables for this repository
+        sql = 'CREATE TABLE IF NOT EXISTS messages (messageid TEXT, category TEXT, contactid TEXT, body TEXT)'
+        self.execute(sql)
 

@@ -8,14 +8,11 @@ class StoreMessage:
 
     @staticmethod
     def execute(token):
+        # create a seperate instance of the message repository
         from webapi import app
+        messagerepo = repositories.MessageRepo(app.config['c_persistence']['repositories']['message'])
 
-        messagerepo = repositories.MessageRepo(app.config['c_messages'], app.config['f_messages'])
-        messageinfo = {
-            'messageid': '{0}-{1}'.format(token.message.correlationid, token.message.category),
-            'sender': token.message.sender,
-            'body': token.message.body
-        }
-
-        messagerepo.add_message(messageinfo)
+        message = token.message
+        messageid = '{0}-{1}'.format(message.correlationid, message.category)
+        messagerepo.add_message(messageid, message.category, message.sender, message.body)
 

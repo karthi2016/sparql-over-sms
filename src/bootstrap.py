@@ -24,12 +24,11 @@ def configure(binder):
     contactrepo = repositories.ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
     binder.bind(repositories.ContactRepo, to=contactrepo, scope=singleton)
 
-    messagerepo = repositories.MessageRepo(app.config['c_messages'], app.config['f_messages'])
+    messagerepo = repositories.MessageRepo(app.config['c_persistence']['repositories']['message'])
     binder.bind(repositories.MessageRepo, to=messagerepo, scope=singleton)
 
     configmanager = services.ConfigManager(app.config)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
-
 
 # bootstrap application
 app.injector = FlaskInjector(app=app, modules=[configure])
