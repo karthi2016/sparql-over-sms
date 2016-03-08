@@ -11,8 +11,10 @@ class MessageRepo:
         return [self.get_message(messageid) for messageid in messageids]
 
     def get_message(self, messageid):
-        messageinfo = self.messagestore[messageid]
+        if not self.messagestore.has_section(messageid):
+            return None
 
+        messageinfo = self.messagestore[messageid]
         message = {k: messageinfo[k] for k in messageinfo.keys()}
         message['messageid'] = messageid
 

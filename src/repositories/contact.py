@@ -29,7 +29,7 @@ class ContactRepo:
         self.save()
 
     def find_contact(self, phonenumber):
-        result = [c for c in self.get_contacts() if c['phonenumber'] == phonenumber]
+        result = [c for c in self.get_contacts() if c.get('phonenumber') == phonenumber]
         return result[0] if len(result) > 0 else None
 
     def update_contact(self, contactid, contactinfo):

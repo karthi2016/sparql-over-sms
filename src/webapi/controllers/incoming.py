@@ -7,7 +7,7 @@ from pipelines.receivesparqlresponse import ReceiveSparqlResponse
 from pipelines.receivesparqlupdate import ReceiveSparqlUpdate
 from pipelines.wrappers import PipelineToken
 from pipelines.wrappers.pipelinetoken import INCOMING_TOKEN
-from services.messenger import SPARQL_QUERY, SPARQL_UPDATE, SPARQL_QUERY_RESPONSE, SPARQL_UPDATE_RESPONSE
+from transfer.messenger import MSG_SPARQL_QUERY, MSG_SPARQL_UPDATE, MSG_SPARQL_QUERY_RESPONSE, MSG_SPARQL_UPDATE_RESPONSE
 from transfer import Messenger
 from transfer.wrappers.message import Message
 from webapi import app
@@ -19,18 +19,18 @@ from webapi.helpers.responses import *
 def incoming(contactrepo):
     payload = request.get_json()
     sender = payload['sender']
-    body = b64decode(payload['body']).decode('utf-8').strip()
+    body = payload['body']
 
     # process message
     messenger = Messenger(contactrepo)
     message = messenger.receive(sender, body)
 
     pipeline = None
-    if message.category is SPARQL_QUERY:
+    if message.category is MSG_SPARQL_QUERY:
         pipeline = ReceiveSparqlQuery
-    elif message.category is SPARQL_UPDATE:
+    elif message.category is MSG_SPARQL_UPDATE:
         pipeline = ReceiveSparqlUpdate
-    elif message.category in [SPARQL_QUERY_RESPONSE, SPARQL_UPDATE_RESPONSE]:
+    elif message.category in [MSG_SPARQL_QUERY_RESPONSE, MSG_SPARQL_UPDATE_RESPONSE]:
         pipeline = ReceiveSparqlResponse
 
     if pipeline is not None:

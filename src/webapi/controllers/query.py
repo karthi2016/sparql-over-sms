@@ -6,7 +6,7 @@ from injector import inject
 from pipelines import SendSparqlQuery, SendSparqlUpdate
 from pipelines.wrappers import PipelineToken
 from pipelines.wrappers.pipelinetoken import OUTGOING_TOKEN
-from services.messenger import SPARQL_QUERY, SPARQL_UPDATE, SPARQL_QUERY_RESPONSE
+from transfer.messenger import MSG_SPARQL_QUERY, MSG_SPARQL_UPDATE, MSG_SPARQL_QUERY_RESPONSE
 from transfer.wrappers.message import Message
 from webapi import app
 from webapi.helpers.crossdomain import crossdomain
@@ -41,7 +41,7 @@ def outgoing_sparql(contactid, messagerepo):
     query = request.args.get('query')
 
     # send sparql query to contact
-    message = Message(SPARQL_QUERY, query, receiver=contactid)
+    message = Message(MSG_SPARQL_QUERY, query, receiver=contactid)
     result = SendSparqlQuery.execute(PipelineToken(message, OUTGOING_TOKEN))
     print(result)
 
@@ -51,7 +51,7 @@ def outgoing_sparql(contactid, messagerepo):
 
     started = timer()
     while reply is None:
-        reply = messagerepo.find_message(correlationid, SPARQL_QUERY_RESPONSE)
+        reply = messagerepo.find_message(correlationid, MSG_SPARQL_QUERY_RESPONSE)
 
         # stop if timeout is reached
         elapsed = timer() - started
@@ -73,7 +73,7 @@ def outgoing_sparqlupdate(contactid):
     update = request.form.get('update')
 
     # send sparql update to contact
-    message = Message(SPARQL_UPDATE, update, receiver=contactid)
+    message = Message(MSG_SPARQL_UPDATE, update, receiver=contactid)
     result = SendSparqlUpdate.execute(PipelineToken(message, OUTGOING_TOKEN))
 
     print(result)
