@@ -1,1 +1,0 @@
-from connectors.asterisk import AsteriskConnector

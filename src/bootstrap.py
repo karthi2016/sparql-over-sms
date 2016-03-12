@@ -3,9 +3,14 @@ import glob
 import os
 import repositories
 import services
+import transfer
 
-from flask.ext.injector import FlaskInjector, singleton
+from repositories import ContactRepo, MessageRepo
+from flask_injector import FlaskInjector
+from injector import singleton
+from services import ConfigManager, ServiceBox
 from webapi import app
+from transfer import Messenger
 
 # load configuration
 configuration = glob.glob('configuration/*.conf')
@@ -19,16 +24,26 @@ for file in configuration:
     app.config['f_{0}'.format(filename)] = file
 
 
+# populate ioc container
+contactrepo = repositories.ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
+ServiceBox.register_instance(ContactRepo, contactrepo)
+
+messagerepo = repositories.MessageRepo(app.config['c_persistence']['repositories']['message'])
+ServiceBox.register_instance(MessageRepo, messagerepo)
+
+configmanager = services.ConfigManager(app.config)
+ServiceBox.register_instance(ConfigManager, configmanager)
+
+messenger = Messenger(contactrepo)
+ServiceBox.register_instance(Messenger, messenger)
+
+
 # bind dependencies
 def configure(binder):
-    contactrepo = repositories.ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
     binder.bind(repositories.ContactRepo, to=contactrepo, scope=singleton)
-
-    messagerepo = repositories.MessageRepo(app.config['c_persistence']['repositories']['message'])
     binder.bind(repositories.MessageRepo, to=messagerepo, scope=singleton)
-
-    configmanager = services.ConfigManager(app.config)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
+    binder.bind(transfer.Messenger, to=messenger, scope=singleton)
 
 # bootstrap application
 app.injector = FlaskInjector(app=app, modules=[configure])

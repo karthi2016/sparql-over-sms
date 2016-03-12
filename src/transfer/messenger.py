@@ -39,9 +39,11 @@ class Messenger:
 
         return Message(int(body[0]), body[5:], sender=sender['contactid'], correlationid=body[1:5])
 
+    @staticmethod
     def compose_body(self, message):
         return '{0}{1}{2}'.format(message.category, message.correlationid, message.body)
 
+    @staticmethod
     def determine_transfer(self, receiver):
         for strategy in transfer_strategies:
             if strategy.is_supported(receiver):

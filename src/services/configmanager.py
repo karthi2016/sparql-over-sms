@@ -1,6 +1,6 @@
 
 class ConfigManager:
-    """Configuraion Manager"""
+    """Configuration Manager"""
 
     def __init__(self, appconfig):
         self.appconfig = appconfig
@@ -12,9 +12,12 @@ class ConfigManager:
         config = self.appconfig['c_' + name]
         return self._configasdict(config)
 
-    def get_configurationsection(self, name, section):
+    def get_section(self, name, section):
         section = self.appconfig['c_' + name][section]
         return self._sectionasdict(section)
+
+    def get_option(self, configuration, section, option):
+        return self.appconfig['c_' + configuration][section][option]
 
     def update_configuration(self, name, section, keyvalue):
         config = self.appconfig['c_' + name][section]

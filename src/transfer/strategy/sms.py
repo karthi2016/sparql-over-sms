@@ -1,4 +1,5 @@
-from connectors import AsteriskConnector
+from services.servicebox import ServiceBox
+from transfer.connectors import AsteriskConnector
 
 
 class SmsTransfer:
@@ -7,9 +8,8 @@ class SmsTransfer:
 
     @staticmethod
     def send_single(phonenumber, body):
-        from webapi import app
+        asterisk = ServiceBox.get_instance(AsteriskConnector)
 
-        asterisk = AsteriskConnector(app.config['c_asterisk'])
         asterisk.startsession()
         asterisk.send_sms(phonenumber, body)
 

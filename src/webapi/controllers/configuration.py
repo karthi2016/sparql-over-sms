@@ -23,7 +23,7 @@ def retreive_configuration(configmanager, name):
 @inject(configmanager=services.ConfigManager)
 @app.route('/configuration/<name>/<section>', methods=['GET'])
 def retreive_configurationsection(configmanager, name, section):
-    section = configmanager.get_configurationsection(name, section)
+    section = configmanager.get_section(name, section)
     return ok(section)
 
 

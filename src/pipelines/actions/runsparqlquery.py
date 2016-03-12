@@ -1,4 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper
+from services import ConfigManager, ServiceBox
 
 
 class RunSparqlQuery:
@@ -8,10 +9,11 @@ class RunSparqlQuery:
 
     @staticmethod
     def execute(token):
-        from webapi import app
+        configmanager = ServiceBox.get_instance(ConfigManager)
+        endpoint = configmanager.get_option("persistence", "triplestore", "query")
 
         # initialize sparql endpoint
-        sparql = SPARQLWrapper(app.config['c_persistence']['triplestore']['query'])
+        sparql = SPARQLWrapper(endpoint)
 
         # prepare sparql update
         sparql.setQuery(token.message.body)

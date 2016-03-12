@@ -1,4 +1,4 @@
-from repositories import ContactRepo
+from services import ServiceBox
 from transfer import Messenger
 
 
@@ -9,11 +9,7 @@ class SendSms:
 
     @staticmethod
     def execute(token):
-        from webapi import app
-
-        contactrepo = ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
-
-        messenger = Messenger(contactrepo)
+        messenger = ServiceBox.get_instance(Messenger)
         messenger.send(token.message)
 
 

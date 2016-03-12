@@ -1,4 +1,5 @@
-import repositories
+from repositories import MessageRepo
+from services import ServiceBox
 
 
 class StoreMessage:
@@ -8,9 +9,7 @@ class StoreMessage:
 
     @staticmethod
     def execute(token):
-        # create a seperate instance of the message repository
-        from webapi import app
-        messagerepo = repositories.MessageRepo(app.config['c_persistence']['repositories']['message'])
+        messagerepo = ServiceBox.get_instance(MessageRepo)
 
         message = token.message
         messageid = '{0}-{1}'.format(message.correlationid, message.category)
