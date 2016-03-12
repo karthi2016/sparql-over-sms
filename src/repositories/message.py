@@ -1,4 +1,4 @@
-from os import path
+from os import path, makedirs
 from repositories import Repository
 
 
@@ -40,6 +40,10 @@ class MessageRepo(Repository):
         self.execute(sql, (messageid,))
 
     def setup_storage(self):
+        directory = path.dirname(self.filepath)
+        if not path.exists(directory):
+            makedirs(directory)
+
         # create a empty file that will be used as storage
         open(self.filepath, 'w').close()
 
