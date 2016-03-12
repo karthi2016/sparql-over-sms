@@ -19,12 +19,20 @@ def nocontent():
     return Response(status=204)
 
 
+def badrequest():
+    return Response(status=400)
+
+
 def notfound():
     return Response(status=404)
 
 
 def timeout():
     return Response(status=408)
+
+
+def servererror():
+    return Response(status=500)
 
 
 def notimplemented():

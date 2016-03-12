@@ -2,7 +2,7 @@ from pipelines.wrappers.pipelinetoken import OUTGOING_TOKEN
 from transfer.wrappers import Message
 
 
-class ToReply:
+class ToResponse:
     """Converts an incoming token to an outgoing token"""
     name = 'ToReply'
     description = 'Converts an incoming token to an outgoing token'

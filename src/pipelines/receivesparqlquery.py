@@ -1,6 +1,6 @@
 from pipelines.actions import RunSparqlQuery
 from pipelines.basepipeline import Pipeline
-from pipelines.filters import Base64Decode, ToReply
+from pipelines.filters import Base64Decode, ToResponse
 from pipelines.sendsparqlresponse import SendSparqlResponse
 
 
@@ -12,7 +12,7 @@ class ReceiveSparqlQuery(Pipeline):
     chain = [
         Base64Decode,
         RunSparqlQuery,
-        ToReply,
+        ToResponse,
         SendSparqlResponse
     ]
 

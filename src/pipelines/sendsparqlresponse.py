@@ -1,4 +1,4 @@
-from pipelines.actions import SendSms
+from pipelines.actions import SendMessage
 from pipelines.basepipeline import Pipeline
 from pipelines.filters import Base64Encode
 
@@ -10,7 +10,7 @@ class SendSparqlResponse(Pipeline):
 
     chain = [
         Base64Encode,
-        SendSms
+        SendMessage
     ]
 
     @staticmethod
