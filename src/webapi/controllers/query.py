@@ -1,4 +1,5 @@
 import repositories
+
 from flask import request
 from injector import inject
 from pipelines import SendSparqlQuery, SendSparqlUpdate
@@ -44,7 +45,7 @@ def outgoing_sparql(contactid):
     except Exception:
         return servererror()
 
-    return ok(result.message.body)
+    return ok(result.message.body.lower().replace("'", "\""))
 
 
 @crossdomain()
@@ -60,7 +61,7 @@ def outgoing_sparqlupdate(contactid):
     except Exception:
         return servererror()
     
-    return ok(result.message.body)
+    return ok(result.message.body.lower().replace("'", "\""))
 
 
 

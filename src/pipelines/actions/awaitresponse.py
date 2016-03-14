@@ -17,7 +17,7 @@ class AwaitResponse:
 
         # retreive required information
         correlationid = token.message.correlationid
-        category = Messenger.get_category_counterpart(token.message.category)
+        category = token.message.category
 
         # poll until response comes in
         response = None

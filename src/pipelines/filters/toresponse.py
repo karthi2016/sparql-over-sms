@@ -4,7 +4,7 @@ from transfer.wrappers import Message
 
 class ToResponse:
     """Converts an incoming token to an outgoing token"""
-    name = 'ToReply'
+    name = 'ToResponse'
     description = 'Converts an incoming token to an outgoing token'
 
     @staticmethod
@@ -27,6 +27,7 @@ class ToResponse:
         # new message becomes the working item
         token.message_original = message
         token.message = message
+
 
 
 
