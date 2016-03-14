@@ -33,7 +33,6 @@ def get_queryendpoints(contactrepo):
 
 @crossdomain()
 @app.route('/query/<contactid>/sparql', methods=['GET', 'OPTIONS'])
-@inject(messagerepo=repositories.MessageRepo)
 def outgoing_sparql(contactid):
     query = request.args.get('query')
 
