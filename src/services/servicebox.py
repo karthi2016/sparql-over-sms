@@ -9,4 +9,4 @@ class ServiceBox:
 
     @staticmethod
     def get_instance(name):
-        ServiceBox.instances.get(name, None)
+        return ServiceBox.instances.get(name, None)
