@@ -4,7 +4,9 @@ from flask import Response
 
 def ok(content, mimetype=None):
     body = content if type(content) is str else json.dumps(content)
-    return Response(body, status=200, mimetype='application/json' if mimetype is None else mimetype)
+    resp = Response(body, status=200, mimetype='application/json' if mimetype is None else mimetype)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 def created():
