@@ -27,9 +27,23 @@ class MessageRepo(Repository):
         r = result[0]
         return {'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': r[3]}
 
-    def add_message(self, messageid, category, contactid, body):
-        sql = 'INSERT INTO messages VALUES (?, ?, ?, ?)'
-        self.execute(sql, (messageid, category, contactid, body,))
+    def get_multipart_message(self, messageid):
+        sql = 'SELECT DISTINCT * FROM messages where messageid = ?'
+        result = self.execute(sql, (messageid,))
+
+        if len(result) != max(int(msg[4]) for msg in result):
+            return None
+
+        # sort messages based on position
+        result.sort(key=lambda x: int(x[4]))
+        body = ''.join(r[3] for r in result)
+
+        r = result[0]
+        return {'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': body}
+
+    def add_message(self, messageid, category, contactid, body, position):
+        sql = 'INSERT INTO messages VALUES (?, ?, ?, ?, ?)'
+        self.execute(sql, (messageid, category, contactid, body, position,))
 
     def find_message(self, correlationid, category):
         messageid = '{0}-{1}'.format(correlationid, category)
@@ -48,6 +62,7 @@ class MessageRepo(Repository):
         open(self.filepath, 'w').close()
 
         # create the required tables for this repository
-        sql = 'CREATE TABLE IF NOT EXISTS messages (messageid TEXT, category TEXT, contactid TEXT, body TEXT)'
+        sql = 'CREATE TABLE IF NOT EXISTS messages (messageid TEXT, category TEXT, contactid TEXT, body TEXT, ' \
+              'position TEXT)'
         self.execute(sql)
 

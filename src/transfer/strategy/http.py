@@ -3,7 +3,7 @@ import requests
 
 class HttpTransfer:
     """Transfers messages with HTTP"""
-    max_bodysize = 140000
+    max_bodysize = 135
 
     @staticmethod
     def send_single(receiver, body):
@@ -11,8 +11,9 @@ class HttpTransfer:
         response = requests.post(url, json={'sender': '+31626056615', 'body': body})
 
     @staticmethod
-    def send_multiple(messages):
-        raise NotImplementedError('Sending multiple messages via http')
+    def send_multiple(receiver, bodies):
+        for body in bodies:
+            HttpTransfer.send_single(receiver, body)
 
     @staticmethod
     def is_supported(receiver):

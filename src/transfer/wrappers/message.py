@@ -4,14 +4,15 @@ from uuid import uuid4
 class Message:
     """Represents a incoming or outgoing message"""
 
-    def __init__(self, category, body, sender=None, receiver=None, correlationid=None):
+    def __init__(self, category, body, position=0, sender=None, receiver=None, correlationid=None):
         self.category = category
         self.body = body
+        self.position = position
         self.sender = sender
         self.receiver = receiver
 
         # generate a correlation id
-        self.correlationid = correlationid if correlationid is not None else uuid4().hex[:4]
+        self.correlationid = correlationid if correlationid is not None else uuid4().hex[:3]
 
     def __str__(self):
         incoming = self.sender is not None
