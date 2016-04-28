@@ -1,6 +1,6 @@
 from pipelines.actions.storemessage import StoreMessage
 from pipelines.basepipeline import Pipeline
-from pipelines.filters import Base64Decode
+from pipelines.filters import Base64Decode, GzipDecompress
 
 
 class ReceiveSparqlResponse(Pipeline):
@@ -10,6 +10,7 @@ class ReceiveSparqlResponse(Pipeline):
 
     chain = [
         Base64Decode,
+        GzipDecompress,
         StoreMessage
     ]
 

@@ -1,6 +1,6 @@
 from pipelines.actions import RunSparqlUpdate
 from pipelines.basepipeline import Pipeline
-from pipelines.filters import Base64Decode
+from pipelines.filters import Base64Decode, GzipDecompress
 
 
 class ReceiveSparqlUpdate(Pipeline):
@@ -10,6 +10,7 @@ class ReceiveSparqlUpdate(Pipeline):
 
     chain = [
         Base64Decode,
+        GzipDecompress,
         RunSparqlUpdate
     ]
 
