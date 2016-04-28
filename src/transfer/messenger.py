@@ -42,7 +42,8 @@ class Messenger:
     def receive(self, address, body):
         sender = self.contactrepo.find_contact(address)
 
-        return Message(int(body[0]), body[5:], sender=sender['contactid'], correlationid=body[1:4], position=body[4])
+        return Message(int(body[0]), body[5:], sender=sender['contactid'], correlationid=body[1:4],
+                       position=Messenger.gsmchar_to_numeric(body[4]))
 
     def receive_stored(self, stored):
         return Message(int(stored['category']), stored['body'], sender=stored['contactid'],
@@ -50,14 +51,16 @@ class Messenger:
 
     @staticmethod
     def encode_single(message):
-        return '{0}{1}{2}{3}'.format(message.category, message.correlationid, 0, message.body)
+        return '{0}{1}{2}{3}'.format(message.category, message.correlationid,
+                                     Messenger.numeric_to_gsmchar(0), message.body)
 
     @staticmethod
     def encode_multiple(message, max_bodysize):
         body = message.body
         chunked = [body[i:i + max_bodysize] for i in range(0, len(body), max_bodysize)]
 
-        return ['{0}{1}{2}{3}'.format(message.category, message.correlationid, i + 1, x) for i, x in enumerate(chunked)]
+        return ['{0}{1}{2}{3}'.format(message.category, message.correlationid, Messenger.numeric_to_gsmchar(i + 1), x)
+                for i, x in enumerate(chunked)]
 
     @staticmethod
     def determine_transfer(receiver):
@@ -68,5 +71,17 @@ class Messenger:
     @staticmethod
     def get_category_counterpart(messagecategory):
         return messagecategory + (1 if messagecategory % 2 is 0 else -1)
+
+    @staticmethod
+    def numeric_to_gsmchar(num):
+        gsm = '@!#¤%&()*+,-./0123456789:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+        return gsm[num]
+
+    @staticmethod
+    def gsmchar_to_numeric(char):
+        gsm = '@!#¤%&()*+,-./0123456789:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+        return gsm.index(char)
+
+
 
 

@@ -15,7 +15,7 @@ class MessageRepo(Repository):
         sql = 'SELECT * FROM messages'
         result = self.execute(sql)
 
-        return [{'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': r[3]} for r in result]
+        return [{'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': r[3], 'pos': r[4]} for r in result]
 
     def get_message(self, messageid):
         sql = 'SELECT * FROM messages WHERE messageid = ? LIMIT 1'
