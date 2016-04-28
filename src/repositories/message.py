@@ -41,7 +41,7 @@ class MessageRepo(Repository):
         r = result[0]
         return {'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': body}
 
-    def add_message(self, messageid, category, contactid, body, position):
+    def add_message(self, messageid, category, contactid, body, position=0):
         sql = 'INSERT INTO messages VALUES (?, ?, ?, ?, ?)'
         self.execute(sql, (messageid, category, contactid, body, position,))
 
