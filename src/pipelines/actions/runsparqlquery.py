@@ -1,3 +1,5 @@
+import rdflib
+
 from SPARQLWrapper import SPARQLWrapper
 from services import ConfigManager, ServiceBox
 
@@ -18,9 +20,13 @@ class RunSparqlQuery:
         # prepare sparql update
         sparql.setQuery(token.message.body)
         sparql.method = 'GET'
-        sparql.returnFormat = 'json'
+        sparql.returnFormat = 'rdf+xml'
 
         # return result un-altered
-        token.result = sparql.query().convert()
+        result = sparql.query().convert()
+        if type(result) is rdflib.ConjunctiveGraph:
+            token.result = result.serialize(format='turtle').decode('utf-8')
+        else:
+            token.result = result.toxml()
 
 
