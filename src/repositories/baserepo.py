@@ -19,7 +19,6 @@ class Repository:
         return result
 
     def connect(self):
-        print(self.filepath)
         connection = sqlite3.connect(self.filepath)
         return connection, connection.cursor()
 
