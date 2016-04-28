@@ -2,9 +2,9 @@ import json
 from flask import Response
 
 
-def ok(content):
+def ok(content, mimetype=None):
     body = content if type(content) is str else json.dumps(content)
-    return Response(body, status=200, mimetype='application/json')
+    return Response(body, status=200, mimetype='application/json' if mimetype is None else mimetype)
 
 
 def created():
