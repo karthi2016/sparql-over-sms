@@ -10,9 +10,9 @@ from webapi import app
 from webapi.helpers.responses import *
 
 
-@inject(contactrepo=repositories.ContactRepo)
+@inject(contactrepo=repositories.ContactRepo, messagerepo=repositories.MessageRepo)
 @app.route('/incoming', methods=['POST'])
-def incoming(contactrepo):
+def incoming(contactrepo, messagerepo):
     payload = request.get_json()
     sender = payload['sender']
     body = payload['body']
@@ -20,6 +20,15 @@ def incoming(contactrepo):
     # process message
     messenger = Messenger(contactrepo)
     message = messenger.receive(sender, body)
+
+    messagerepo.add_message(message.correlationid, message.category, message.sender, message.body, message.position)
+    if int(message.position) > 0:
+        # store message
+        multipart = messagerepo.get_multipart_message(message.correlationid)
+        if multipart is not None:
+            message = messenger.receive_stored(multipart)
+        else:
+            return nocontent()
 
     pipeline = None
     if message.category is MSG_SPARQL_QUERY:
@@ -30,7 +39,10 @@ def incoming(contactrepo):
         pipeline = ReceiveSparqlResponse
 
     if pipeline is not None:
-        pipeline.execute(PipelineToken(message, INCOMING_TOKEN))
+        try:
+            pipeline.execute(PipelineToken(message, INCOMING_TOKEN))
+        except Exception as e:
+            print(e)
     else:
         print('No suitable pipeline found..')
 

@@ -42,10 +42,10 @@ def outgoing_sparql(contactid):
         result = SendSparqlQuery.execute(PipelineToken(message, OUTGOING_TOKEN))
     except TimeoutError:
         return timeout()
-    except Exception:
+    except Exception as e:
         return servererror()
 
-    return ok(result.message.body.lower().replace("'", "\""))
+    return ok(result.message.body.lower().replace("'", "\""), 'application/sparql-results+json; charset=UTF-8')
 
 
 @crossdomain()
@@ -61,7 +61,7 @@ def outgoing_sparqlupdate(contactid):
     except Exception:
         return servererror()
     
-    return ok(result.message.body.lower().replace("'", "\""))
+    return ok(result.message.body.lower().replace("'", "\""), 'application/sparql-results+json; charset=UTF-8')
 
 
 
