@@ -15,16 +15,10 @@ class Repository:
         cursor.execute(sql, params)
         result = cursor.fetchall()
 
-        self.disconnect(self.commit(connection))
+        connection.commit()
+        connection.close()
         return result
 
     def connect(self):
         connection = sqlite3.connect(self.filepath)
         return connection, connection.cursor()
-
-    def commit(self, connection):
-        connection.commit()
-        return connection
-
-    def disconnect(self, connection):
-        connection.close()

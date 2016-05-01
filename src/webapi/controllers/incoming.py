@@ -21,14 +21,16 @@ def incoming(contactrepo, messagerepo):
     messenger = Messenger(contactrepo)
     message = messenger.receive(sender, body)
 
-    messagerepo.add_message(message.correlationid, message.category, message.sender, message.body, message.position)
     if int(message.position) > 0:
-        # store message
-        multipart = messagerepo.get_multipart_message(message.correlationid)
+        # store multi-part message
+        messagerepo.add_message(message.correlationid, message.position, message.category, message.sender, message.body)
+
+        # check if all parts are received
+        multipart = messagerepo.get_message_byidandcategory(message.correlationid, message.category)
         if multipart is not None:
             message = messenger.receive_stored(multipart)
         else:
-            return nocontent()
+            return accepted()
 
     pipeline = None
     if message.category is MSG_SPARQL_QUERY:

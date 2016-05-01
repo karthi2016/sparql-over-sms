@@ -12,6 +12,6 @@ class StoreMessage:
         messagerepo = ServiceBox.get_instance(MessageRepo)
 
         message = token.message
-        messageid = '{0}-{1}'.format(message.correlationid, message.category)
-        messagerepo.add_message(messageid, message.category, message.sender, message.body)
+        identifier = message.correlationid
+        messagerepo.add_message(identifier, 0, message.category, message.sender, message.body)
 
