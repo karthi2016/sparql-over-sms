@@ -36,9 +36,10 @@ pip install -r requirements.txt
 python src\bootstrap.py
 ```
 
+For further customization, please consult the [documentation](https://github.com/onnovalkering/sparql-over-sms/wiki).
+
 ### Requirements
 For the use of SPARQL over SMS, at least the following are assumed to be installed:
 
 - Python 3.4+
 - virtualenv
-
