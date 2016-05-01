@@ -1,6 +1,6 @@
 Flask==0.10.1
 Flask-Injector==0.6.2
-gunicorn=19.4.5
+tornado==4.3
 injector==0.9.1
 isodate==0.5.4
 itsdangerous==0.24

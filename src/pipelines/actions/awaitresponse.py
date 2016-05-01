@@ -16,14 +16,14 @@ class AwaitResponse:
         messagerepo = ServiceBox.get_instance(MessageRepo)
 
         # retreive required information
-        correlationid = token.message.correlationid
+        messageid = token.message.correlationid
         category = token.message.category
 
         # poll until response comes in
         response = None
         started = timer()
         while response is None:
-            response = messagerepo.find_message(correlationid, category)
+            response = messagerepo.get_message_byidandcategory(messageid, category)
 
             # stop if timeout is reached
             elapsed = timer() - started
@@ -33,4 +33,4 @@ class AwaitResponse:
             # don't flood it
             time.sleep(1)
 
-        token.message.body = response['body']
+        token.message.body = response.body

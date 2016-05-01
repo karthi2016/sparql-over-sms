@@ -3,6 +3,7 @@ import repositories
 from flask import request
 from injector import inject
 from webapi import app
+from webapi.helpers import crossdomain
 from webapi.helpers.responses import *
 
 
@@ -55,4 +56,24 @@ def delete_contact(contactid, contactrepo):
     contactrepo.remove_contact(contactid)
 
     return nocontent()
+
+
+@crossdomain()
+@inject(contactrepo=repositories.ContactRepo)
+@app.route('/query/endpoints', methods=['GET', 'OPTIONS'])
+def get_queryendpoints(contactrepo):
+    contacts = [c for c in contactrepo.get_contacts() if c['sparqlenabled'] == 'yes']
+
+    endpoints = []
+    for contact in contacts:
+        endpoint = {
+            'contact': contact['fullname'],
+            'sparql': {
+                'query': '/query/{0}/sparql'.format(contact['contactid']),
+                'update': '/query/{0}/sparql/update'.format(contact['contactid'])
+            }
+        }
+        endpoints.append(endpoint)
+
+    return ok(endpoints)
 

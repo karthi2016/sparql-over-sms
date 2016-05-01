@@ -6,4 +6,4 @@ import webapi.controllers.configuration
 import webapi.controllers.contacts
 import webapi.controllers.incoming
 import webapi.controllers.system
-import webapi.controllers.query
+import webapi.controllers.sparql

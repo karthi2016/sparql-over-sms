@@ -1,9 +1,22 @@
+from models import Message
 from os import path, makedirs
 from repositories import Repository
 
+messages_create_table_sql = '''
+  CREATE TABLE IF NOT EXISTS messages (
+    identifier TEXT,
+    position INTEGER,
+    category INTEGER,
+    senderid TEXT,
+    body TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(identifier, position)
+  )
+'''
+
 
 class MessageRepo(Repository):
-    """Repository for retreiving and restoring messages"""
+    """Repository for retreiving and storing messages"""
 
     def __init__(self, filepath):
         super().__init__(filepath)
@@ -11,47 +24,38 @@ class MessageRepo(Repository):
         if not path.isfile(filepath):
             self.setup_storage()
 
+    # ----------------------------------------------------------------------- #
+
     def get_messages(self):
         sql = 'SELECT * FROM messages'
-        result = self.execute(sql)
+        results = self.execute(sql)
 
-        return [{'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': r[3], 'pos': r[4]} for r in result]
+        return [self.as_message(result) for result in results]
 
-    def get_message(self, messageid):
-        sql = 'SELECT * FROM messages WHERE messageid = ? LIMIT 1'
-        result = self.execute(sql, (messageid,))
+    def get_message_byid(self, identifier):
+        sql = 'SELECT * FROM messages WHERE identifier = ?'
+        return self.get_message_bysql(sql, (identifier,))
 
-        if len(result) != 1:
+    def get_message_byidandcategory(self, identifier, category):
+        sql = 'SELECT * FROM messages WHERE identifier = ? AND category = ?'
+        return self.get_message_bysql(sql, (identifier, category))
+
+    def get_message_bysql(self, sql, parameters):
+        results = self.execute(sql, parameters)
+
+        if len(results) == 0:
             return None
 
-        r = result[0]
-        return {'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': r[3]}
+        result = results[0]
+        if result[1] is 0:
+            return self.as_message(result)
 
-    def get_multipart_message(self, messageid):
-        sql = 'SELECT DISTINCT * FROM messages where messageid = ?'
-        result = self.execute(sql, (messageid,))
+        # positions higher than 0 mean multi-part messages
+        return self.combine_multipart_messages(results)
 
-        if len(result) != max(int(msg[4]) for msg in result):
-            return None
-
-        # sort messages based on position
-        result.sort(key=lambda x: int(x[4]))
-        body = ''.join(r[3] for r in result)
-
-        r = result[0]
-        return {'messageid': r[0], 'category': r[1], 'contactid': r[2], 'body': body}
-
-    def add_message(self, messageid, category, contactid, body, position=0):
+    def add_message(self, identifier, position, category, senderid, body):
         sql = 'INSERT INTO messages VALUES (?, ?, ?, ?, ?)'
-        self.execute(sql, (messageid, category, contactid, body, position,))
-
-    def find_message(self, correlationid, category):
-        messageid = '{0}-{1}'.format(correlationid, category)
-        return self.get_message(messageid)
-
-    def remove_message(self, messageid):
-        sql = 'DELETE FROM messages WHERE messageid = ?'
-        self.execute(sql, (messageid,))
+        self.execute(sql, (identifier, position, category, senderid, body,))
 
     def setup_storage(self):
         directory = path.dirname(self.filepath)
@@ -62,7 +66,19 @@ class MessageRepo(Repository):
         open(self.filepath, 'w').close()
 
         # create the required tables for this repository
-        sql = 'CREATE TABLE IF NOT EXISTS messages (messageid TEXT, category TEXT, contactid TEXT, body TEXT, ' \
-              'position TEXT)'
-        self.execute(sql)
+        self.execute(messages_create_table_sql)
+
+    def combine_multipart_messages(self, results):
+        # check if all position are available
+        if len(results) != max(int(result[1]) for result in results):
+            return None
+
+        results.sort(key=lambda r: int(r[1]))
+        body = ''.join(result[4] for result in results)
+
+        result = results[0]
+        return self.as_message(result, body)
+
+    def as_message(self, result, body=None):
+        return Message(result[0], result[1], result[2], result[3], result[4] if body is None else body, result[5])
 

@@ -11,18 +11,22 @@ from injector import singleton
 from services import ConfigManager, ServiceBox
 from webapi import app
 from transfer import Messenger
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+from os import path
 
 # load configuration
-configuration = glob.glob('configuration/*.conf')
+sources = path.dirname(path.abspath(__file__))
+configuration = glob.glob(path.join(sources, 'configuration/*.conf'))
 for file in configuration:
     config = configparser.ConfigParser()
     config.read(file)
 
     # use filename as key
-    filename = os.path.splitext(os.path.basename(file))[0]
+    filename = path.splitext(path.basename(file))[0]
     app.config['c_{0}'.format(filename)] = config
     app.config['f_{0}'.format(filename)] = file
-
 
 # populate ioc container
 contactrepo = repositories.ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
@@ -37,7 +41,6 @@ ServiceBox.register_instance(ConfigManager, configmanager)
 messenger = Messenger(contactrepo)
 ServiceBox.register_instance(Messenger, messenger)
 
-
 # bind dependencies
 def configure(binder):
     binder.bind(repositories.ContactRepo, to=contactrepo, scope=singleton)
@@ -46,6 +49,12 @@ def configure(binder):
     binder.bind(transfer.Messenger, to=messenger, scope=singleton)
 
 # bootstrap application
+with open(path.join(path.dirname(sources), 'releaseversion.txt'), 'r') as f:
+    app.releaseversion = f.readline()
+
 app.injector = FlaskInjector(app=app, modules=[configure])
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', debug=True)
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(5000)
+    print('SPARQL over SMS service started ({0})'.format(app.releaseversion))
+    IOLoop.instance().start()
