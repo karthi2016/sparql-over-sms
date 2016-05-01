@@ -2,7 +2,7 @@
 Efficient transfer of SPARQL queries and results over short-message networks.
 
 ### Introduction
-SPARQL over SMS showns that data sharing according to Semantic Web practices is possible even in areas without a Web infrastructure. 
+SPARQL over SMS shows that data sharing according to Semantic Web practices is possible even in areas without a Web infrastructure. 
 The development of SPARQL over SMS is based on multiple ICT4D cases, but it is also applicable to low-bandwidth cases in general.
 For example in the context of disaster management or the Internet of Things.
 
@@ -18,7 +18,7 @@ git clone https://github.com/onnovalkering/sparl-over-sms
 cd sparql-over-sms
 
 virtualenv venv
-./venv/Scripts/activate
+.\venv\Scripts\activate
 
 pip install -r requirements.txt
 python src\bootstrap.py
