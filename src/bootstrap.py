@@ -11,6 +11,9 @@ from injector import singleton
 from services import ConfigManager, ServiceBox
 from webapi import app
 from transfer import Messenger
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
 
 # load configuration
 configuration = glob.glob('configuration/*.conf')
@@ -22,7 +25,6 @@ for file in configuration:
     filename = os.path.splitext(os.path.basename(file))[0]
     app.config['c_{0}'.format(filename)] = config
     app.config['f_{0}'.format(filename)] = file
-
 
 # populate ioc container
 contactrepo = repositories.ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
@@ -48,4 +50,6 @@ def configure(binder):
 # bootstrap application
 app.injector = FlaskInjector(app=app, modules=[configure])
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', debug=True)
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(5000)
+    IOLoop.instance().start()
