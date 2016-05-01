@@ -6,7 +6,10 @@ from webapi.helpers.responses import *
 
 @app.route('/')
 def get_status():
-    return ok({'name': 'Semantic M2M', 'version': '0.0.0'})
+    with open('./../releaseversion.txt', 'r') as f:
+        releaseversion = f.readline()
+
+    return ok({'name': 'SPARQL over SMS', 'version': releaseversion})
 
 
 @inject(messagerepo=repositories.MessageRepo)
