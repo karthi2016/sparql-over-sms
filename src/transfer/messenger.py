@@ -46,8 +46,7 @@ class Messenger:
                        position=Messenger.gsmchar_to_numeric(body[4]))
 
     def receive_stored(self, stored):
-        return Message(int(stored['category']), stored['body'], sender=stored['contactid'],
-                       correlationid=stored['messageid'])
+        return Message(int(stored.category), stored.body, sender=stored.sender, correlationid=stored.identifier)
 
     @staticmethod
     def encode_single(message):
