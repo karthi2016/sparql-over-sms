@@ -1,4 +1,6 @@
 import requests
+from repositories import ContactRepo
+from services import ServiceBox
 
 
 class HttpTransfer:
@@ -7,8 +9,11 @@ class HttpTransfer:
 
     @staticmethod
     def send_single(receiver, body):
+        contactrepo = ServiceBox.get_instance(ContactRepo)
+        self = contactrepo.get_contact('self')
+
         url = 'http://{0}:5000/incoming'.format(receiver['hostname'])
-        response = requests.post(url, json={'sender': '+31626056615', 'body': body})
+        response = requests.post(url, json={'sender': self['phonenumber'], 'body': body})
 
     @staticmethod
     def send_multiple(receiver, bodies):
