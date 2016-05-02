@@ -17,11 +17,8 @@ To get SPARQL over SMS running within 5 minutes, run these commands on either Wi
 git clone https://github.com/onnovalkering/sparl-over-sms
 cd sparql-over-sms
 
-virtualenv venv
-.\venv\Scripts\activate
-
-pip install -r requirements.txt
-python src\bootstrap.py
+pip3 install -r requirements.txt
+python3 src/bootstrap.py
 ```
 
 For further customization, please consult the [documentation](https://github.com/onnovalkering/sparql-over-sms/wiki).
@@ -39,7 +36,6 @@ The estimated number of triples that can be send per SMS are:
 | 10 | 301 |
 
 ### Requirements
-For the use of SPARQL over SMS, at least the following are assumed to be installed:
+For the use of SPARQL over SMS, the following are assumed to be installed:
 
-- Python 3.4+
-- virtualenv
+- Python 3.4.2+

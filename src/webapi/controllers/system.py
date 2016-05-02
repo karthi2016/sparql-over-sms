@@ -12,4 +12,4 @@ def get_status():
 @inject(messagerepo=repositories.MessageRepo)
 @app.route('/messages')
 def messages(messagerepo):
-    return ok(messagerepo.get_messages())
+    return ok([m.__dict__ for m in messagerepo.get_messages()])
