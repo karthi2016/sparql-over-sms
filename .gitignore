@@ -66,4 +66,5 @@ target/
 
 # Custom
 venv/
-src/persistence
+src/persistence/
+*.db
