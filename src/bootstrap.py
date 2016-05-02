@@ -1,6 +1,5 @@
 import configparser
 import glob
-import os
 import repositories
 import services
 import transfer
@@ -15,6 +14,13 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from os import path
+from argparse import ArgumentParser
+
+# parse arguments
+parser = ArgumentParser(description='SPARQL over SMS')
+parser.add_argument('--processes', default=1, help='number of processes (default: 1)')
+parser.add_argument('--port', default=5000, help='port number to bind (default: 5000)')
+args = parser.parse_args()
 
 # load configuration
 sources = path.dirname(path.abspath(__file__))
@@ -52,9 +58,11 @@ def configure(binder):
 with open(path.join(path.dirname(sources), 'releaseversion.txt'), 'r') as f:
     app.releaseversion = f.readline()
 
+
 app.injector = FlaskInjector(app=app, modules=[configure])
 if __name__ == "__main__":
     http_server = HTTPServer(WSGIContainer(app))
-    http_server.listen(5000)
+    http_server.bind(args.port)
+    http_server.start(args.processes)
     print('SPARQL over SMS service started ({0})'.format(app.releaseversion))
-    IOLoop.instance().start()
+    IOLoop.current().start()
