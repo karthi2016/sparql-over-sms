@@ -80,5 +80,5 @@ class MessageRepo(Repository):
         return self.as_message(result, body)
 
     def as_message(self, result, body=None):
-        return Message(result[0], result[1], result[2], result[3], result[4] if body is None else body, result[5])
+        return Message(result[0], result[1], result[2], result[3], result[4] if body is None else body)
 
