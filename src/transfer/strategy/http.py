@@ -12,7 +12,7 @@ class HttpTransfer:
         contactrepo = ServiceBox.get_instance(ContactRepo)
         self = contactrepo.get_contact_byid('self')
 
-        url = 'http://{0}:5000/incoming'.format(receiver['hostname'])
+        url = 'http://{0}:5000/incoming'.format(receiver.ip)
         session = FuturesSession()
         response_future = session.post(url, json={'sender': self.phonenumber, 'body': body})
 
@@ -26,5 +26,5 @@ class HttpTransfer:
 
     @staticmethod
     def is_supported(receiver):
-        return receiver['hostname'] is not None
+        return receiver.ip is not None
 

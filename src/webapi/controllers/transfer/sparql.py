@@ -19,7 +19,8 @@ def endpoint_sparql(contactid):
         result = SendSparqlQuery.execute(PipelineToken(message, OUTGOING_TOKEN))
     except TimeoutError:
         return timeout()
-    except Exception:
+    except Exception as e:
+        print(e)
         return servererror()
 
     return ok(result.message.body.lower().replace("'", "\""), 'application/sparql-results+json; charset=UTF-8')
