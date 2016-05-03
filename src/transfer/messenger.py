@@ -42,7 +42,7 @@ class Messenger:
     def receive(self, address, body):
         sender = self.contactrepo.get_contact_byphonenumber(address)
 
-        return Message(int(body[0]), body[5:], sender=sender['contactid'], correlationid=body[1:4],
+        return Message(int(body[0]), body[5:], sender=sender.sender, correlationid=body[1:4],
                        position=Messenger.gsmchar_to_numeric(body[4]))
 
     def receive_stored(self, stored):

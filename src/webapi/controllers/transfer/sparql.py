@@ -9,7 +9,7 @@ from webapi.helpers import crossdomain
 from webapi.helpers.responses import *
 
 
-@crossdomain()
+@crossdomain(origin='*')
 @app.route('/agent/<contactid>/sparql', methods=['GET', 'OPTIONS'])
 def endpoint_sparql(contactid):
     query = request.args.get('query')
@@ -26,7 +26,7 @@ def endpoint_sparql(contactid):
     return ok(result.message.body.lower().replace("'", "\""), 'application/sparql-results+json; charset=UTF-8')
 
 
-@crossdomain()
+@crossdomain(origin='*')
 @app.route('/agent/<contactid>/sparql/update', methods=['POST', 'OPTIONS'])
 def endpoint_sparqlupdate(contactid):
     update = request.form.get('update')
