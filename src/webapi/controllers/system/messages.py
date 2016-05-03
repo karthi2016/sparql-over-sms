@@ -1,10 +1,26 @@
 import repositories
+
 from injector import inject
 from webapi import app
 from webapi.helpers.responses import *
 
 
-@inject(messagerepo=repositories.MessageRepo)
 @app.route('/messages')
-def messages(messagerepo):
-    return ok([m.__dict__ for m in messagerepo.get_messages()])
+@inject(repository=repositories.MessageRepo)
+def get_messages(repository):
+    messages = repository.get_messages()
+
+    # return messages as JSON
+    return ok('[{}]'.format(','.join([m.as_json() for m in messages])), 'application/json')
+
+
+@app.route('/message/<identifier>')
+@inject(repository=repositories.MessageRepo)
+def get_message_byid(repository, identifier):
+    message = repository.get_message_byid(identifier)
+
+    if message is None:
+        return notfound()
+
+    # return message as JSON
+    return ok(message.as_json(), 'application/json')

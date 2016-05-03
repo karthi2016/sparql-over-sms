@@ -1,6 +1,6 @@
 
 class Contact:
-    """Base contact model"""
+    """Represents a contact"""
 
-    def __init__(self):
+    def __init__(self, identifier, name, phonenumber, host):
         pass

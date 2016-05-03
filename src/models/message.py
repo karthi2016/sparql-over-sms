@@ -1,6 +1,8 @@
+from models import Model
 
-class Message:
-    """Base message model"""
+
+class Message(Model):
+    """Representas a message"""
 
     def __init__(self, identifier, position, category, sender, body):
         self.identifier = identifier
