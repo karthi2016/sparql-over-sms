@@ -36,7 +36,7 @@ for file in configuration:
     app.config['f_{0}'.format(filename)] = file
 
 # populate ioc container
-contactrepo = repositories.ContactRepo(app.config['c_contacts'], app.config['f_contacts'])
+contactrepo = repositories.ContactRepo(app.config['c_persistence']['repositories']['contact'])
 ServiceBox.register_instance(ContactRepo, contactrepo)
 
 messagerepo = repositories.MessageRepo(app.config['c_persistence']['repositories']['message'])

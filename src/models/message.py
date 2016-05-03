@@ -2,7 +2,7 @@ from models import Model
 
 
 class Message(Model):
-    """Representas a message"""
+    """Message representation"""
 
     def __init__(self, identifier, position, category, sender, body):
         self.identifier = identifier

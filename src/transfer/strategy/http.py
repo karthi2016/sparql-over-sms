@@ -10,11 +10,11 @@ class HttpTransfer:
     @staticmethod
     def send_single(receiver, body):
         contactrepo = ServiceBox.get_instance(ContactRepo)
-        self = contactrepo.get_contact('self')
+        self = contactrepo.get_contact_byid('self')
 
         url = 'http://{0}:5000/incoming'.format(receiver['hostname'])
         session = FuturesSession()
-        response_future = session.post(url, json={'sender': self['phonenumber'], 'body': body})
+        response_future = session.post(url, json={'sender': self.phonenumber, 'body': body})
 
         # wait for the response to come in
         response_future.result()

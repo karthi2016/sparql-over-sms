@@ -2,6 +2,7 @@ from models import Message
 from os import path, makedirs
 from repositories import Repository
 
+
 messages_create_table_sql = '''
   CREATE TABLE IF NOT EXISTS messages (
     identifier TEXT,

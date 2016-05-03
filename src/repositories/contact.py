@@ -1,51 +1,73 @@
+from models import Contact
+from repositories import Repository
+from os import path, makedirs
 
-class ContactRepo:
-    """Repository for retreiving and restoring contacts"""
+contacts_create_table_sql = '''
+  CREATE TABLE IF NOT EXISTS contacts (
+    identifier TEXT,
+    name TEXT,
+    phonenumber TEXT,
+    ip TEXT,
+    PRIMARY KEY(identifier)
+  )
+'''
 
-    def __init__(self, contactstore, filepath):
-        self.contactstore = contactstore
-        self.filepath = filepath
+class ContactRepo(Repository):
+    """Repository for retreiving and storing contact"""
+
+    def __init__(self, filepath):
+        super().__init__(filepath)
+
+        if not path.isfile(filepath):
+            self.setup_storage()
+
+    # ----------------------------------------------------------------------- #
 
     def get_contacts(self):
-        contactids = self.contactstore.sections()
-        return [self.get_contact(contactid) for contactid in contactids]
+        sql = 'SELECT * FROM contacts'
+        results = self.execute(sql)
 
-    def get_contact(self, contactid):
-        contactinfo = self.contactstore[contactid]
+        return [self.as_contact(result) for result in results]
 
-        contact = {k: contactinfo[k] for k in contactinfo.keys()}
-        contact['contactid'] = contactid
+    def get_contact_byid(self, identifier):
+        sql = 'SELECT * FROM contacts WHERE identifier = ?'
+        return self.get_contact_bysql(sql, (identifier,))
 
-        return contact
+    def get_contact_byphonenumber(self, phonenumber):
+        sql = 'SELECT * FROM contacts WHERE phonenumber = ? LIMIT 1'
+        return self.get_contact_bysql(sql, (phonenumber,))
 
-    def add_contact(self, contactinfo):
-        contactid = contactinfo['contactid']
+    def get_contact_bysql(self, sql, parameters):
+        result = self.execute(sql, parameters)
 
-        self.contactstore.add_section(contactid)
-        self.contactstore.set(contactid, 'fullname', contactinfo['fullname'])
-        self.contactstore.set(contactid, 'phonenumber', contactinfo['phonenumber'])
+        if len(result) == 0:
+            return None
 
-        # persist changes
-        self.save()
+        return self.as_contact(result[0])
 
-    def find_contact(self, phonenumber):
-        result = [c for c in self.get_contacts() if c.get('phonenumber') == phonenumber]
-        return result[0] if len(result) > 0 else None
+    def add_contact(self, identifier, name, phonenumber, ip=None):
+        sql = 'INSERT INTO contacts (identifier, name, phonenumber, ip) VALUES (?, ?, ?, ?)'
+        self.execute(sql, (identifier, name, phonenumber, ip,))
 
-    def update_contact(self, contactid, contactinfo):
-        contact = self.contactstore[contactid]
-        contact['fullname'] = contactinfo['fullname']
-        contact['phonenumber'] = contactinfo['phonenumber']
+    def update_contact(self, identifier, name, phonenumber, ip=None):
+        sql = 'UPDATE contacts SET name = ?, phonenumber = ?, ip = ? WHERE identifier = ?'
+        self.execute(sql, (name, phonenumber, ip, identifier))
 
-        # persist changes
-        self.save()
+    def delete_contact(self, identifier):
+        sql = 'DELETE FROM contacts WHERE identifier = ?'
+        self.execute(sql, (identifier,))
 
-    def remove_contact(self, contactid):
-        self.contactstore.remove_section(contactid)
+    def setup_storage(self):
+        directory = path.dirname(self.filepath)
+        if not path.exists(directory):
+            makedirs(directory)
 
-        # persist changes
-        self.save()
+        # create a empty file that will be used as storage
+        open(self.filepath, 'w').close()
 
-    def save(self):
-        with open(self.filepath, 'w') as file:
-            self.contactstore.write(file)
+        # create the required tables for this repository
+        self.execute(contacts_create_table_sql)
+
+    def as_contact(self, result):
+        return Contact(result[0], result[1], result[2], result[3])
+

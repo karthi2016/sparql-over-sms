@@ -28,7 +28,7 @@ class Messenger:
         self.contactrepo = contactrepo
 
     def send(self, message):
-        receiver = self.contactrepo.get_contact(message.receiver)
+        receiver = self.contactrepo.get_contact_byid(message.receiver)
 
         transfer = self.determine_transfer(receiver)
         if len(message.body) <= transfer.max_bodysize:
@@ -40,7 +40,7 @@ class Messenger:
             transfer.send_multiple(receiver, bodies)
 
     def receive(self, address, body):
-        sender = self.contactrepo.find_contact(address)
+        sender = self.contactrepo.get_contact_byphonenumber(address)
 
         return Message(int(body[0]), body[5:], sender=sender['contactid'], correlationid=body[1:4],
                        position=Messenger.gsmchar_to_numeric(body[4]))
