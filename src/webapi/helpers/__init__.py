@@ -1,1 +1,1 @@
-from webapi.helpers.crossdomain import crossdomain
+from webapi.helpers.responses import *
