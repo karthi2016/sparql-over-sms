@@ -7,6 +7,7 @@ import transfer
 
 from repositories import ContactRepo, MessageRepo
 from flask_injector import FlaskInjector
+from flask.ext.cors import CORS
 from injector import singleton
 from services import ConfigManager, ServiceBox
 from webapi import app
@@ -60,6 +61,7 @@ with open(path.join(path.dirname(sources), 'releaseversion.txt'), 'r') as f:
     app.releaseversion = f.readline()
 
 app.injector = FlaskInjector(app=app, modules=[configure])
+CORS(app)
 if __name__ == "__main__":
     http_server = HTTPServer(WSGIContainer(app))
     http_server.bind(args.port)

@@ -5,12 +5,10 @@ from pipelines.wrappers.pipelinetoken import OUTGOING_TOKEN
 from transfer.messenger import MSG_SPARQL_QUERY, MSG_SPARQL_UPDATE
 from transfer.wrappers import Message
 from webapi import app
-from webapi.helpers import crossdomain
 from webapi.helpers.responses import *
 
 
-@crossdomain(origin='*')
-@app.route('/agent/<contactid>/sparql', methods=['GET', 'OPTIONS'])
+@app.route('/agent/<contactid>/sparql', methods=['GET'])
 def endpoint_sparql(contactid):
     query = request.args.get('query')
 
@@ -26,8 +24,7 @@ def endpoint_sparql(contactid):
     return ok(result.message.body.lower().replace("'", "\""), 'application/sparql-results+json; charset=UTF-8')
 
 
-@crossdomain(origin='*')
-@app.route('/agent/<contactid>/sparql/update', methods=['POST', 'OPTIONS'])
+@app.route('/agent/<contactid>/sparql/update', methods=['POST'])
 def endpoint_sparqlupdate(contactid):
     update = request.form.get('update')
 
