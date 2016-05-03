@@ -1,4 +1,4 @@
-import requests
+from requests_futures.sessions import FuturesSession
 from repositories import ContactRepo
 from services import ServiceBox
 
@@ -13,7 +13,11 @@ class HttpTransfer:
         self = contactrepo.get_contact('self')
 
         url = 'http://{0}:5000/incoming'.format(receiver['hostname'])
-        response = requests.post(url, json={'sender': self['phonenumber'], 'body': body})
+        session = FuturesSession()
+        response_future = session.post(url, json={'sender': self['phonenumber'], 'body': body})
+
+        # wait for the response to come in
+        response_future.result()
 
     @staticmethod
     def send_multiple(receiver, bodies):

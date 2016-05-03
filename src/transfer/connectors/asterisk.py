@@ -1,4 +1,4 @@
-import requests
+from requests_futures.sessions import FuturesSession
 
 
 class AsteriskConnector:
@@ -19,7 +19,7 @@ class AsteriskConnector:
         self.dongleid = general['dongleid']
 
     def startsession(self):
-        self.session = requests.Session()
+        self.session = FuturesSession()
         self.authenticate()
 
     def authenticate(self):
@@ -35,7 +35,8 @@ class AsteriskConnector:
         return self.send_request(parameters)
 
     def send_request(self, parameters):
-        return self.session.get(self.url, params=parameters)
+        future = self.session.get(self.url, params=parameters)
+        return future.result()
 
 
 
