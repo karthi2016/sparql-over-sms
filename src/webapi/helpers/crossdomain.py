@@ -1,4 +1,4 @@
-# Adapted from: http://flask.pocoo.org/snippets/56/
+# adapted from: http://flask.pocoo.org/snippets/56/
 from datetime import timedelta
 from flask import make_response, request, current_app
 from functools import update_wrapper
@@ -48,4 +48,5 @@ def crossdomain(origin=None, methods=None, headers=None,
 
         f.provide_automatic_options = False
         return update_wrapper(wrapped_function, f)
+
     return decorator

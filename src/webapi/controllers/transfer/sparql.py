@@ -37,14 +37,7 @@ def endpoint_sparqlupdate(contactid):
         return timeout()
     except Exception:
         return servererror()
-    
+
     return ok(result.message.body.lower().replace("'", "\""), 'application/sparql-results+json; charset=UTF-8')
-
-
-
-
-
-
-
 
 
