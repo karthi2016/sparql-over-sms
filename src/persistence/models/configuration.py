@@ -1,6 +1,6 @@
 from datetime import datetime
 from peewee import CharField, DateTimeField
-from persistence import BaseModel
+from persistence.models import BaseModel
 
 
 class Configuration(BaseModel):

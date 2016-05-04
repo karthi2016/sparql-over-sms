@@ -1,6 +1,6 @@
 from datetime import datetime
 from peewee import CharField, IntegerField, TextField, DateTimeField
-from persistence import BaseModel
+from persistence.models import BaseModel
 
 
 class Message(BaseModel):

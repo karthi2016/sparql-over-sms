@@ -1,0 +1,3 @@
+from persistence.repositories.configurationrepo import ConfigurationRepo
+from persistence.repositories.contactrepo import ContactRepo
+from persistence.repositories.messagerepo import MessageRepo
