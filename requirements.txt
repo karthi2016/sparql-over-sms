@@ -7,6 +7,7 @@ itsdangerous==0.24
 Jinja2==2.8
 keepalive==0.5
 MarkupSafe==0.23
+peewee==2.8.1
 pyparsing==2.1.1
 rdflib==4.2.1
 requests==2.10.0
