@@ -11,7 +11,7 @@ For instance, the infrastructure is already in place and has a global reach whic
 Also, the required hardware to be able to send SMS messages is widespread available and is relatively affordable.
 
 ### Getting started
-To get SPARQL over SMS running within 5 minutes, run these commands on either Windows or Linux:
+To get SPARQL over SMS running within 5 minutes, run these commands:
 
 ```shell
 git clone https://github.com/onnovalkering/sparl-over-sms
