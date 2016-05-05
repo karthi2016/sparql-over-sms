@@ -1,5 +1,4 @@
-from datetime import datetime
-from peewee import CharField, DateTimeField
+from peewee import CharField
 from persistence.models import BaseModel
 
 
@@ -8,7 +7,5 @@ class Contact(BaseModel):
 
     identifier = CharField()
     name = CharField()
-    phonenumber = CharField()
-    ip = CharField()
-    created_timestamp = DateTimeField(default=datetime.now)
-    modified_timestamp = DateTimeField(default=datetime.now)
+    phonenumber = CharField(null=True)
+    ip = CharField(null=True)

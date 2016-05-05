@@ -1,6 +1,5 @@
-from datetime import datetime
-from peewee import CharField, IntegerField, TextField, DateTimeField
-from persistence.models import BaseModel
+from peewee import CharField, IntegerField, TextField, ForeignKeyField
+from persistence.models import BaseModel, Contact
 
 
 class Message(BaseModel):
@@ -9,7 +8,7 @@ class Message(BaseModel):
     identifier = CharField()
     position = IntegerField()
     category = IntegerField()
-    sender = CharField()
-    receiver = CharField()
+    sender = ForeignKeyField(Contact, related_name='send_messages', null=True)
+    receiver = ForeignKeyField(Contact, related_name='received_messages', null=True)
     body = TextField()
-    created_timestamp = DateTimeField(default=datetime.now)
+

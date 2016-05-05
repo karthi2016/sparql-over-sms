@@ -1,5 +1,4 @@
-from datetime import datetime
-from peewee import CharField, DateTimeField
+from peewee import CharField
 from persistence.models import BaseModel
 
 
@@ -8,5 +7,4 @@ class Configuration(BaseModel):
 
     identifier = CharField()
     value = CharField()
-    created_timestamp = DateTimeField(default=datetime.now)
-    modified_timestamp = DateTimeField(default=datetime.now)
+    scope = CharField(null=True)
