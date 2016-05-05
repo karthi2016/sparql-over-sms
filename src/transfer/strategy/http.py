@@ -1,5 +1,5 @@
+from persistence.repositories import ContactRepo
 from requests_futures.sessions import FuturesSession
-from repositories import ContactRepo
 from services import ServiceBox
 
 
