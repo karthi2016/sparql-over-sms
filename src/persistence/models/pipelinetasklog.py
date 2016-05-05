@@ -1,6 +1,5 @@
 from peewee import IntegerField, ForeignKeyField
-from persistence.models import BaseModel
-from pipelines.wrappers import PipelineReport
+from persistence.models import BaseModel, PipelineReport
 
 
 class PipelineTaskLog(BaseModel):
