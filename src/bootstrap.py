@@ -1,11 +1,9 @@
 import configparser
 import os
 import glob
-import repositories
 import services
 import transfer
 
-from repositories import ContactRepo, MessageRepo
 from flask_injector import FlaskInjector
 from flask.ext.cors import CORS
 from injector import singleton
@@ -37,22 +35,14 @@ for file in configuration:
     app.config['f_{0}'.format(filename)] = file
 
 # populate ioc container
-contactrepo = repositories.ContactRepo(app.config['c_persistence']['repositories']['contact'])
-ServiceBox.register_instance(ContactRepo, contactrepo)
-
-messagerepo = repositories.MessageRepo(app.config['c_persistence']['repositories']['message'])
-ServiceBox.register_instance(MessageRepo, messagerepo)
-
 configmanager = services.ConfigManager(app.config)
 ServiceBox.register_instance(ConfigManager, configmanager)
 
-messenger = Messenger(contactrepo)
+messenger = Messenger('asdf')
 ServiceBox.register_instance(Messenger, messenger)
 
 # bind dependencies
 def configure(binder):
-    binder.bind(repositories.ContactRepo, to=contactrepo, scope=singleton)
-    binder.bind(repositories.MessageRepo, to=messagerepo, scope=singleton)
     binder.bind(services.ConfigManager, to=configmanager, scope=singleton)
     binder.bind(transfer.Messenger, to=messenger, scope=singleton)
 

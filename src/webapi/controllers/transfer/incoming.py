@@ -1,7 +1,4 @@
-import repositories
-
 from flask import request
-from injector import inject
 from pipelines import ReceiveSparqlQuery, ReceiveSparqlResponse, ReceiveSparqlUpdate
 from pipelines.wrappers import PipelineToken, INCOMING_TOKEN
 from transfer.messenger import MSG_SPARQL_QUERY, MSG_SPARQL_UPDATE, MSG_SPARQL_QUERY_RESPONSE, MSG_SPARQL_UPDATE_RESPONSE
@@ -10,7 +7,6 @@ from webapi import app
 from webapi.helpers.responses import *
 
 
-@inject(contactrepo=repositories.ContactRepo, messagerepo=repositories.MessageRepo)
 @app.route('/incoming', methods=['POST'])
 def incoming(contactrepo, messagerepo):
     payload = request.get_json()

@@ -1,9 +1,14 @@
 import json
+import datetime
 from flask import Response
 
 
+def default(o):
+    if type(o) is datetime.date or type(o) is datetime.datetime:
+        return o.isoformat()
+
 def ok(content, mimetype):
-    body = content if type(content) is str else json.dumps(content)
+    body = content if type(content) is str else json.dumps(content, default=default)
     return Response(body, status=200, mimetype=mimetype)
 
 def created():

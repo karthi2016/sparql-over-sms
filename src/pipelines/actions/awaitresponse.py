@@ -1,9 +1,8 @@
 import time
 
-from repositories import MessageRepo
+from persistence.repositories import MessageRepo
 from services import ServiceBox
 from timeit import default_timer as timer
-from transfer import Messenger
 
 
 class AwaitResponse:

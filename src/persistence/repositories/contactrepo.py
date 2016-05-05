@@ -62,8 +62,10 @@ class ContactRepo:
 
     @staticmethod
     def delete_contact(identifier):
-        contact = ContactRepo.get_contact_byid(identifier)
-        contact.delete()
+        return ((Contact
+                .delete()
+                .where(Contact.identifier == identifier))
+                .execute())
 
 
 

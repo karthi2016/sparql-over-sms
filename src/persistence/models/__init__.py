@@ -7,10 +7,13 @@ from persistence.models.pipelinetasklog import PipelineTaskLog
 
 # initialize tables
 from persistence import database
-database.create_tables([
-    Configuration,
-    Contact,
-    Message,
-    PipelineReport,
-    PipelineTaskLog
-])
+try:
+    database.create_tables([
+        Configuration,
+        Contact,
+        Message,
+        PipelineReport,
+        PipelineTaskLog
+    ])
+except:
+    print('exception!')

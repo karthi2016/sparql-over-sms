@@ -1,12 +1,8 @@
-import repositories
-
-from injector import inject
 from webapi import app
 from webapi.helpers.responses import *
 
 
 @app.route('/messages')
-@inject(repository=repositories.MessageRepo)
 def get_messages(repository):
     messages = repository.get_messages()
 
@@ -15,7 +11,6 @@ def get_messages(repository):
 
 
 @app.route('/message/<identifier>')
-@inject(repository=repositories.MessageRepo)
 def get_message_byid(repository, identifier):
     message = repository.get_message_byid(identifier)
 

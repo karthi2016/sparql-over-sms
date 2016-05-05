@@ -1,62 +1,55 @@
-import repositories
 from flask import request
-
-from injector import inject
+from persistence.repositories import ContactRepo
 from webapi import app
 from webapi.helpers.responses import *
 
 
-@app.route('/contacts')
-@inject(repository=repositories.ContactRepo)
-def get_contacts(repository):
-    contacts = repository.get_contacts()
+@app.route('/contacts', methods=['GET'])
+def get_contacts():
+    contacts = ContactRepo.get_contacts()
 
     # return contacts as JSON
-    return ok('[{}]'.format(','.join([c.as_json() for c in contacts])), 'application/json')
+    return ok([c.as_dict() for c in contacts], 'application/json')
 
 
-@app.route('/contact/<identifier>')
-@inject(repository=repositories.ContactRepo)
-def get_contact_byid(repository, identifier):
-    contact = repository.get_contact_byid(identifier)
+@app.route('/contact/<identifier>', methods=['GET'])
+def get_contact_byid(identifier):
+    contact = ContactRepo.get_contact_byid(identifier)
 
     if contact is None:
         return notfound()
 
     # return contact as JSON
-    return ok(contact.as_json(), 'application/json')
+    return ok(contact.as_dict(), 'application/json')
 
 @app.route('/contacts', methods=['POST'])
-@inject(repository=repositories.ContactRepo)
-def add_contact(repository):
+def add_contact():
     payload = request.get_json()
 
     # unpack payload
     identifier = payload['identifier']
     name = payload['name']
-    phonenumber = payload['phonenumber']
+    phonenumber = payload.get('phonenumber', None)
     ip = payload.get('ip', None)
 
-    repository.add_contact(identifier, name, phonenumber, ip)
+    ContactRepo.add_contact(identifier, name, phonenumber, ip)
     return nocontent()
 
 @app.route('/contact/<identifier>', methods=['PUT'])
-@inject(repository=repositories.ContactRepo)
-def update_contact(repository, identifier):
+def update_contact(identifier):
     payload = request.get_json()
 
     # unpack payload
     name = payload['name']
-    phonenumber = payload['phonenumber']
+    phonenumber = payload.get('phonenumber', None)
     ip = payload.get('ip', None)
 
-    repository.update_contact(identifier, name, phonenumber, ip)
+    ContactRepo.update_contact(identifier, name, phonenumber, ip)
     return nocontent()
 
 @app.route('/contact/<identifier>', methods=['DELETE'])
-@inject(repository=repositories.ContactRepo)
-def delete_contact(repository, identifier):
-    repository.delete_contact(identifier)
+def delete_contact(identifier):
+    ContactRepo.delete_contact(identifier)
     return nocontent()
 
 
