@@ -10,7 +10,7 @@ class HttpHandler(RequestHandler):
             raise TypeError('String expected')
 
         try:
-            arguments = [arg.decode('utf-8') for arg in self.request.query_arguments[key]]
+            arguments = [arg.decode('utf-8') for arg in self.request.arguments[key]]
             return arguments[0] if single else arguments
         except KeyError:
             return None
