@@ -1,7 +1,9 @@
+from processing.models import OutgoingPipelineToken
+from processing.pipelines import SendSparqlUpdate
 from tornroutes import route
 from transfer.models import OutgoingMessage
 from webapi.handlers import HttpHandler
-from webapi.helpers import badrequest
+from webapi.helpers import badrequest, timeout, servererror
 
 
 @route('/agent/([\w]+)/sparql/update')
@@ -14,5 +16,14 @@ class SparqlUpdate(HttpHandler):
             raise badrequest('parameter "update" not provided')
 
         message = OutgoingMessage(2, update, agentid)
-        self.write('{0}'.format(message))
+        token = OutgoingPipelineToken(message)
+
+        try:
+            result = SendSparqlUpdate.execute(token)
+        except TimeoutError:
+            raise timeout('the "SendSparqlUpdate" operation has timed out')
+        except Exception:
+            raise servererror('the "SendSparqlUpdate" operation failed')
+
+        self.write(result)
         self.set_status(200)

@@ -1,0 +1,5 @@
+from processing.pipelines.sendsparqlquery import SendSparqlQuery
+from processing.pipelines.sendsparqlupdate import SendSparqlUpdate
+from processing.pipelines.receivesparqlquery import ReceiveSparqlQuery
+from processing.pipelines.receivesparqlupdate import ReceiveSparqlUpdate
+from processing.pipelines.receivesparqlresponse import ReceiveSparqlResponse
