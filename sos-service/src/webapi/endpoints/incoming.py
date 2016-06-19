@@ -18,5 +18,6 @@ class SparqlUpdate(HttpHandler):
             raise badrequest('parameter "content" not provided')
 
         message = IncomingMessage(3, content, sender)
+        self.write('{0}'.format(message))
         self.set_status(202)
 
