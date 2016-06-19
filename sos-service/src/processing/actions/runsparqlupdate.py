@@ -1,5 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper
-from services import ConfigManager, ServiceBox
+from utilities.configuration import ConfigManager
 
 
 class RunSparqlUpdate:
@@ -9,7 +9,7 @@ class RunSparqlUpdate:
 
     @staticmethod
     def execute(token):
-        configmanager = ServiceBox.get_instance(ConfigManager)
+        configmanager = ConfigManager()
         endpoint = configmanager.get_option("persistence", "triplestore", "query")
 
         # initialize sparql endpoint

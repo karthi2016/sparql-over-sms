@@ -1,7 +1,6 @@
 import time
 
 from persistence.repositories import MessageRepo
-from services import ServiceBox
 from timeit import default_timer as timer
 
 
@@ -12,7 +11,7 @@ class AwaitResponse:
 
     @staticmethod
     def execute(token):
-        messagerepo = ServiceBox.get_instance(MessageRepo)
+        messagerepo = MessageRepo()
 
         # retreive required information
         messageid = token.message.correlationid

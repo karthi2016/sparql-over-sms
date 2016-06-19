@@ -1,5 +1,4 @@
-from pipelines.wrappers.pipelinetoken import OUTGOING_TOKEN
-from transfer.wrappers import Message
+from transfer.models import Message
 
 
 class ToResponse:
@@ -18,6 +17,7 @@ class ToResponse:
         # a new message becomes the new working item
         message = Message(category, body, receiver=receiver, correlationid=replyto.correlationid)
 
+        from processing.models.pipelinetoken import OUTGOING_TOKEN
         token.category = OUTGOING_TOKEN
 
         # current message becomes the replyto

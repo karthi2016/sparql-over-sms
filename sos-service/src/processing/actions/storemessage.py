@@ -1,4 +1,4 @@
-from services import ServiceBox
+from persistence.repositories import MessageRepo
 
 
 class StoreMessage:

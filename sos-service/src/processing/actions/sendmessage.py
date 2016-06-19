@@ -1,5 +1,4 @@
-from services import ServiceBox
-from transfer import Messenger
+from utilities.messaging import Messenger
 
 
 class SendMessage:
@@ -9,6 +8,6 @@ class SendMessage:
 
     @staticmethod
     def execute(token):
-        messenger = ServiceBox.get_instance(Messenger)
+        messenger = Messenger()
         messenger.send(token.message)
 

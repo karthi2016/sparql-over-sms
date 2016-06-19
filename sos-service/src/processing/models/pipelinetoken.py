@@ -1,4 +1,4 @@
-from pipelines.wrappers import PipelineReport
+from processing.models.pipelinereport import PipelineReport
 
 INCOMING_TOKEN = 0
 OUTGOING_TOKEN = 1
