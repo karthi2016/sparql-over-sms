@@ -4,6 +4,8 @@ import org.apache.commons.cli.*;
 import org.sparqloversms.compression.procedures.CompressProcedure;
 import org.sparqloversms.compression.procedures.DecompressProcedure;
 import org.sparqloversms.compression.procedures.interfaces.Procedure;
+import org.sparqloversms.compression.serialization.SPINSerializer;
+import org.sparqloversms.compression.serialization.interfaces.Serializer;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +27,7 @@ public class CLI
             boolean hasDecompress = cmd.hasOption("decompress");
             String inputFile = cmd.getOptionValue("input");
             String outputFile = cmd.getOptionValue("output");
+            String type = cmd.getOptionValue("type");
 
             if (hasHelp) {
                 showHelp();
@@ -40,6 +43,12 @@ public class CLI
             }
             if (outputFile == null) {
                 throw new ParseException("The --output option is required.");
+            }
+            if (type == null) {
+                throw new ParseException("The --type option is required.");
+            }
+            if (!type.toUpperCase().equals("SPARQL") && !type.toUpperCase().equals("RDF")) {
+                throw new ParseException("The argument of the --type option must be either 'SPARQL' or 'RDF'.");
             }
 
             if (hasCompress) {
@@ -99,6 +108,14 @@ public class CLI
                 .hasArg()
                 .argName("file")
                 .desc("absolute or relative path to the output file")
+                .build()
+        );
+
+        options.addOption(Option.builder("t")
+                .longOpt("type")
+                .hasArg()
+                .argName("type")
+                .desc("the type if the input: SPARQL or RDF")
                 .build()
         );
     }

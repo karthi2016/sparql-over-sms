@@ -7,4 +7,8 @@ public class NTriplesSerializer implements Serializer {
     public String serialize(String input) {
         return null;
     }
+
+    public String deserialize(String input) {
+        return null;
+    }
 }
