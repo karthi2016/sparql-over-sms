@@ -1,5 +1,6 @@
 package org.sparqloversms.compression.serialization;
 
+import org.apache.jena.rdf.model.Model;
 import org.sparqloversms.compression.serialization.interfaces.Serializer;
 
 public class NTriplesSerializer implements Serializer {
@@ -8,7 +9,8 @@ public class NTriplesSerializer implements Serializer {
         return null;
     }
 
-    public String deserialize(String input) {
+    @Override
+    public String serialize(Model model) {
         return null;
     }
 }

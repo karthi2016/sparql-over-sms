@@ -49,6 +49,11 @@ public class SPINSerializer implements Serializer {
         return output;
     }
 
+    @Override
+    public String serialize(Model model) {
+        return null;
+    }
+
     private void shortenVariableNames(Model model) {
         Property varName = model.getProperty("http://spinrdf.org/sp#varName");
         Selector selector = new org.apache.jena.rdf.model.SimpleSelector(null, varName, null, "");
