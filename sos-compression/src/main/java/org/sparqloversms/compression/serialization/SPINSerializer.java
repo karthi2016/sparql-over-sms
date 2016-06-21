@@ -1,7 +1,6 @@
 package org.sparqloversms.compression.serialization;
 
-import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.vocabulary.RDF;
@@ -11,14 +10,14 @@ import org.topbraid.spin.model.*;
 import org.topbraid.spin.system.SPINModuleRegistry;
 
 import org.apache.jena.query.Query;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.util.FileUtils;
 
 import org.sparqloversms.compression.serialization.interfaces.Serializer;
 import org.topbraid.spin.vocabulary.SP;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.List;
 
 public class SPINSerializer implements Serializer {
 
@@ -35,6 +34,8 @@ public class SPINSerializer implements Serializer {
         ARQ2SPIN arq2SPIN = new ARQ2SPIN(model, true);
         arq2SPIN.createQuery(query, null);
 
+        shortenVariableNames(model);
+
         String output = null;
         try(StringWriter sw = new StringWriter())
         {
@@ -48,6 +49,26 @@ public class SPINSerializer implements Serializer {
         return output;
     }
 
+    private void shortenVariableNames(Model model) {
+        Property varName = model.getProperty("http://spinrdf.org/sp#varName");
+        Selector selector = new org.apache.jena.rdf.model.SimpleSelector(null, varName, null, "");
+        List<Statement> statements = model.listStatements(selector).toList();
+
+        int counter = 0;
+        HashMap<String, String> mapping = new HashMap<>();
+        for (Statement s : statements) {
+            String name = s.getObject().asLiteral().toString();
+
+            String replacement = mapping.getOrDefault(name, null);
+            if (replacement == null) {
+                replacement = String.valueOf(Character.toChars(97 + counter++));
+                mapping.put(name, replacement);
+            }
+
+            s.changeObject(replacement);
+        }
+    }
+
     public String deserialize(String input) {
         Model model = ModelFactory.createDefaultModel();
         model.read(new StringReader(input), null, FileUtils.langTurtle);
@@ -58,21 +79,3 @@ public class SPINSerializer implements Serializer {
         return SPINFactory.asQuery(queryInstance).toString();
     }
 }
-
-//        String query =
-//            "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema>\n" +
-//            "PREFIX rm: <http://purl.org/collections/w4ra/radiomarche>\n" +
-//            "\n" +
-//            "CONSTRUCT {\n" +
-//            "    ?adv rm:has_offering ?off .\n" +
-//            "    ?adv rm:contact_tel ?tel .\n" +
-//            "    ?off rdfs:label ?pname\n" +
-//            "} WHERE {\n" +
-//            "    ?off a rm:Offering .\n" +
-//            "    ?off rm:has_contact ?contact .\n" +
-//            "    ?off rm:prod_name ?prod.\n" +
-//            "    ?prod rdfs:label ?pname.\n" +
-//            "    ?adv rm:contact_tel ?tel .\n" +
-//            "    ?adv rm:zone ?zone .\n" +
-//            "    FILTER (?zone IN (rm:zone_Mafoune, rm:zone_Mandiakuy))\n" +
-//            "}";
