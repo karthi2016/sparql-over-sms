@@ -184,7 +184,7 @@ public class CLI
                 .longOpt("knowledge")
                 .hasArg()
                 .argName("file")
-                .desc("absolute or relative path the the knowledge file (.hdt)")
+                .desc("absolute or relative path the the knowledge file (.rdf|.hdt)")
                 .build()
         );
     }

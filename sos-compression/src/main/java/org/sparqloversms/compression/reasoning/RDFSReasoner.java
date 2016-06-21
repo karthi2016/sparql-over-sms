@@ -1,7 +1,6 @@
 package org.sparqloversms.compression.reasoning;
 
 import org.apache.jena.rdf.model.*;
-import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
@@ -14,8 +13,8 @@ public class RDFSReasoner implements Reasoner {
 
     private Model knowledge;
 
-    public RDFSReasoner() {
-        knowledge = FileManager.get().loadModel("C:\\Temp\\knowledge.ttl");
+    public RDFSReasoner(Model knowledge) {
+        this.knowledge = knowledge;
     }
 
     @Override
@@ -250,10 +249,6 @@ public class RDFSReasoner implements Reasoner {
                     }
                 }
             }
-        }
-
-        for (Statement s : redundant) {
-            System.out.println(s.getSubject().toString() + " " + s.getPredicate().toString() + " " + s.getObject().asResource().toString());
         }
 
         return input.remove(redundant);

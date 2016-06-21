@@ -16,6 +16,10 @@ public class HDTEncoder implements Encoder {
 
     private Dictionary dictionary;
 
+    public HDTEncoder(Dictionary dictionary) {
+        this.dictionary = dictionary;
+    }
+
     public HDTEncoder(String hdtFileName) throws IOException {
         HDT hdt = HDTManager.loadHDT(hdtFileName, null);
         dictionary = hdt.getDictionary();
