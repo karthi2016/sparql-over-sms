@@ -1,4 +1,4 @@
-package org.sparqloversms.compression.reasoning.interfaces;
+package org.sparqloversms.algorithm.reasoning.interfaces;
 
 import org.apache.jena.rdf.model.Model;
 

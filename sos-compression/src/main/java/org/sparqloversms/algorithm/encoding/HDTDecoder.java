@@ -1,8 +1,8 @@
-package org.sparqloversms.compression.encoding;
+package org.sparqloversms.algorithm.encoding;
 
 import org.rdfhdt.hdt.dictionary.Dictionary;
 import org.rdfhdt.hdt.enums.TripleComponentRole;
-import org.sparqloversms.compression.encoding.interfaces.Decoder;
+import org.sparqloversms.algorithm.encoding.interfaces.Decoder;
 
 import java.util.ArrayList;
 import java.util.List;

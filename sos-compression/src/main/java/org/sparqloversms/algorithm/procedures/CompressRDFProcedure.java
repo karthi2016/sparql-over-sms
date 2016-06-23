@@ -1,4 +1,4 @@
-package org.sparqloversms.compression.procedures;
+package org.sparqloversms.algorithm.procedures;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -7,13 +7,13 @@ import org.apache.jena.util.FileUtils;
 import org.rdfhdt.hdt.hdt.HDT;
 import org.rdfhdt.hdt.hdt.HDTManager;
 import org.rdfhdt.hdtjena.HDTGraph;
-import org.sparqloversms.compression.encoding.HDTEncoder;
-import org.sparqloversms.compression.encoding.interfaces.Encoder;
-import org.sparqloversms.compression.procedures.interfaces.Procedure;
-import org.sparqloversms.compression.reasoning.RDFSReasoner;
-import org.sparqloversms.compression.reasoning.interfaces.Reasoner;
-import org.sparqloversms.compression.serialization.TurtleSerializer;
-import org.sparqloversms.compression.serialization.interfaces.Serializer;
+import org.sparqloversms.algorithm.encoding.HDTEncoder;
+import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
+import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.reasoning.RDFSReasoner;
+import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
+import org.sparqloversms.algorithm.serialization.TurtleSerializer;
+import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 import java.io.IOException;
 import java.io.StringReader;
 

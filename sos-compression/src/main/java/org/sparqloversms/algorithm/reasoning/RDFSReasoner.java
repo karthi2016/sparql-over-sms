@@ -1,10 +1,10 @@
-package org.sparqloversms.compression.reasoning;
+package org.sparqloversms.algorithm.reasoning;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
-import org.sparqloversms.compression.reasoning.interfaces.Reasoner;
+import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
 
 import java.util.ArrayList;
 import java.util.List;

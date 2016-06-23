@@ -1,4 +1,4 @@
-package org.sparqloversms.compression.encoding;
+package org.sparqloversms.algorithm.encoding;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.FileUtils;
@@ -6,7 +6,7 @@ import org.rdfhdt.hdt.dictionary.Dictionary;
 import org.rdfhdt.hdt.enums.TripleComponentRole;
 import org.rdfhdt.hdt.hdt.HDT;
 import org.rdfhdt.hdt.hdt.HDTManager;
-import org.sparqloversms.compression.encoding.interfaces.Encoder;
+import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;

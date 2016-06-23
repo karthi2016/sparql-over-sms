@@ -1,6 +1,6 @@
-package org.sparqloversms.compression.procedures;
+package org.sparqloversms.algorithm.procedures;
 
-import org.sparqloversms.compression.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
 
 public class DecompressRDFProcedure implements Procedure {
     private String input;

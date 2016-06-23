@@ -1,10 +1,10 @@
-package org.sparqloversms.compression.procedures;
+package org.sparqloversms.algorithm.procedures;
 
-import org.sparqloversms.compression.encoding.HDTEncoder;
-import org.sparqloversms.compression.encoding.interfaces.Encoder;
-import org.sparqloversms.compression.procedures.interfaces.Procedure;
-import org.sparqloversms.compression.serialization.SPINSerializer;
-import org.sparqloversms.compression.serialization.interfaces.Serializer;
+import org.sparqloversms.algorithm.encoding.HDTEncoder;
+import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
+import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.serialization.SPINSerializer;
+import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 import java.io.IOException;
 
 public class CompressSPARQLProcedure implements Procedure {

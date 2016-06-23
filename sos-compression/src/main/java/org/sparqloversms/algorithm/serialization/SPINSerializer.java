@@ -1,4 +1,4 @@
-package org.sparqloversms.compression.serialization;
+package org.sparqloversms.algorithm.serialization;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.Lang;
@@ -12,7 +12,7 @@ import org.topbraid.spin.system.SPINModuleRegistry;
 import org.apache.jena.query.Query;
 import org.apache.jena.util.FileUtils;
 
-import org.sparqloversms.compression.serialization.interfaces.Serializer;
+import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 import org.topbraid.spin.vocabulary.SP;
 
 import java.io.*;

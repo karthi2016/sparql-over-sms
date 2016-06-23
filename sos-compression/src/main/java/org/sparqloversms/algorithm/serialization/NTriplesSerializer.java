@@ -1,7 +1,7 @@
-package org.sparqloversms.compression.serialization;
+package org.sparqloversms.algorithm.serialization;
 
 import org.apache.jena.rdf.model.Model;
-import org.sparqloversms.compression.serialization.interfaces.Serializer;
+import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 
 public class NTriplesSerializer implements Serializer {
 

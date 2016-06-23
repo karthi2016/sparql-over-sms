@@ -1,8 +1,8 @@
-package org.sparqloversms.compression.serialization;
+package org.sparqloversms.algorithm.serialization;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.util.FileUtils;
-import org.sparqloversms.compression.serialization.interfaces.Serializer;
+import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 
 import java.io.IOException;
 import java.io.StringWriter;

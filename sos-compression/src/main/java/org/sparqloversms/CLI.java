@@ -1,12 +1,12 @@
-package org.sparqloversms.compression;
+package org.sparqloversms;
 
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
-import org.sparqloversms.compression.procedures.CompressRDFProcedure;
-import org.sparqloversms.compression.procedures.CompressSPARQLProcedure;
-import org.sparqloversms.compression.procedures.DecompressRDFProcedure;
-import org.sparqloversms.compression.procedures.DecompressSPARQLProcedure;
-import org.sparqloversms.compression.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.procedures.CompressRDFProcedure;
+import org.sparqloversms.algorithm.procedures.CompressSPARQLProcedure;
+import org.sparqloversms.algorithm.procedures.DecompressRDFProcedure;
+import org.sparqloversms.algorithm.procedures.DecompressSPARQLProcedure;
+import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,7 @@ public class CLI
     private static CommandLineParser parser = new DefaultParser();
 
     public static void main( String[] args ) {
+        long start = System.currentTimeMillis();
         defineOptions();
 
         try {
@@ -83,6 +84,9 @@ public class CLI
             System.err.println(e.getMessage());
             System.exit(1);
         }
+
+        long finish = System.currentTimeMillis();
+        System.out.println(finish - start);
     }
 
     private static void performCompression(String type, String inputFile, String outputFile, String knowledgeFile) {

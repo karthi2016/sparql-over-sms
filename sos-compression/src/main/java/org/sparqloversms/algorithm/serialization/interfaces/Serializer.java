@@ -1,4 +1,4 @@
-package org.sparqloversms.compression.serialization.interfaces;
+package org.sparqloversms.algorithm.serialization.interfaces;
 
 import org.apache.jena.rdf.model.Model;
 
