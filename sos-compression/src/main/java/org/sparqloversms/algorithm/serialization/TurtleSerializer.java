@@ -3,28 +3,25 @@ package org.sparqloversms.algorithm.serialization;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.util.FileUtils;
 import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
+import org.sparqloversms.algorithm.serialization.models.SerializerResult;
 
 import java.io.IOException;
 import java.io.StringWriter;
 
 public class TurtleSerializer implements Serializer {
 
-    public String serialize(String input) {
-        return null;
-    }
-
     @Override
-    public String serialize(Model model) {
-        String output = null;
+    public SerializerResult serialize(Model model) {
+        SerializerResult result = new SerializerResult();
 
         try(final StringWriter sw = new StringWriter())
         {
             model.write(sw, FileUtils.langTurtle);
-            output = sw.toString();
+            result.setOutput(sw.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return output;
+        return result;
     }
 }

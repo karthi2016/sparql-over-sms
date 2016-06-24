@@ -4,6 +4,7 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.vocabulary.RDF;
+import org.sparqloversms.algorithm.serialization.models.SerializerResult;
 import org.topbraid.spin.arq.ARQ2SPIN;
 import org.topbraid.spin.arq.ARQFactory;
 import org.topbraid.spin.model.*;
@@ -27,8 +28,13 @@ public class SPINSerializer implements Serializer {
 
     /*-----------------------------------------------------------------------*/
 
-    public String serialize(String input) {
-        Model model = ModelFactory.createDefaultModel();
+    @Override
+    public SerializerResult serialize(Model model) {
+
+        SerializerResult result = new SerializerResult();
+
+        String input = "this is broken";
+        model = ModelFactory.createDefaultModel();
         Query query = ARQFactory.get().createQuery(model, input);
 
         ARQ2SPIN arq2SPIN = new ARQ2SPIN(model, true);
@@ -46,12 +52,8 @@ public class SPINSerializer implements Serializer {
             e.printStackTrace();
         }
 
-        return output;
-    }
-
-    @Override
-    public String serialize(Model model) {
-        return null;
+        result.setOutput(output);
+        return result;
     }
 
     private void shortenVariableNames(Model model) {
@@ -74,13 +76,13 @@ public class SPINSerializer implements Serializer {
         }
     }
 
-    public String deserialize(String input) {
-        Model model = ModelFactory.createDefaultModel();
-        model.read(new StringReader(input), null, FileUtils.langTurtle);
-
-        Model spinSchema = RDFDataMgr.loadModel("http://spinrdf.org/sp", Lang.RDFXML);
-        InfModel infModel = ModelFactory.createRDFSModel(spinSchema, model);
-        Resource queryInstance = SPINFactory.asQuery(infModel.listResourcesWithProperty(RDF.type, SP.Query).next());
-        return SPINFactory.asQuery(queryInstance).toString();
-    }
+//    public String deserialize(String input) {
+//        Model model = ModelFactory.createDefaultModel();
+//        model.read(new StringReader(input), null, FileUtils.langTurtle);
+//
+//        Model spinSchema = RDFDataMgr.loadModel("http://spinrdf.org/sp", Lang.RDFXML);
+//        InfModel infModel = ModelFactory.createRDFSModel(spinSchema, model);
+//        Resource queryInstance = SPINFactory.asQuery(infModel.listResourcesWithProperty(RDF.type, SP.Query).next());
+//        return SPINFactory.asQuery(queryInstance).toString();
+//    }
 }

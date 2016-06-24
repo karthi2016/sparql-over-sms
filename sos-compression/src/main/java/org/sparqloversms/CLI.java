@@ -2,21 +2,27 @@ package org.sparqloversms;
 
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
-import org.sparqloversms.algorithm.procedures.CompressRDFProcedure;
-import org.sparqloversms.algorithm.procedures.CompressSPARQLProcedure;
-import org.sparqloversms.algorithm.procedures.DecompressRDFProcedure;
-import org.sparqloversms.algorithm.procedures.DecompressSPARQLProcedure;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.rdfhdt.hdt.hdt.HDT;
+import org.rdfhdt.hdt.hdt.HDTManager;
+import org.sparqloversms.algorithm.encoding.HDTEncoder;
+import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
+import org.sparqloversms.algorithm.procedures.RDFCompressionProcedure;
 import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.procedures.models.ProcedureReport;
+import org.sparqloversms.algorithm.reasoning.RDFSReasoner;
+import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
+import org.sparqloversms.algorithm.serialization.TurtleSerializer;
+import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
 
 public class CLI
 {
-    private static final Logger logger = Logger.getLogger(CLI.class.getName());
     private static Options options = new Options();
     private static CommandLineParser parser = new DefaultParser();
 
@@ -74,13 +80,19 @@ public class CLI
             }
 
             // All seems fine, let's do this
+            Model input = readInputFile(inputFile);
+            HDT knowledge = readKnowledgeFile(knowledgeFile);
+
+            String output;
             if (hasCompress) {
-                performCompression(type, inputFile, outputFile, knowledgeFile);
+                output = performCompression(type, input, knowledge);
             }
             else {
-                performDecompression(type, inputFile, outputFile, knowledgeFile);
+                output = performDecompression(type, input, knowledge);
             }
-        } catch (ParseException | IllegalArgumentException e) {
+
+            FileUtils.writeStringToFile(new File(outputFile), output);
+        } catch (ParseException | IllegalArgumentException | IOException e) {
             System.err.println(e.getMessage());
             System.exit(1);
         }
@@ -89,52 +101,33 @@ public class CLI
         System.out.println(finish - start);
     }
 
-    private static void performCompression(String type, String inputFile, String outputFile, String knowledgeFile) {
-        try {
-            String input = FileUtils.readFileToString(new File(inputFile));
+    private static String performCompression(String type, Model input, HDT knowledge) {
+        Reasoner defaultReasoner = new RDFSReasoner(knowledge);
+        Serializer defaultSerializer = new TurtleSerializer();
+        Encoder defaultEncoder = new HDTEncoder(knowledge);
 
-            // Pick the correct procedure for the job
-            Procedure procedure;
-            switch (type.toUpperCase()) {
-                case "SPARQL":
-                    procedure = new CompressSPARQLProcedure(input, knowledgeFile);
-                    break;
-                case "RDF":
-                default:
-                    procedure = new CompressRDFProcedure(input, knowledgeFile);
-                    break;
-            }
-
-            String output = procedure.start();
-            FileUtils.writeStringToFile(new File(outputFile), output);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
+        Procedure procedure;
+        if (type.toUpperCase().equals("RDF")) {
+            procedure = new RDFCompressionProcedure(defaultReasoner, defaultSerializer, defaultEncoder);
         }
+        else {
+            throw new UnsupportedOperationException("SPARQL compression is not yet supported.");
+        }
+
+        ProcedureReport report = procedure.run(input);
+        return report.getOutput();
     }
 
-    private static void performDecompression(String type, String inputFile, String outputFile, String knowledgeFile) {
-        try {
-            String input = FileUtils.readFileToString(new File(inputFile));
+    private static String performDecompression(String type, Model input, HDT knowledge) {
+        throw new UnsupportedOperationException("Decompression is not yet supported.");
+    }
 
-            // Pick the correct procedure for the job
-            Procedure procedure;
-            switch (type.toUpperCase()) {
-                case "SPARQL":
-                    procedure = new DecompressSPARQLProcedure(input, knowledgeFile);
-                    break;
-                case "RDF":
-                default:
-                    procedure = new DecompressRDFProcedure(input, knowledgeFile);
-                    break;
-            }
+    private static Model readInputFile(String inputFile) {
+        return  ModelFactory.createDefaultModel().read(inputFile);
+    }
 
-            String output = procedure.start();
-            FileUtils.writeStringToFile(new File(outputFile), output);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
-        }
+    private static HDT readKnowledgeFile(String knowledgeFile) throws IOException {
+        return HDTManager.loadHDT(knowledgeFile, null);
     }
 
     /* CLI helpers ----------------------------------------------------------*/

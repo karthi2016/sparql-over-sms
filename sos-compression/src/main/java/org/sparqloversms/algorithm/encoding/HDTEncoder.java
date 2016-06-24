@@ -7,6 +7,8 @@ import org.rdfhdt.hdt.enums.TripleComponentRole;
 import org.rdfhdt.hdt.hdt.HDT;
 import org.rdfhdt.hdt.hdt.HDTManager;
 import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
+import org.sparqloversms.algorithm.encoding.model.EncoderResult;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -16,18 +18,16 @@ public class HDTEncoder implements Encoder {
 
     private Dictionary dictionary;
 
-    public HDTEncoder(Dictionary dictionary) {
-        this.dictionary = dictionary;
-    }
-
-    public HDTEncoder(String hdtFileName) throws IOException {
-        HDT hdt = HDTManager.loadHDT(hdtFileName, null);
-        dictionary = hdt.getDictionary();
+    public HDTEncoder(HDT knowledge) {
+        this.dictionary = knowledge.getDictionary();
     }
 
     /*-----------------------------------------------------------------------*/
 
-    public String encode(String input) {
+    @Override
+    public EncoderResult encode(String input) {
+        EncoderResult result = new EncoderResult();
+
         Model model = ModelFactory.createDefaultModel();
         String output;
 
@@ -54,20 +54,22 @@ public class HDTEncoder implements Encoder {
             Property predicate = triple.getPredicate();
             RDFNode object = triple.getObject();
 
-            output = encodeSubject(subject, model, output);
-            output = encodePredicate(predicate, model, output);
-            output = encodeObject(object, model, output);
+            output = encodeSubject(subject, model, output, result);
+            output = encodePredicate(predicate, model, output, result);
+            output = encodeObject(object, model, output, result);
         }
 
-        output = removeUnnecessaryPrefixes(model, output);
+        output = removeUnnecessaryPrefixes(model, output, result);
 
         // Remove double spaces and newlines to minimize output
         output = output.replace("\n", " ").replace("\r", " ");
         output = output.trim().replaceAll(" +", " ");
-        return output;
+
+        result.setOutput(output);
+        return result;
     }
 
-    private String encodeSubject(Resource subject, Model model, String output) {
+    private String encodeSubject(Resource subject, Model model, String output, EncoderResult result) {
         String value = subject.toString();
         int id = dictionary.stringToId(value, TripleComponentRole.SUBJECT);
 
@@ -82,12 +84,13 @@ public class HDTEncoder implements Encoder {
             }
 
             output = output.replaceAll(String.format("<?%s>?", value), String.format("\\$%x", id));
+            result.track("subject-encoded");
         }
 
         return output;
     }
 
-    private String encodePredicate(Property predicate, Model model, String output) {
+    private String encodePredicate(Property predicate, Model model, String output, EncoderResult result) {
         String value = predicate.toString();
         int id = dictionary.stringToId(value, TripleComponentRole.SUBJECT);
 
@@ -102,12 +105,13 @@ public class HDTEncoder implements Encoder {
             }
 
             output = output.replaceAll(String.format("<?%s>?", value), String.format("\\$%x", id));
+            result.track("predicate-encoded");
         }
 
         return output;
     }
 
-    private String encodeObject(RDFNode object, Model model, String output) {
+    private String encodeObject(RDFNode object, Model model, String output, EncoderResult result) {
         if (object.isAnon()) {
             return output;
         }
@@ -125,12 +129,13 @@ public class HDTEncoder implements Encoder {
             }
 
             output = output.replaceAll(String.format("<?%s>?", value), String.format("\\$%x", id));
+            result.track("object-encoded");
         }
 
         return output;
     }
 
-    private String removeUnnecessaryPrefixes(Model model, String output) {
+    private String removeUnnecessaryPrefixes(Model model, String output, EncoderResult result) {
         Map<String, String> map = model.getNsPrefixMap();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String key = entry.getKey();
@@ -138,6 +143,7 @@ public class HDTEncoder implements Encoder {
 
             if (!output.contains(prefixPattern)) {
                 output = output.replaceAll(String.format("@prefix %s: .*\\.", key), " ");
+                result.track("unnecessary-prefix");
             }
         }
 

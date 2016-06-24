@@ -1,5 +1,9 @@
 package org.sparqloversms.algorithm.encoding.interfaces;
 
+import org.sparqloversms.algorithm.encoding.model.EncoderResult;
+
 public interface Encoder {
-    String encode(String input);
+
+    EncoderResult encode(String input);
+
 }

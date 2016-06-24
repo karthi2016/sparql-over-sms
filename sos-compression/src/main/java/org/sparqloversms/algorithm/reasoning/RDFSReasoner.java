@@ -1,10 +1,14 @@
 package org.sparqloversms.algorithm.reasoning;
 
 import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.impl.ModelCom;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
+import org.rdfhdt.hdt.hdt.HDT;
+import org.rdfhdt.hdtjena.HDTGraph;
 import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
+import org.sparqloversms.algorithm.reasoning.models.ReasonerResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +17,24 @@ public class RDFSReasoner implements Reasoner {
 
     private Model knowledge;
 
-    public RDFSReasoner(Model knowledge) {
-        this.knowledge = knowledge;
+    private Selector typeTripleSelector = new SimpleSelector(null, RDF.type, null, "");
+    private Selector resourceTripleSelector = new SimpleSelector(null, RDF.type, RDFS.Resource);
+    private Selector subPropertyTripleSelector = new SimpleSelector(null, RDFS.subPropertyOf, null, "");
+    private Selector subClassOfResourceTripleSelector = new SimpleSelector(null, RDFS.subClassOf, RDFS.Resource);
+    private Selector subClassOfTripleSelector = new SimpleSelector(null, RDFS.subClassOf, null, "");
+    private Selector subPropertyOfMemberSelector = new SimpleSelector(null, RDFS.subPropertyOf, RDFS.member);
+    private Selector subClassOfLiteralSelector = new SimpleSelector(null, RDFS.subClassOf, RDFS.Literal);
+
+    public RDFSReasoner(HDT knowledge) {
+        this.knowledge = new ModelCom(new HDTGraph(knowledge));
     }
 
-    @Override
-    public Model removeRedundancy(Model input) {
-        List<Statement> redundant = new ArrayList<>();
+    /*-----------------------------------------------------------------------*/
 
-        // Predefined selectors
-        Selector typeTripleSelector = new SimpleSelector(null, RDF.type, null, "");
-        Selector resourceTripleSelector = new SimpleSelector(null, RDF.type, RDFS.Resource);
-        Selector subPropertyTripleSelector = new SimpleSelector(null, RDFS.subPropertyOf, null, "");
-        Selector subClassOfResourceTripleSelector = new SimpleSelector(null, RDFS.subClassOf, RDFS.Resource);
-        Selector subClassOfTripleSelector = new SimpleSelector(null, RDFS.subClassOf, null, "");
-        Selector subPropertyOfMemberSelector = new SimpleSelector(null, RDFS.subPropertyOf, RDFS.member);
-        Selector subClassOfLiteralSelector = new SimpleSelector(null, RDFS.subClassOf, RDFS.Literal);
+    @Override
+    public ReasonerResult removeRedundancy(Model input) {
+        ReasonerResult result = new ReasonerResult();
+        List<Statement> redundant = new ArrayList<>();
 
         // Predefined triples
         List<Statement> allTriples = input.listStatements().toList();
@@ -52,6 +58,7 @@ public class RDFSReasoner implements Reasoner {
 
                 if (knowledge.contains(predicate, RDFS.domain, object)) {
                     redundant.add(typeTriple);
+                    result.track("rdfs-entailment-pattern-2");
                     break;
                 }
             }
@@ -69,6 +76,7 @@ public class RDFSReasoner implements Reasoner {
 
                 if (knowledge.contains(predicate, RDFS.range, object)) {
                     redundant.add(typeTriple);
+                    result.track("rdfs-entailment-pattern-3");
                     break;
                 }
             }
@@ -89,6 +97,7 @@ public class RDFSReasoner implements Reasoner {
                 if (!triple.getPredicate().equals(resourceTriple.getPredicate())
                 ||  !triple.getObject().equals(resourceTriple.getObject())) {
                     redundant.add(resourceTriple);
+                    result.track("rdfs-entailment-pattern-4");
                     break;
                 }
             }
@@ -105,6 +114,7 @@ public class RDFSReasoner implements Reasoner {
                 Statement triple = selection.next();
                 if (knowledge.contains(subject, RDFS.subPropertyOf, triple.getSubject())) {
                     redundant.add(subPropertyTriple);
+                    result.track("rdfs-entailment-pattern-5");
                     break;
                 }
             }
@@ -117,6 +127,7 @@ public class RDFSReasoner implements Reasoner {
 
             if (subject.equals(object) && knowledge.contains(subject, RDF.type, RDF.Property)) {
                 redundant.add(subPropertyTriple);
+                result.track("rdfs-entailment-pattern-6");
             }
         }
 
@@ -133,6 +144,7 @@ public class RDFSReasoner implements Reasoner {
 
                 if (knowledge.contains(subject, predicate, object)) {
                     redundant.add(triple);
+                    result.track("rdfs-entailment-pattern-7");
                     break;
                 }
             }
@@ -142,6 +154,7 @@ public class RDFSReasoner implements Reasoner {
         for (Statement subClassOfResourceTriple : subClassOfResourceTriples) {
             if (input.contains(subClassOfResourceTriple.getSubject(), RDF.type, RDFS.Class)) {
                 redundant.add(subClassOfResourceTriple);
+                result.track("rdfs-entailment-pattern-8");
             }
         }
 
@@ -160,6 +173,7 @@ public class RDFSReasoner implements Reasoner {
                 for (RDFNode otherType : otherTypes) {
                     if (knowledge.contains(typeSubject, RDFS.subClassOf, otherType)) {
                         redundant.add(typeTriple);
+                        result.track("rdfs-entailment-pattern-9");
                     }
                 }
             }
@@ -172,6 +186,7 @@ public class RDFSReasoner implements Reasoner {
 
             if (subject.equals(object) && knowledge.contains(subject, RDF.type, RDFS.Class)) {
                 redundant.add(subClassOfTriple);
+                result.track("rdfs-entailment-pattern-10");
             }
         }
 
@@ -186,6 +201,7 @@ public class RDFSReasoner implements Reasoner {
 
                 if (knowledge.contains(subject, RDFS.subClassOf, object)) {
                     redundant.add(subClassOfTriple);
+                    result.track("rdfs-entailment-pattern-11");
                 }
             }
         }
@@ -196,6 +212,7 @@ public class RDFSReasoner implements Reasoner {
 
             if (knowledge.contains(subject, RDF.type, RDFS.ContainerMembershipProperty)) {
                 redundant.add(subPropertyOfMemberTriple);
+                result.track("rdfs-entailment-pattern-12");
             }
         }
 
@@ -205,6 +222,7 @@ public class RDFSReasoner implements Reasoner {
 
             if (knowledge.contains(subject, RDF.type, RDFS.Datatype)) {
                 redundant.add(subClassOfLiteralTriple);
+                result.track("rdfs-entailment-pattern-13");
             }
         }
 
@@ -225,6 +243,7 @@ public class RDFSReasoner implements Reasoner {
                     // Remove either (s, p, o) or (o, p, s)
                     if (!redundant.contains(triple) && !redundant.contains(symmetricTriple)) {
                         redundant.add(symmetricTriple);
+                        result.track("owl-symmetric-property");
                     }
                 }
             }
@@ -246,11 +265,15 @@ public class RDFSReasoner implements Reasoner {
                     // Remove either (s, p, o) or (o, o2, s)
                     if (!redundant.contains(triple) && !redundant.contains(inverseTriple)) {
                         redundant.add(inverseTriple);
+                        result.track("owl-inverse-of");
                     }
                 }
             }
         }
 
-        return input.remove(redundant);
+        Model output = input.intersection(input).remove(redundant);
+        result.setOutput(output);
+
+        return result;
     }
 }
