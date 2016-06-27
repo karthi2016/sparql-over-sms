@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class HDTEncoder implements Encoder {
 
@@ -83,8 +84,13 @@ public class HDTEncoder implements Encoder {
                 }
             }
 
-            output = output.replaceAll(String.format("<?%s>?", value), String.format("\\$%x", id));
-            result.track("subject-encoded");
+
+            String search = String.format("<?%s>?", value);
+            String replacement = String.format("\\$%x", id);
+            if (Pattern.compile(search).matcher(output).find()) {
+                output = output.replaceAll(search, replacement);
+                result.track("subject-encoded");
+            }
         }
 
         return output;
@@ -104,8 +110,12 @@ public class HDTEncoder implements Encoder {
                 }
             }
 
-            output = output.replaceAll(String.format("<?%s>?", value), String.format("\\$%x", id));
-            result.track("predicate-encoded");
+            String search = String.format("<?%s>?", value);
+            String replacement = String.format("\\$%x", id);
+            if (Pattern.compile(search).matcher(output).find()) {
+                output = output.replaceAll(search, replacement);
+                result.track("predicate-encoded");
+            }
         }
 
         return output;
@@ -128,8 +138,12 @@ public class HDTEncoder implements Encoder {
                 }
             }
 
-            output = output.replaceAll(String.format("<?%s>?", value), String.format("\\$%x", id));
-            result.track("object-encoded");
+            String search = String.format("<?%s>?", value);
+            String replacement = String.format("\\$%x", id);
+            if (Pattern.compile(search).matcher(output).find()) {
+                output = output.replaceAll(search, replacement);
+                result.track("object-encoded");
+            }
         }
 
         return output;

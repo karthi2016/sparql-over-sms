@@ -20,7 +20,7 @@ public class ReasonerResult {
     }
 
     public void track(String name) {
-        tracker.put(name, tracker.getOrDefault(name, 1));
+        tracker.put(name, tracker.getOrDefault(name, 0) + 1);
     }
 
     public Model getOutput() {

@@ -33,7 +33,6 @@ public class CLI {
     private static CommandLineParser parser = new DefaultParser();
 
     public static void main(String[] args) {
-        long start = System.currentTimeMillis();
         defineOptions();
 
         try {
@@ -89,24 +88,22 @@ public class CLI {
             Model input = readInputFile(inputFile);
             HDT knowledge = readKnowledgeFile(knowledgeFile);
 
-            String output;
+            ProcedureReport report;
             if (hasCompress) {
-                output = performCompression(type, input, knowledge);
+                report = performCompression(type, input, knowledge);
             } else {
-                output = performDecompression(type, input, knowledge);
+                report = performDecompression(type, input, knowledge);
             }
 
-            FileUtils.writeStringToFile(new File(outputFile), output);
+            FileUtils.writeStringToFile(new File(outputFile + ".report"), report.toJSON());
+            FileUtils.writeStringToFile(new File(outputFile), report.getOutput());
         } catch (ParseException | IllegalArgumentException | IOException e) {
             System.err.println(e.getMessage());
             System.exit(1);
         }
-
-        long finish = System.currentTimeMillis();
-        System.out.println(finish - start);
     }
 
-    private static String performCompression(String type, Model input, HDT knowledge) {
+    private static ProcedureReport performCompression(String type, Model input, HDT knowledge) {
         Reasoner defaultReasoner = new RDFSReasoner(knowledge);
         Serializer defaultSerializer = new TurtleSerializer();
         Encoder defaultEncoder = new HDTEncoder(knowledge);
@@ -120,10 +117,10 @@ public class CLI {
         }
 
         ProcedureReport report = procedure.run(input);
-        return report.getOutput();
+        return report;
     }
 
-    private static String performDecompression(String type, Model input, HDT knowledge) {
+    private static ProcedureReport performDecompression(String type, Model input, HDT knowledge) {
         throw new UnsupportedOperationException("Decompression is not yet supported.");
     }
 
