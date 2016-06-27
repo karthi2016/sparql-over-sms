@@ -4,6 +4,8 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
+import org.apache.jena.vocabulary.VCARD;
 import org.sparqloversms.algorithm.serialization.models.SerializerResult;
 import org.topbraid.spin.arq.ARQ2SPIN;
 import org.topbraid.spin.arq.ARQFactory;
@@ -30,12 +32,13 @@ public class SPINSerializer implements Serializer {
 
     @Override
     public SerializerResult serialize(Model model) {
-
         SerializerResult result = new SerializerResult();
 
-        String input = "this is broken";
+        RDFNode input = model.listObjectsOfProperty(VCARD.NOTE, RDFS.label).next();
+        String sparql = input.asLiteral().toString();
+
         model = ModelFactory.createDefaultModel();
-        Query query = ARQFactory.get().createQuery(model, input);
+        Query query = ARQFactory.get().createQuery(model, sparql);
 
         ARQ2SPIN arq2SPIN = new ARQ2SPIN(model, true);
         arq2SPIN.createQuery(query, null);

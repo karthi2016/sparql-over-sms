@@ -19,6 +19,11 @@ public class ProcedureReport {
 
     public ProcedureReport() {
         this.startTimestamp = System.currentTimeMillis();
+
+        // Empty placeholders
+        reasonerResult = new ReasonerResult();
+        serializerResult = new SerializerResult();
+        encoderResult = new EncoderResult();
     }
 
     /*-----------------------------------------------------------------------*/
@@ -61,12 +66,7 @@ public class ProcedureReport {
     }
 
     public String toJSON() {
-        PropertyFilter filter = new PropertyFilter() {
-            public boolean apply(Object source, String name, Object value) {
-                return !"output".equals(name);
-            }
-        };
-
+        PropertyFilter filter = (source, name, value) -> !"output".equals(name);
         return JSON.toJSONString(this, filter);
     }
 }

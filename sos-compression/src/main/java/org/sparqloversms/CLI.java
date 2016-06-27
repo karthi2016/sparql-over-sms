@@ -2,31 +2,37 @@ package org.sparqloversms;
 
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.vocabulary.RDFS;
+import org.apache.jena.vocabulary.SKOS;
+import org.apache.jena.vocabulary.VCARD;
 import org.rdfhdt.hdt.hdt.HDT;
 import org.rdfhdt.hdt.hdt.HDTManager;
 import org.sparqloversms.algorithm.encoding.HDTEncoder;
 import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
 import org.sparqloversms.algorithm.procedures.RDFCompressionProcedure;
+import org.sparqloversms.algorithm.procedures.SPARQLCompressionProcedure;
 import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
 import org.sparqloversms.algorithm.procedures.models.ProcedureReport;
 import org.sparqloversms.algorithm.reasoning.RDFSReasoner;
 import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
+import org.sparqloversms.algorithm.serialization.SPINSerializer;
 import org.sparqloversms.algorithm.serialization.TurtleSerializer;
 import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class CLI
-{
+public class CLI {
     private static Options options = new Options();
     private static CommandLineParser parser = new DefaultParser();
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         long start = System.currentTimeMillis();
         defineOptions();
 
@@ -86,8 +92,7 @@ public class CLI
             String output;
             if (hasCompress) {
                 output = performCompression(type, input, knowledge);
-            }
-            else {
+            } else {
                 output = performDecompression(type, input, knowledge);
             }
 
@@ -109,9 +114,9 @@ public class CLI
         Procedure procedure;
         if (type.toUpperCase().equals("RDF")) {
             procedure = new RDFCompressionProcedure(defaultReasoner, defaultSerializer, defaultEncoder);
-        }
-        else {
-            throw new UnsupportedOperationException("SPARQL compression is not yet supported.");
+        } else {
+            Serializer spinSerializer = new SPINSerializer();
+            procedure = new SPARQLCompressionProcedure(spinSerializer, defaultEncoder);
         }
 
         ProcedureReport report = procedure.run(input);
@@ -123,7 +128,22 @@ public class CLI
     }
 
     private static Model readInputFile(String inputFile) {
-        return  ModelFactory.createDefaultModel().read(inputFile);
+        Model model = ModelFactory.createDefaultModel();
+
+        String extension = FilenameUtils.getExtension(inputFile);
+        if (extension.toUpperCase().equals("SPARQL")) {
+            try {
+                byte[] encoded = Files.readAllBytes(Paths.get(inputFile));
+                String sparql = new String(encoded, Charset.defaultCharset());
+
+                return  model.add(VCARD.NOTE, RDFS.label, sparql);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+
+        return model.read(inputFile);
     }
 
     private static HDT readKnowledgeFile(String knowledgeFile) throws IOException {
