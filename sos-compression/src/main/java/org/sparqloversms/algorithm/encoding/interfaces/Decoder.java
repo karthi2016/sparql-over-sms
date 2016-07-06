@@ -1,7 +1,9 @@
 package org.sparqloversms.algorithm.encoding.interfaces;
 
+import org.sparqloversms.algorithm.encoding.model.DecoderResult;
+
 public interface Decoder {
 
-    String decode(String input);
+    DecoderResult decode(String input);
 
 }

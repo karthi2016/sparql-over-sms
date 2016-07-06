@@ -6,20 +6,26 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.RDFS;
-import org.apache.jena.vocabulary.SKOS;
 import org.apache.jena.vocabulary.VCARD;
 import org.rdfhdt.hdt.hdt.HDT;
 import org.rdfhdt.hdt.hdt.HDTManager;
+import org.sparqloversms.algorithm.encoding.HDTDecoder;
 import org.sparqloversms.algorithm.encoding.HDTEncoder;
+import org.sparqloversms.algorithm.encoding.interfaces.Decoder;
 import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
 import org.sparqloversms.algorithm.procedures.RDFCompressionProcedure;
+import org.sparqloversms.algorithm.procedures.RDFDecompressionProcedure;
 import org.sparqloversms.algorithm.procedures.SPARQLCompressionProcedure;
+import org.sparqloversms.algorithm.procedures.SPARQLDecompressionProcedure;
+import org.sparqloversms.algorithm.procedures.interfaces.DecompressionProcedure;
 import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.procedures.models.CompressionReport;
+import org.sparqloversms.algorithm.procedures.models.DecompressionReport;
 import org.sparqloversms.algorithm.procedures.models.ProcedureReport;
 import org.sparqloversms.algorithm.reasoning.RDFSReasoner;
 import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
-import org.sparqloversms.algorithm.serialization.SPINSerializer;
-import org.sparqloversms.algorithm.serialization.TurtleSerializer;
+import org.sparqloversms.algorithm.serialization.*;
+import org.sparqloversms.algorithm.serialization.interfaces.Deserializer;
 import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 
 import java.io.File;
@@ -85,15 +91,18 @@ public class CLI {
             }
 
             // All seems fine, let's do this
-            Model input = readInputFile(inputFile);
             HDT knowledge = readKnowledgeFile(knowledgeFile);
 
             ProcedureReport report;
             if (hasCompress) {
+                Model input = readInputFileAsModel(inputFile);
                 report = performCompression(type, input, knowledge);
             } else {
+                String input = readInputFileAsText(inputFile);
                 report = performDecompression(type, input, knowledge);
             }
+
+            System.out.println(report.getOutput());
 
             FileUtils.writeStringToFile(new File(outputFile + ".report"), report.toJSON());
             FileUtils.writeStringToFile(new File(outputFile), report.getOutput());
@@ -103,7 +112,7 @@ public class CLI {
         }
     }
 
-    private static ProcedureReport performCompression(String type, Model input, HDT knowledge) {
+    private static CompressionReport performCompression(String type, Model input, HDT knowledge) {
         Reasoner defaultReasoner = new RDFSReasoner(knowledge);
         Serializer defaultSerializer = new TurtleSerializer();
         Encoder defaultEncoder = new HDTEncoder(knowledge);
@@ -116,15 +125,30 @@ public class CLI {
             procedure = new SPARQLCompressionProcedure(spinSerializer, defaultEncoder);
         }
 
-        ProcedureReport report = procedure.run(input);
+        CompressionReport report = procedure.run(input);
         return report;
     }
 
-    private static ProcedureReport performDecompression(String type, Model input, HDT knowledge) {
-        throw new UnsupportedOperationException("Decompression is not yet supported.");
+    private static DecompressionReport performDecompression(String type, String input, HDT knowledge) {
+        Decoder defaultDecoder = new HDTDecoder(knowledge);
+        Deserializer defaultDeserializer = new TurtleDeserializer();
+        Serializer defaultSerializer = new TurtleSerializer();
+
+        DecompressionProcedure procedure;
+        if (type.toUpperCase().equals("RDF")) {
+            procedure = new RDFDecompressionProcedure(defaultDecoder, defaultDeserializer, defaultSerializer);
+        } else {
+            Deserializer spinDeserializer = new SPINDeserializer();
+            Serializer sparqlSerializer = new SPARQLSerializer();
+
+            procedure = new SPARQLDecompressionProcedure(defaultDecoder, spinDeserializer, sparqlSerializer);
+        }
+
+        DecompressionReport report = procedure.run(input);
+        return report;
     }
 
-    private static Model readInputFile(String inputFile) {
+    private static Model readInputFileAsModel(String inputFile) {
         Model model = ModelFactory.createDefaultModel();
 
         String extension = FilenameUtils.getExtension(inputFile);
@@ -141,6 +165,17 @@ public class CLI {
         }
 
         return model.read(inputFile);
+    }
+
+    private static String readInputFileAsText(String inputFile) {
+        try {
+            return FileUtils.readFileToString(new File(inputFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return null;
     }
 
     private static HDT readKnowledgeFile(String knowledgeFile) throws IOException {

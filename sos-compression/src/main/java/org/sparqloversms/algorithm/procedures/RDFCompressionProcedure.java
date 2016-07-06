@@ -4,7 +4,7 @@ import org.apache.jena.rdf.model.Model;
 import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
 import org.sparqloversms.algorithm.encoding.model.EncoderResult;
 import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
-import org.sparqloversms.algorithm.procedures.models.ProcedureReport;
+import org.sparqloversms.algorithm.procedures.models.CompressionReport;
 import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
 import org.sparqloversms.algorithm.reasoning.models.ReasonerResult;
 import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
@@ -25,8 +25,8 @@ public class RDFCompressionProcedure implements Procedure {
     /*-----------------------------------------------------------------------*/
 
     @Override
-    public ProcedureReport run(Model procedureInput) {
-        ProcedureReport report = new ProcedureReport();
+    public CompressionReport run(Model procedureInput) {
+        CompressionReport report = new CompressionReport();
 
         // Step 1 - remove redundancy
         Model reasonerInput = procedureInput;

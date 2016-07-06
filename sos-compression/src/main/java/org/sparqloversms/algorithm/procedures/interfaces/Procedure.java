@@ -1,10 +1,10 @@
 package org.sparqloversms.algorithm.procedures.interfaces;
 
 import org.apache.jena.rdf.model.Model;
-import org.sparqloversms.algorithm.procedures.models.ProcedureReport;
+import org.sparqloversms.algorithm.procedures.models.CompressionReport;
 
 public interface Procedure {
 
-    ProcedureReport run(Model procedureInput);
+    CompressionReport run(Model procedureInput);
 
 }

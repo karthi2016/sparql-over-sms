@@ -78,14 +78,4 @@ public class SPINSerializer implements Serializer {
             s.changeObject(replacement);
         }
     }
-
-//    public String deserialize(String input) {
-//        Model model = ModelFactory.createDefaultModel();
-//        model.read(new StringReader(input), null, FileUtils.langTurtle);
-//
-//        Model spinSchema = RDFDataMgr.loadModel("http://spinrdf.org/sp", Lang.RDFXML);
-//        InfModel infModel = ModelFactory.createRDFSModel(spinSchema, model);
-//        Resource queryInstance = SPINFactory.asQuery(infModel.listResourcesWithProperty(RDF.type, SP.Query).next());
-//        return SPINFactory.asQuery(queryInstance).toString();
-//    }
 }

@@ -2,10 +2,11 @@ package org.sparqloversms.algorithm.encoding;
 
 import org.rdfhdt.hdt.dictionary.Dictionary;
 import org.rdfhdt.hdt.enums.TripleComponentRole;
+import org.rdfhdt.hdt.hdt.HDT;
 import org.sparqloversms.algorithm.encoding.interfaces.Decoder;
+import org.sparqloversms.algorithm.encoding.model.DecoderResult;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,27 +15,31 @@ public class HDTDecoder implements Decoder {
 
     private Dictionary dictionary;
 
-    public HDTDecoder(Dictionary dictionary) {
-        this.dictionary = dictionary;
+    public HDTDecoder(HDT knowledge) {
+        this.dictionary = knowledge.getDictionary();
     }
 
     /*-----------------------------------------------------------------------*/
 
-    public String decode(String input) {
-        Pattern pat = Pattern.compile("\\$\\w{1,5}");
-        Matcher m = pat.matcher(input);
+    public DecoderResult decode(String input) {
+        DecoderResult result = new DecoderResult();
+        String temp = input;
 
-        List<String> placeholders = new ArrayList<>();
+        Pattern pat = Pattern.compile("\\$\\w{1,5}");
+        Matcher m = pat.matcher(temp);
+
+        Set<String> placeholders = new HashSet<>();
         while (m.find()) {
             placeholders.add(m.group());
         }
 
         for (String placeholder : placeholders) {
             String uri = getUriFromDictionary(placeholder);
-            input = input.replaceAll(placeholder, String.format("<%s>", uri));
+            temp = temp.replaceAll(Pattern.quote(placeholder), String.format("<%s>", uri));
         }
 
-        return input;
+        result.setOutput(temp);
+        return result;
     }
 
     private String getUriFromDictionary(String placeholder) {

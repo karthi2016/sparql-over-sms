@@ -84,8 +84,7 @@ public class HDTEncoder implements Encoder {
                 }
             }
 
-
-            String search = String.format("<?%s>?", value);
+            String search = String.format("(<%s>)|((?!<)%s(?!>)\\s)", value, value);
             String replacement = String.format("\\$%x", id);
             if (Pattern.compile(search).matcher(output).find()) {
                 output = output.replaceAll(search, replacement);
@@ -110,7 +109,7 @@ public class HDTEncoder implements Encoder {
                 }
             }
 
-            String search = String.format("<?%s>?", value);
+            String search = String.format("(<%s>)|((?!<)%s(?!>)\\s)", value, value);
             String replacement = String.format("\\$%x", id);
             if (Pattern.compile(search).matcher(output).find()) {
                 output = output.replaceAll(search, replacement);
@@ -138,7 +137,7 @@ public class HDTEncoder implements Encoder {
                 }
             }
 
-            String search = String.format("<?%s>?", value);
+            String search = String.format("(<%s>)|((?!<)%s(?!>)\\s)", value, value);
             String replacement = String.format("\\$%x", id);
             if (Pattern.compile(search).matcher(output).find()) {
                 output = output.replaceAll(search, replacement);
