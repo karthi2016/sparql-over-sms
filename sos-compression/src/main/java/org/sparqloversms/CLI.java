@@ -7,6 +7,8 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.RDFS;
 import org.apache.jena.vocabulary.VCARD;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.varia.NullAppender;
 import org.rdfhdt.hdt.hdt.HDT;
 import org.rdfhdt.hdt.hdt.HDTManager;
 import org.sparqloversms.algorithm.encoding.HDTDecoder;
@@ -40,6 +42,9 @@ public class CLI {
 
     public static void main(String[] args) {
         defineOptions();
+
+        // Temporary disable log4j (used by Jena)
+        BasicConfigurator.configure(new NullAppender());
 
         try {
             CommandLine cmd = parser.parse(options, args);
