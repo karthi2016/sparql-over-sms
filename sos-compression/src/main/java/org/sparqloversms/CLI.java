@@ -20,7 +20,7 @@ import org.sparqloversms.algorithm.procedures.RDFDecompressionProcedure;
 import org.sparqloversms.algorithm.procedures.SPARQLCompressionProcedure;
 import org.sparqloversms.algorithm.procedures.SPARQLDecompressionProcedure;
 import org.sparqloversms.algorithm.procedures.interfaces.DecompressionProcedure;
-import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.procedures.interfaces.CompressionProcedure;
 import org.sparqloversms.algorithm.procedures.models.CompressionReport;
 import org.sparqloversms.algorithm.procedures.models.DecompressionReport;
 import org.sparqloversms.algorithm.procedures.models.ProcedureReport;
@@ -122,7 +122,7 @@ public class CLI {
         Serializer defaultSerializer = new TurtleSerializer();
         Encoder defaultEncoder = new HDTEncoder(knowledge);
 
-        Procedure procedure;
+        CompressionProcedure procedure;
         if (type.toUpperCase().equals("RDF")) {
             procedure = new RDFCompressionProcedure(defaultReasoner, defaultSerializer, defaultEncoder);
         } else {

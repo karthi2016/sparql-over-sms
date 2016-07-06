@@ -1,30 +1,14 @@
 package org.sparqloversms.algorithm.procedures;
 
-import org.apache.commons.lang3.CharSet;
-import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.riot.Lang;
-import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.util.CharEncoding;
-import org.apache.jena.util.FileUtils;
-import org.apache.jena.vocabulary.RDF;
 import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
 import org.sparqloversms.algorithm.encoding.model.EncoderResult;
-import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.procedures.interfaces.CompressionProcedure;
 import org.sparqloversms.algorithm.procedures.models.CompressionReport;
 import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 import org.sparqloversms.algorithm.serialization.models.SerializerResult;
-import org.topbraid.spin.model.SPINFactory;
-import org.topbraid.spin.vocabulary.SP;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.nio.charset.Charset;
-
-public class SPARQLCompressionProcedure implements Procedure {
+public class SPARQLCompressionProcedure implements CompressionProcedure {
 
     private Serializer serializer;
     private Encoder encoder;

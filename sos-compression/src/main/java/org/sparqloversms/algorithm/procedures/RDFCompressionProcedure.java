@@ -3,14 +3,14 @@ package org.sparqloversms.algorithm.procedures;
 import org.apache.jena.rdf.model.Model;
 import org.sparqloversms.algorithm.encoding.interfaces.Encoder;
 import org.sparqloversms.algorithm.encoding.model.EncoderResult;
-import org.sparqloversms.algorithm.procedures.interfaces.Procedure;
+import org.sparqloversms.algorithm.procedures.interfaces.CompressionProcedure;
 import org.sparqloversms.algorithm.procedures.models.CompressionReport;
 import org.sparqloversms.algorithm.reasoning.interfaces.Reasoner;
 import org.sparqloversms.algorithm.reasoning.models.ReasonerResult;
 import org.sparqloversms.algorithm.serialization.interfaces.Serializer;
 import org.sparqloversms.algorithm.serialization.models.SerializerResult;
 
-public class RDFCompressionProcedure implements Procedure {
+public class RDFCompressionProcedure implements CompressionProcedure {
 
     private Reasoner reasoner;
     private Serializer serializer;
