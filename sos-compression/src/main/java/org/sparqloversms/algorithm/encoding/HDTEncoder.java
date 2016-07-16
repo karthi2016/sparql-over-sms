@@ -88,7 +88,7 @@ public class HDTEncoder implements Encoder {
             String replacement = String.format("\\$%x", id);
             if (Pattern.compile(search).matcher(output).find()) {
                 output = output.replaceAll(search, replacement);
-                result.track("subject-encoded");
+                result.track("subject encoded");
             }
         }
 
@@ -113,7 +113,7 @@ public class HDTEncoder implements Encoder {
             String replacement = String.format("\\$%x", id);
             if (Pattern.compile(search).matcher(output).find()) {
                 output = output.replaceAll(search, replacement);
-                result.track("predicate-encoded");
+                result.track("predicate encoded");
             }
         }
 
@@ -141,7 +141,7 @@ public class HDTEncoder implements Encoder {
             String replacement = String.format("\\$%x", id);
             if (Pattern.compile(search).matcher(output).find()) {
                 output = output.replaceAll(search, replacement);
-                result.track("object-encoded");
+                result.track("object encoded");
             }
         }
 
@@ -156,7 +156,7 @@ public class HDTEncoder implements Encoder {
 
             if (!output.contains(prefixPattern)) {
                 output = output.replaceAll(String.format("@prefix %s: .*\\.", key), " ");
-                result.track("unnecessary-prefix");
+                result.track("unnecessary prefix");
             }
         }
 

@@ -36,6 +36,7 @@ public class HDTDecoder implements Decoder {
         for (String placeholder : placeholders) {
             String uri = getUriFromDictionary(placeholder);
             temp = temp.replaceAll(Pattern.quote(placeholder), String.format("<%s>", uri));
+            result.track("placeholder decoded");
         }
 
         result.setOutput(temp);
