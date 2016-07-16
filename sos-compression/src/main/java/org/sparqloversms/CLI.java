@@ -61,6 +61,7 @@ public class CLI {
             String inputFile = cmd.getOptionValue("input");
             String outputFile = cmd.getOptionValue("output");
             String knowledgeFile = cmd.getOptionValue("knowledge");
+            String reportFile = cmd.getOptionValue("report");
 
             if (!hasCompress && !hasDecompress) {
                 throw new ParseException("Either --compress or --decompress must be specified.");
@@ -76,9 +77,6 @@ public class CLI {
             }
             if (inputFile == null) {
                 throw new ParseException("The --input option is required.");
-            }
-            if (outputFile == null) {
-                throw new ParseException("The --output option is required.");
             }
             if (knowledgeFile == null) {
                 throw new ParseException("The --knowledge option is required.");
@@ -107,10 +105,15 @@ public class CLI {
                 report = performDecompression(type, input, knowledge);
             }
 
-            System.out.println(report.getOutput());
+            if (outputFile != null) {
+                FileUtils.writeStringToFile(new File(outputFile), report.getOutput());
+            } else {
+                System.out.println(report.getOutput());
+            }
 
-            FileUtils.writeStringToFile(new File(outputFile + ".report"), report.toJSON());
-            FileUtils.writeStringToFile(new File(outputFile), report.getOutput());
+            if (reportFile != null) {
+                FileUtils.writeStringToFile(new File(reportFile), report.toJSON());
+            }
         } catch (ParseException | IllegalArgumentException | IOException e) {
             System.err.println(e.getMessage());
             System.exit(1);
@@ -200,12 +203,12 @@ public class CLI {
         commands.isRequired();
         commands.addOption(Option.builder()
                 .longOpt("compress")
-                .desc("performs compression on the input file")
+                .desc("performs compression on input file")
                 .build()
         );
         commands.addOption(Option.builder()
                 .longOpt("decompress")
-                .desc("performs decompression on the input file")
+                .desc("performs decompression on input file")
                 .build()
         );
         options.addOptionGroup(commands);
@@ -214,7 +217,7 @@ public class CLI {
                 .longOpt("input")
                 .hasArg()
                 .argName("file")
-                .desc("absolute or relative path to the input file")
+                .desc("absolute/relative path to input file")
                 .build()
         );
 
@@ -230,7 +233,7 @@ public class CLI {
                 .longOpt("output")
                 .hasArg()
                 .argName("file")
-                .desc("absolute or relative path to the output file (.ttl)")
+                .desc("absolute/relative path to output file (.ttl)")
                 .build()
         );
 
@@ -238,7 +241,15 @@ public class CLI {
                 .longOpt("knowledge")
                 .hasArg()
                 .argName("file")
-                .desc("absolute or relative path the the knowledge file (.rdf|.hdt)")
+                .desc("absolute/relative path to knowledge file (.hdt)")
+                .build()
+        );
+
+        options.addOption(Option.builder("r")
+                .longOpt("report")
+                .hasArg()
+                .argName("file")
+                .desc("absolute/relative path to report file (.json)")
                 .build()
         );
     }
