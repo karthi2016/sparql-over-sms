@@ -64,6 +64,9 @@ target/
 # IntelliJ IDEA
 .idea/
 
+# Visual Studio
+*.pyproj
+
 # Custom
 venv/
 *.db
