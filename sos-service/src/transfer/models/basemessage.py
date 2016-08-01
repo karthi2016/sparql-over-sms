@@ -1,5 +1,5 @@
 
-class Message:
+class BaseMessage:
 
     def __init__(self, category, content, sender, receiver, position=0, correlationid=None):
         self.category = category

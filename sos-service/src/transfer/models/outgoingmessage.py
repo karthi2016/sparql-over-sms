@@ -1,6 +1,6 @@
-from transfer.models import Message
+from transfer.models import BaseMessage
 
-class OutgoingMessage(Message):
+class OutgoingMessage(BaseMessage):
 
     def __init__(self, category, content, receiver):
         super().__init__(category, content, '~self', receiver)

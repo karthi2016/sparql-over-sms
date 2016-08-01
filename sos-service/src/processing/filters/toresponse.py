@@ -1,4 +1,4 @@
-from transfer.models import Message
+from transfer.models import BaseMessage
 
 
 class ToResponse:

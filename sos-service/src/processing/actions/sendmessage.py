@@ -1,4 +1,4 @@
-from utilities.messaging import Messenger
+from utilities.messaging import MessengerFactory
 
 
 class SendMessage:
@@ -8,6 +8,8 @@ class SendMessage:
 
     @staticmethod
     def execute(token):
-        messenger = Messenger()
-        messenger.send(token.message)
+        message = token.message
+
+        messenger = MessengerFactory.get_messenger(message.receiver)
+        messenger.send(message)
 

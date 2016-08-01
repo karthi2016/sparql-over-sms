@@ -2,6 +2,7 @@ from processing.models import OutgoingPipelineToken
 from processing.pipelines import SendSparqlUpdate
 from tornroutes import route
 from transfer.models import OutgoingMessage
+from transfer.constants import MessageCategory
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest, timeout, servererror
 
@@ -15,7 +16,7 @@ class SparqlUpdate(HttpHandler):
         if update is None:
             raise badrequest('parameter "update" not provided')
 
-        message = OutgoingMessage(2, update, agentid)
+        message = OutgoingMessage(MessageCategory.SPARQL_UPDATE, update, agentid)
         token = OutgoingPipelineToken(message)
 
         try:

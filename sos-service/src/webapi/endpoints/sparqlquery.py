@@ -2,6 +2,7 @@ from processing.models import OutgoingPipelineToken
 from processing.pipelines import SendSparqlQuery
 from tornroutes import route
 from transfer.models import OutgoingMessage
+from transfer.constants import MessageCategory
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest, timeout, servererror
 
@@ -15,7 +16,7 @@ class SparqlQuery(HttpHandler):
         if query is None:
             raise badrequest('parameter "query" not provided')
 
-        message = OutgoingMessage(1, query, agentid)
+        message = OutgoingMessage(MessageCategory.SPARQL_QUERY, query, agentid)
         token = OutgoingPipelineToken(message)
 
         try:

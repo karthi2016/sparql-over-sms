@@ -9,6 +9,10 @@ def make_app():
 
 
 if __name__ == "__main__":
+    port = 8888
+
     app = make_app()
-    app.listen(8888)
+    app.listen(port)
+
+    print('The SPARQL over SMS service is listening on port {0}'.format(port))
     IOLoop.current().start()

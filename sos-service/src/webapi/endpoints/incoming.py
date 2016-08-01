@@ -1,11 +1,12 @@
 from tornroutes import route
 from transfer.models import IncomingMessage
+from transfer.constants import MessageCategory
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest
 
 
 @route('/incoming')
-class SparqlUpdate(HttpHandler):
+class Incoming(HttpHandler):
 
     def post(self):
         sender = self.get_parameter('sender')
