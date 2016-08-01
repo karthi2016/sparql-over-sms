@@ -66,6 +66,8 @@ target/
 
 # Visual Studio
 *.pyproj
+*.sln
+.vs/
 
 # Custom
 venv/
