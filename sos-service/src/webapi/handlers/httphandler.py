@@ -14,3 +14,6 @@ class HttpHandler(RequestHandler):
             return arguments[0] if single else arguments
         except KeyError:
             return None
+
+    def accepted():
+        self.set_status(202)

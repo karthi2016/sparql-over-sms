@@ -1,4 +1,3 @@
-from utilities.messaging import MessengerFactory
 
 
 class SendMessage:
@@ -10,6 +9,6 @@ class SendMessage:
     def execute(token):
         message = token.message
 
-        messenger = MessengerFactory.get_messenger(message.receiver)
-        messenger.send(message)
+        #messenger = MessengerFactory.get_messenger(message.receiver)
+        #messenger.send(message)
 

@@ -1,1 +1,2 @@
+from persistence.repositories.contactrepo import ContactRepo
 from persistence.repositories.messagerepo import MessageRepo

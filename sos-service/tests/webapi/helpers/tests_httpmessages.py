@@ -6,12 +6,12 @@ class HttpMessages(TestCase):
     """Tests to verify the correct functioning of the httpmessages helpers"""
     defaultmessage = "default log message"
     
-    def test_badrequest_withmessage_returnobject(self):
+    def test_badrequest_withmessage_returns(self):
         message = badrequest(self.defaultmessage)
 
         self.assertEqual(message.status_code, 400)
         self.assertEqual(message.log_message, self.defaultmessage)
 
-    def test_badrequest_withoutmessage_raiseerror(self):
+    def test_badrequest_withoutmessage_raises(self):
         with self.assertRaises(TypeError):
             message = badrequest()

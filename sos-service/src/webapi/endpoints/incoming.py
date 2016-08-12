@@ -3,6 +3,8 @@ from transfer.models import IncomingMessage
 from transfer.constants import MessageCategory
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest
+from persistence import messaginguow
+from utilities.messaging import extract_all
 
 
 @route('/incoming')
@@ -18,7 +20,9 @@ class Incoming(HttpHandler):
         if content is None:
             raise badrequest('parameter "content" not provided')
 
-        message = IncomingMessage(3, content, sender)
-        self.write('{0}'.format(message))
-        self.set_status(202)
+        # persist so it can be processed in the background
+        correlationid, category, position, body = extract_all(content)
+        messaginguow.store_incoming(sender, correlationid, category, position, body)
+
+        self.accepted()
 

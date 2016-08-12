@@ -1,3 +1,2 @@
-from utilities.messaging.messenger import Messenger
-from utilities.messaging.messengerfactory import MessengerFactory
+from utilities.messaging.extraction import *
 
