@@ -1,4 +1,4 @@
-from persistence.models import BaseModel
+from persistence.models import Agent, BaseModel
 from peewee import *
 
 class Message(BaseModel):
@@ -7,8 +7,8 @@ class Message(BaseModel):
     messageid = IntegerField()
     correlationid = CharField()
     category = IntegerField()
-    senderid = IntegerField()
-    receiverid = IntegerField()
+    sender = ForeignKeyField(Agent, related_name='send_messages')
+    receiver = ForeignKeyField(Agent, related_name='received_messages')
     
     # flags
     complete = BooleanField()

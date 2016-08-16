@@ -5,8 +5,8 @@ from peewee import SqliteDatabase
 database = SqliteDatabase('sparqloversms.db', threadlocals=True)
 
 # create repository singletons
-messagerepo = MessageRepo(database)
-contactrepo = ContactRepo(database)
+message_repo = MessageRepo(database)
+contact_repo = ContactRepo(database)
 
 # create unit of work singletons
-messaginguow = MessagingUoW(messagerepo, contactrepo)
+messaging_uow = MessagingUoW(message_repo, contact_repo)

@@ -3,7 +3,7 @@ from transfer.models import IncomingMessage
 from transfer.constants import MessageCategory
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest
-from persistence import messaginguow
+from persistence import messaging_uow
 from utilities.messaging import extract_all
 
 
@@ -22,7 +22,7 @@ class Incoming(HttpHandler):
 
         # persist so it can be processed in the background
         correlationid, category, position, body = extract_all(content)
-        messaginguow.store_incoming(sender, correlationid, category, position, body)
+        messaging_uow.store_incoming(sender, correlationid, category, position, body)
 
         self.accepted()
 

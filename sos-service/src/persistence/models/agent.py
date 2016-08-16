@@ -5,8 +5,8 @@ class Agent(BaseModel):
     """description of class"""
 
     agentid = IntegerField()
-    name = CharField()
-    hostname = CharField()
-    phonenumber = CharField()
+    name = CharField(unqiue=True)
+    hostname = CharField(unqiue=True)
+    phonenumber = CharField(unqiue=True)
     
 
