@@ -5,6 +5,7 @@ from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest
 from persistence import messaging_uow
 from utilities.messaging import extract_all
+from processing.tasks import *
 
 
 @route('/incoming')
@@ -22,7 +23,11 @@ class Incoming(HttpHandler):
 
         # persist so it can be processed in the background
         correlationid, category, position, body = extract_all(content)
-        messaging_uow.store_incoming(sender, correlationid, category, position, body)
+        message = messaging_uow.store_incoming(sender, correlationid, category, position, body)
+
+        # if message is complete, create processing task
+        if message.complete:
+            example.delay(message.id)
 
         self.accepted()
 
