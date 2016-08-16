@@ -14,7 +14,7 @@ def determine_address_type(address):
 
 
 def is_phonenumber_address(address):
-    return address[1] == '+'
+    return address[0] == '+'
 
 def is_hostname_address(address):
     return '.' in address

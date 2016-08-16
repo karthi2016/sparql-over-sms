@@ -4,12 +4,11 @@ from peewee import *
 class Message(BaseModel):
     """description of class"""
 
-    messageid = IntegerField()
     correlationid = CharField()
     category = IntegerField()
     sender = ForeignKeyField(Agent, related_name='send_messages')
     receiver = ForeignKeyField(Agent, related_name='received_messages')
     
     # flags
-    complete = BooleanField()
-    processed = BooleanField()
+    complete = BooleanField(default=False)
+    processed = BooleanField(default=False)

@@ -15,5 +15,5 @@ class HttpHandler(RequestHandler):
         except KeyError:
             return None
 
-    def accepted():
+    def accepted(self):
         self.set_status(202)

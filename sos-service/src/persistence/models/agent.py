@@ -4,9 +4,8 @@ from peewee import *
 class Agent(BaseModel):
     """description of class"""
 
-    agentid = IntegerField()
-    name = CharField(unqiue=True)
-    hostname = CharField(unqiue=True)
-    phonenumber = CharField(unqiue=True)
+    name = CharField(unique=True, null=True)
+    hostname = CharField(unique=True, null=True)
+    phonenumber = CharField(unique=True, null=True)
     
 
