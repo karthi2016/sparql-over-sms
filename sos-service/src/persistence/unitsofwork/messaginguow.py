@@ -26,3 +26,14 @@ class MessagingUoW:
 
         message = self.messagerepo.create(senderid, receiverid, correlationid, category, position, body)
 
+        # update message flags
+        message.complete = True if int(position) is 0 else self.is_complete(message)
+        message.save()
+        
+    def is_complete(self, message):
+        messageparts = message.parts
+
+        expectedcount = max({part.position for part in messageparts})
+        return len(messageparts) == expectedcount
+
+

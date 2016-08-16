@@ -8,6 +8,7 @@ class Message(BaseModel):
     category = IntegerField()
     sender = ForeignKeyField(Agent, related_name='send_messages')
     receiver = ForeignKeyField(Agent, related_name='received_messages')
+    body = CharField(null=True)
     
     # flags
     complete = BooleanField(default=False)

@@ -17,6 +17,8 @@ class MessageRepo:
         messagepart = MessagePart(message=message, position=position, body=body)
         messagepart.save()
 
+        return message
+
     def get_bycorrelation(self, correlationid, category):
         try:
             return Message.get(correlationid=correlationid, category=category)
