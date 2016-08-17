@@ -1,4 +1,5 @@
 from requests_futures.sessions import FuturesSession
+from persistence import agent_repo
 
 
 class HttpTransfer:
@@ -7,10 +8,9 @@ class HttpTransfer:
 
     @staticmethod
     def send_single(receiver, body):
-        contactrepo = ServiceBox.get_instance(ContactRepo)
-        self = contactrepo.get_contact_byid('self')
+        self = agent_repo.get_byname('~self')
 
-        url = 'http://{0}:8888/incoming'.format(receiver.ip)
+        url = 'http://{0}:8888/incoming'.format(receiver.hostname)
         session = FuturesSession()
         response_future = session.post(url, json={'sender': self.phonenumber, 'body': body})
 
@@ -24,4 +24,4 @@ class HttpTransfer:
 
     @staticmethod
     def is_supported(receiver):
-        return receiver.ip is not None
+        return receiver.hostname is not None

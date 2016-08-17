@@ -19,6 +19,12 @@ class MessageRepo:
 
         return message
 
+    def get_byid(self, messageid):
+        try:
+            return Message.get(id=messageid)
+        except Message.DoesNotExist:
+            return None
+
     def get_bycorrelation(self, correlationid, category):
         try:
             return Message.get(correlationid=correlationid, category=category)

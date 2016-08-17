@@ -2,21 +2,21 @@
 class MessagingUoW:
     """description of class"""
 
-    def __init__(self, contactrepo, messagerepo):
-        self.contactrepo = contactrepo
+    def __init__(self, agentrepo, messagerepo):
+        self.agentrepo = agentrepo
         self.messagerepo = messagerepo
 
     def store_incoming(self, sender_address, correlationid, category, position, body):
         # get or create sender/receiver
-        sender = self.contactrepo.get_byaddress(sender_address, create_if_nonexist=True)
-        receiver = self.contactrepo.get_byname('~self', create_if_nonexist=True)
+        sender = self.agentrepo.get_byaddress(sender_address, create_if_nonexist=True)
+        receiver = self.agentrepo.get_byname('~self', create_if_nonexist=True)
 
         return self.store(sender, receiver, correlationid, category, position, body)
 
     def store_outgoing(self, receiver_address, correlationid, category, position, body):
         # get or create sender/receiver
-        sender = self.contactrepo.get_byname('~self', create_if_nonexist=True)
-        receiver = self.contactrepo.get_byaddress(receiver_address, create_if_nonexist=True)
+        sender = self.agentrepo.get_byname('~self', create_if_nonexist=True)
+        receiver = self.agentrepo.get_byaddress(receiver_address, create_if_nonexist=True)
 
         return self.store(sender, receiver, correlationid, category, position, body)
 

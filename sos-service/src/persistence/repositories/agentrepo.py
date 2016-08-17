@@ -1,7 +1,7 @@
 from persistence.models import Agent
 from utilities.messaging.addresses import *
 
-class ContactRepo:
+class AgentRepo:
     """description of class"""
 
     def __init__(self, database):
