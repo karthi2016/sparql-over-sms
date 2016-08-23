@@ -12,7 +12,7 @@ def process_incomingmessage(messageid):
     
     # call appropriate pipeline based on category
     if message.category is MessageCategory.SPARQL_QUERY:
-        return ReceiveSparqlQuery.handle(token)
+        return ReceiveSparqlQuery.execute(token)
     
     if message.category is MessageCategory.SPARQL_UPDATE:
-        return ReceiveSparqlQuery.handle(token)
+        return ReceiveSparqlUpdate.execute(token)
