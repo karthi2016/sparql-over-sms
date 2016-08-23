@@ -1,6 +1,7 @@
 from persistence.models import Agent, BaseModel
 from peewee import *
 
+
 class Message(BaseModel):
     """description of class"""
 
@@ -19,5 +20,5 @@ class Message(BaseModel):
             return None
 
         messageparts = sorted(self.parts, key=lambda x: x.position)
-        body = ''.join([part.body for parg in messageparts])
-        
+        body = ''.join([part.body for part in messageparts])
+        return body

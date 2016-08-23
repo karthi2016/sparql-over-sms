@@ -8,4 +8,3 @@ class MessagePart(BaseModel):
     message = ForeignKeyField(Message, related_name='parts')
     position = IntegerField()
     body = CharField()
-

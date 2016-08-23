@@ -2,7 +2,7 @@ from processing import app
 from persistence import message_repo
 from transfer.constants.messagecategory import MessageCategory
 from processing.pipelines import ReceiveSparqlQuery, ReceiveSparqlUpdate
-from processing.models import PipelineToken
+from processing.models import IncomingPipelineToken
 
 
 @app.task

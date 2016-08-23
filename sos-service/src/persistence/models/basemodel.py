@@ -2,6 +2,7 @@ from datetime import datetime
 from persistence import database
 from peewee import *
 
+
 class BaseModel(Model):
     """description of class"""
 

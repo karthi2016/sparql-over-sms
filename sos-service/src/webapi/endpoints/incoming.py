@@ -1,6 +1,4 @@
 from tornroutes import route
-from transfer.models import IncomingMessage
-from transfer.constants import MessageCategory
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest
 from persistence import messaging_uow

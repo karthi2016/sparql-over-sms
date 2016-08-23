@@ -27,6 +27,5 @@ if __name__ == "__main__":
     app = initialize_app()
     app.listen(port)
 
-
     print('The SPARQL over SMS service is listening on port {0}'.format(port))
     IOLoop.current().start()
