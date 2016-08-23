@@ -8,8 +8,16 @@ class Message(BaseModel):
     category = IntegerField()
     sender = ForeignKeyField(Agent, related_name='send_messages')
     receiver = ForeignKeyField(Agent, related_name='received_messages')
-    body = CharField(null=True)
     
     # flags
     complete = BooleanField(default=False)
     processed = BooleanField(default=False)
+
+    # computed
+    def get_body(self):
+        if not self.complete:
+            return None
+
+        messageparts = sorted(self.parts, key=lambda x: x.position)
+        body = ''.join([part.body for parg in messageparts])
+        

@@ -1,1 +1,1 @@
-from processing.tasks.example import *
+from processing.tasks.processincoming import process_incomingmessage

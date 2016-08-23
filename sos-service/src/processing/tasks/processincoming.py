@@ -1,5 +1,5 @@
 from processing import app
-from persistence import messagerepo
+from persistence import message_repo
 from transfer.constants.messagecategory import MessageCategory
 from processing.pipelines import ReceiveSparqlQuery, ReceiveSparqlUpdate
 from processing.models import PipelineToken
@@ -7,7 +7,7 @@ from processing.models import PipelineToken
 
 @app.task
 def process_incomingmessage(messageid):
-    message = messagerepo.get_byid(messageid)
+    message = message_repo.get_byid(messageid)
     token = IncomingPipelineToken(message)
     
     # call appropriate pipeline based on category

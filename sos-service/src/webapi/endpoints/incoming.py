@@ -5,7 +5,7 @@ from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest
 from persistence import messaging_uow
 from utilities.messaging import extract_all
-from processing.tasks import *
+from processing.tasks import process_incomingmessage
 
 
 @route('/incoming')
@@ -27,7 +27,7 @@ class Incoming(HttpHandler):
 
         # if message is complete, create processing task
         if message.complete:
-            example.delay(message.id)
+            process_incomingmessage.delay(message.id)
 
         self.accepted()
 
