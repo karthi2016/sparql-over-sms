@@ -7,6 +7,7 @@ class Message(BaseModel):
 
     correlationid = CharField()
     category = IntegerField()
+    body = CharField(null=True)
     sender = ForeignKeyField(Agent, related_name='send_messages')
     receiver = ForeignKeyField(Agent, related_name='received_messages')
     
@@ -16,6 +17,9 @@ class Message(BaseModel):
 
     # computed
     def get_body(self):
+        if self.body is not None:
+            return self.body
+
         if not self.complete:
             return None
 

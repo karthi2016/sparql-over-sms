@@ -9,8 +9,12 @@ class GzipCompress:
 
     @staticmethod
     def execute(token):
+        message = token.message
+        body = message.get_body()
+
         mockfile = BytesIO()
         with GzipFile(fileobj=mockfile, mode="w") as f:
-            f.write(bytes(token.message.body, 'utf-8'))
+            f.write(bytes(body, 'utf-8'))
 
+        # re-assign compressed body
         token.message.body = mockfile.getvalue()

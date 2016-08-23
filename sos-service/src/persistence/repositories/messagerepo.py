@@ -7,6 +7,18 @@ class MessageRepo:
     def __init__(self, database):
         self.database = database
 
+    def get_byid(self, messageid):
+        try:
+            return Message.get(id=messageid)
+        except Message.DoesNotExist:
+            return None
+
+    def get_bycorrelation(self, correlationid, category):
+        try:
+            return Message.get(correlationid=correlationid, category=category)
+        except Message.DoesNotExist:
+            return None
+
     def create(self, senderid, receiverid, correlationid, category, position, body):
         message = self.get_bycorrelation(correlationid, category)
         if message is None:
@@ -19,14 +31,11 @@ class MessageRepo:
 
         return message
 
-    def get_byid(self, messageid):
-        try:
-            return Message.get(id=messageid)
-        except Message.DoesNotExist:
-            return None
+    def update(self, message):
+        db_message = self.get_byid(message.id)
+        db_message.__dict__.update(message.__dict__)
 
-    def get_bycorrelation(self, correlationid, category):
-        try:
-            return Message.get(correlationid=correlationid, category=category)
-        except Message.DoesNotExist:
-            return None
+        return message
+
+
+

@@ -8,4 +8,8 @@ class Base64Encode:
 
     @staticmethod
     def execute(token):
-        token.message.body = b64encode(token.message.body).decode('utf-8')
+        message = token.message
+        body = message.get_body()
+
+        # re-assign encoded body
+        token.message.body = b64encode(body).decode('utf-8')

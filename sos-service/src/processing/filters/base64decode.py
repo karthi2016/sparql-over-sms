@@ -8,4 +8,8 @@ class Base64Decode:
 
     @staticmethod
     def execute(token):
-        token.message.body = b64decode(token.message.body)
+        message = token.message
+        body = message.get_body()
+
+        # re-assign decoded body
+        token.message.body = b64decode(body)

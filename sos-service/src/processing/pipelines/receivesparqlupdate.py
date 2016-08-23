@@ -1,6 +1,5 @@
 from processing.actions import RunSparqlUpdate
 from processing.pipelines.basepipeline import Pipeline
-from processing.filters import Base64Decode, GzipDecompress
 
 
 class ReceiveSparqlUpdate(Pipeline):
@@ -9,8 +8,6 @@ class ReceiveSparqlUpdate(Pipeline):
     description = 'Pipeline that handles incoming SPARQL updates'
 
     chain = [
-        Base64Decode,
-        GzipDecompress,
         RunSparqlUpdate
     ]
 

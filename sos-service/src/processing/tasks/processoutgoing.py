@@ -1,5 +1,6 @@
 from processing import app
 
+
 @app.task
-def example(messageid):
-    return messageid * messageid
+def process_outgoingmessage(messageid):
+    print('needs to send {0}'.format(messageid))

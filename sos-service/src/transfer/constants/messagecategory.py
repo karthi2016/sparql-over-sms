@@ -1,7 +1,8 @@
 
 class MessageCategory:
     """Categories for SPARQL over SMS messages"""
-    
+
+    UNKOWN = -1
     USER = 0
     USER_RESPONSE = 1
     SYSTEM = 2
@@ -10,3 +11,6 @@ class MessageCategory:
     SPARQL_QUERY_RESPONSE = 5
     SPARQL_UPDATE = 6
     SPARQL_UPDATE_RESPONSE = 7
+
+
+

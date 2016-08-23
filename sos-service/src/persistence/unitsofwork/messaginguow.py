@@ -31,7 +31,7 @@ class MessagingUoW:
         message.save()
 
         return message
-        
+
     def is_complete(self, message):
         messageparts = message.parts
 

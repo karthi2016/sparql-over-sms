@@ -1,4 +1,4 @@
-from processing.actions.storemessage import StoreMessage
+from processing.actions.sendresponse import StoreMessage
 from processing.pipelines.basepipeline import Pipeline
 from processing.filters import Base64Decode, GzipDecompress
 

@@ -1,3 +1,5 @@
+from processing.pipelines.compressmessage import CompressMessage
+from processing.pipelines.decompressmessage import DecompressMessage
 from processing.pipelines.sendsparqlquery import SendSparqlQuery
 from processing.pipelines.sendsparqlupdate import SendSparqlUpdate
 from processing.pipelines.receivesparqlquery import ReceiveSparqlQuery

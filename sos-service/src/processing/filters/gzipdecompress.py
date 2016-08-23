@@ -9,9 +9,13 @@ class GzipDecompress:
 
     @staticmethod
     def execute(token):
+        message = token.message
+        body = message.get_body()
+
         mockfile = BytesIO()
-        mockfile.write(token.message.body)
+        mockfile.write(body)
         mockfile.seek(0)
 
         with GzipFile(fileobj=mockfile, mode="r") as f:
+            # re-assign decompressed body
             token.message.body = f.read().decode('utf-8')
