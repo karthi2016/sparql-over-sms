@@ -34,8 +34,9 @@ class MessageRepo:
     def update(self, message):
         db_message = self.get_byid(message.id)
         db_message.__dict__.update(message.__dict__)
+        db_message.save()
 
-        return message
+        return db_message
 
 
 

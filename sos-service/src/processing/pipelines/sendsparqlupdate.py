@@ -1,6 +1,6 @@
 from processing.pipelines.basepipeline import Pipeline
 from processing.filters import Base64Encode, ToResponse, GzipCompress
-from processing.actions import SendMessage, AwaitResponse
+from processing.actions import SendResponse, AwaitResponse
 
 
 class SendSparqlUpdate(Pipeline):
@@ -11,7 +11,7 @@ class SendSparqlUpdate(Pipeline):
     chain = [
         GzipCompress,
         Base64Encode,
-        SendMessage,
+        SendResponse,
         ToResponse,
         AwaitResponse
     ]

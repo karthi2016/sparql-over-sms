@@ -1,4 +1,4 @@
-from processing.actions.sendresponse import StoreMessage
+from processing.actions import UpdateMessage
 from processing.pipelines.basepipeline import Pipeline
 from processing.filters import Base64Decode, GzipDecompress
 
@@ -11,7 +11,7 @@ class ReceiveSparqlResponse(Pipeline):
     chain = [
         Base64Decode,
         GzipDecompress,
-        StoreMessage
+        UpdateMessage
     ]
 
     @staticmethod

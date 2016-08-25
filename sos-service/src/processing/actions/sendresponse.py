@@ -1,6 +1,6 @@
 from persistence import message_repo
 from utilities.messaging import to_response_category
-from processing import process_outgoingmessage
+
 
 
 class SendResponse:
@@ -22,5 +22,6 @@ class SendResponse:
 
         # store message, create processing task
         message = message_repo.create(senderid, receiverid, correlationid, category, position, body)
+        from processing import process_outgoingmessage
         process_outgoingmessage.delay(message.id)
 
