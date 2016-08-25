@@ -28,4 +28,3 @@ class Incoming(HttpHandler):
             process_incomingmessage.delay(message.id)
 
         self.accepted()
-

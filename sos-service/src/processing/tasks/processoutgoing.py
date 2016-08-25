@@ -1,6 +1,6 @@
-from processing import app
+from processing import celery
 
 
-@app.task
+@celery.task
 def process_outgoingmessage(messageid):
     print('needs to send {0}'.format(messageid))

@@ -1,11 +1,11 @@
-from processing import app
+from processing import celery
 from persistence import message_repo
 from transfer.constants.messagecategory import MessageCategory
 from processing.pipelines import CompressMessage, DecompressMessage, ReceiveSparqlQuery, ReceiveSparqlUpdate
 from processing.models import IncomingPipelineToken
 
 
-@app.task
+@celery.task
 def process_incomingmessage(messageid):
     message = message_repo.get_byid(messageid)
     token = IncomingPipelineToken(message)

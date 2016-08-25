@@ -4,6 +4,7 @@ from tornroutes import route
 from webapi import endpoints
 from persistence import database
 from persistence.models import modelset
+from tcelery import setup_nonblocking_producer
 
 
 def initialize_db():
@@ -18,7 +19,6 @@ def initialize_db():
 def initialize_app():
     return Application(route.get_routes())
 
-
 if __name__ == "__main__":
     port = 8888
 
@@ -28,4 +28,5 @@ if __name__ == "__main__":
     app.listen(port)
 
     print('The SPARQL over SMS service is listening on port {0}'.format(port))
+    setup_nonblocking_producer()
     IOLoop.current().start()
