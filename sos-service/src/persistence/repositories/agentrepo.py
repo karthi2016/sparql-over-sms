@@ -1,6 +1,7 @@
 from persistence.models import Agent
 from utilities.messaging.addresses import *
 
+
 class AgentRepo:
     """description of class"""
 

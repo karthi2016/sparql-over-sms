@@ -1,7 +1,5 @@
 import rdflib
-
 from SPARQLWrapper import SPARQLWrapper
-from utilities.configuration import ConfigManager
 
 
 class RunSparqlQuery:
@@ -11,16 +9,15 @@ class RunSparqlQuery:
 
     @staticmethod
     def execute(token):
-        configmanager = ConfigManager()
-        endpoint = configmanager.get_option("persistence", "triplestore", "query")
+        endpoint = "http://desktop-at8e6a4:3030/sos/query"
 
         # initialize sparql endpoint
         sparql = SPARQLWrapper(endpoint)
 
         # prepare sparql update
         sparql.setQuery(token.message.body)
-        sparql.method = 'GET'
-        sparql.returnFormat = 'rdf+xml'
+        sparql.method = 'POST'
+        sparql.returnFormat = 'application/rdf+xml'
 
         # return result un-altered
         result = sparql.query().convert()
