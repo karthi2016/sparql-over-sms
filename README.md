@@ -1,6 +1,10 @@
 # SPARQL over SMS
 Efficient transfer of SPARQL queries and results over short-message networks.
 
+| master | develop |
+|--------|---------|
+| [![Build Status](https://travis-ci.org/onnovalkering/sparql-over-sms.svg?branch=master)](https://travis-ci.org/onnovalkering/sparql-over-sms) | [![Build Status](https://travis-ci.org/onnovalkering/sparql-over-sms.svg?branch=develop)](https://travis-ci.org/onnovalkering/sparql-over-sms) |
+
 ### Introduction
 SPARQL over SMS shows that data sharing according to Semantic Web practices is possible even in areas without a Web infrastructure. 
 The development of SPARQL over SMS is based on multiple ICT4D cases, but it is also applicable to low-bandwidth cases in general.
