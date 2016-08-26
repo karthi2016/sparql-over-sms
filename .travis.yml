@@ -2,6 +2,10 @@ language: python
 python:
   - "3.4"
   - "3.5"
-before_install: "cd sos-service"
-install: "pip install -r requirements.txt"
-script: "nosetests"
+before_install: 
+  - "cd sos-service"
+  - "pip install --upgrade pip"
+install: 
+  - "pip install -r requirements.txt"
+script: 
+  - "nosetests"
