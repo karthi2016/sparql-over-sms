@@ -5,7 +5,7 @@ Efficient transfer of SPARQL queries and results over short-message networks.
 |---------|:------:|:-------:|
 | Linux build  | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/master.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/develop.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) |
 | Windows build | [![Build Status](https://img.shields.io/appveyor/ci/onnovalkering/sparql-over-sms/master.svg)](https://ci.appveyor.com/project/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/appveyor/ci/onnovalkering/sparql-over-sms/develop.svg)](https://ci.appveyor.com/project/onnovalkering/sparql-over-sms) |
-| Coverage | [![Build Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/master.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/develop.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) |
+| Coverage | [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/master.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) | [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/develop.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) |
 
 
 ### Introduction
@@ -17,19 +17,6 @@ Although the costs per transferred byte are relatively high for SMS messages, st
 For instance, the infrastructure is already in place and has a global reach which even includes some rural areas of development countries.
 Also, the required hardware to be able to send SMS messages is widespread available and is relatively affordable.
 
-### Getting started
-To get SPARQL over SMS running within 5 minutes, run these commands:
-
-```shell
-git clone https://github.com/onnovalkering/sparl-over-sms
-cd sparql-over-sms
-
-pip3 install -r requirements.txt
-python3 src/bootstrap.py
-```
-
-For further customization, please consult the [documentation](https://github.com/onnovalkering/sparql-over-sms/wiki).
-
 ### Transfer rate
 The developed conversion module can translate SPARQL over HTTP requests to SMS messages and decodes these messages at the other end.
 The estimated number of triples that can be send per SMS are:
@@ -37,12 +24,13 @@ The estimated number of triples that can be send per SMS are:
 | SMSes | Triples |
 | ----- | -----:|
 | 2 | 3 |
-| 4 | 9 |
-| 6 | 66 |
-| 8 | 116 |
+| 4 | 16 |
+| 6 | 84 |
+| 8 | 126 |
 | 10 | 301 |
 
 ### Requirements
-For the use of SPARQL over SMS, the following are assumed to be installed:
+For the use of SPARQL over SMS, the following must be installed:
 
 - Python 3.4.2+
+- RabbitMQ 3.6.0+
