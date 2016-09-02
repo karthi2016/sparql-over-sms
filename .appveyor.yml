@@ -10,7 +10,7 @@ environment:
       PYTHON_ARCH: "32"
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
-  - "pip install --upgrade pip"
+  - "%PYTHON%/Scripts/pip.exe install --upgrade pip"
 install:
   - "cd sos-service"
   - "%PYTHON%/Scripts/pip.exe install -r requirements.txt"
