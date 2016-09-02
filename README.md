@@ -1,6 +1,19 @@
 # SPARQL over SMS
 Efficient transfer of SPARQL queries and results over short-message networks.
 
+> The next version of SPARQL over SMS is currently under active development, a preview can be found in the 'develop' branch. This upcoming will version contains:
+
+> * Improved compression algorithm
+> * Additional reliability measurements 
+> * Comprehensive documentation
+
+> Scheduled for futher developments:
+
+> * Simplifying installation (perhaps docker?)
+> * Support for Bluetooth LE and other low-bandwidth networks
+> * Admin / Control Panel
+
+
 ### Introduction
 SPARQL over SMS shows that data sharing according to Semantic Web practices is possible even in areas without a Web infrastructure. 
 The development of SPARQL over SMS is based on multiple ICT4D cases, but it is also applicable to low-bandwidth cases in general.
