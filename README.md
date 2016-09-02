@@ -5,7 +5,7 @@ Efficient transfer of SPARQL queries and results over short-message networks.
 |---------|:------:|:-------:|
 | Linux build  | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/master.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/develop.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) |
 | Windows build | [![Build Status](https://img.shields.io/appveyor/ci/onnovalkering/sparql-over-sms/master.svg)](https://ci.appveyor.com/project/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/appveyor/ci/onnovalkering/sparql-over-sms/develop.svg)](https://ci.appveyor.com/project/onnovalkering/sparql-over-sms) |
-| Coverage | [![Build Status]](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/master.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) | [![Build Status]](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/develop.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) |
+| Coverage | [![Build Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/master.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/develop.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) |
 
 
 ### Introduction
