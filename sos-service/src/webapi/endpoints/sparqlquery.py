@@ -5,13 +5,11 @@ from transfer.models import OutgoingMessage
 from transfer.constants import MessageCategory
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest, timeout, servererror
-from tornado import web
 
 
 @route('/agent/([\w]+)/sparql')
 class SparqlQuery(HttpHandler):
 
-    #@web.asynchronous
     def get(self, agentid):
         query = self.get_parameter('query')
 
@@ -30,10 +28,4 @@ class SparqlQuery(HttpHandler):
 
         self.write(result)
         self.set_status(200)
-
-        # process_incomingmessage.apply_async(args=[message.id], callback=self.on_result)
-
-        # def on_result(self, response):
-        #    self.write(str(response.result))
-        #    self.finish()
 
