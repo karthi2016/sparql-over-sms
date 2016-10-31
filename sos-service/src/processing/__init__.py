@@ -1,7 +1,8 @@
 from os import environ
 from celery import Celery
 
-celery = Celery('tasks', broker='amqp://guest@127.0.0.1//')
-celery.conf.CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND', 'amqp')
+
+celery = Celery('tasks', broker='redis://localhost:32789')
+celery.conf.CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:32789')
 
 from processing.tasks import *

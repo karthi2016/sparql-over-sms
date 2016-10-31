@@ -17,3 +17,4 @@ class HttpHandler(RequestHandler):
 
     def accepted(self):
         self.set_status(202)
+
