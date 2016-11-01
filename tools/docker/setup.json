@@ -5,7 +5,7 @@
             "persistence": {
                 "triplestore": {
                     "type": "cliopatria",
-                    "shared": "false"
+                    "shared": "true"
                 }
             },
             "processing": {
@@ -14,7 +14,7 @@
                     "shared": "true"
                 },
                 "workers": {
-                    "count": "${instances.count()}"
+                    "count": "2"
                 }
             }
         }
