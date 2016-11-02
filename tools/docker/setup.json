@@ -14,7 +14,7 @@
                     "shared": "true"
                 },
                 "workers": {
-                    "count": "2"
+                    "count": "1"
                 }
             }
         }

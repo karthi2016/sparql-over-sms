@@ -1,13 +1,13 @@
-FROM debian:latest
-
-RUN apt-get -y update
-RUN apt-get -y install python3 python3-pip
+FROM python:3.5
 
 COPY . /sparql-over-sms
+COPY ./tools/run-server.sh . 
+COPY ./tools/run-worker.sh .
 
-RUN pip3 install --upgrade pip
 RUN pip3 install -r /sparql-over-sms/sos-service/requirements.txt
 
-CMD ["python3", "/sparql-over-sms/sos-service/src/bootstrap.py"]
+ENV C_FORCE_ROOT "true"
+
+CMD ["./run-server.sh"]
 
 EXPOSE 8888
