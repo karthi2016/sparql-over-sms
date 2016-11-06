@@ -1,8 +1,8 @@
 FROM python:3.5
 
 COPY . /sparql-over-sms
-COPY ./tools/run-server.sh . 
-COPY ./tools/run-worker.sh .
+COPY ./tools/docker/bootstrap/run-server.sh . 
+COPY ./tools/docker/bootstrap/run-worker.sh .
 
 RUN pip3 install -r /sparql-over-sms/sos-service/requirements.txt
 

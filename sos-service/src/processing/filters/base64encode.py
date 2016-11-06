@@ -12,4 +12,5 @@ class Base64Encode:
         body = message.get_body()
 
         # re-assign encoded body
-        token.message.body = b64encode(body).decode('utf-8')
+        b64body = b64encode(body).decode('utf-8')
+        token.message.body = b64body.replace('+', '_').replace('=', '-').replace('/', ',')

@@ -12,7 +12,7 @@ class HttpTransfer:
 
         url = 'http://{0}:8888/incoming'.format(receiver.hostname)
         session = FuturesSession()
-        response_future = session.post(url, json={'sender': self.phonenumber, 'body': body})
+        response_future = session.post(url, data={'sender': self.hostname, 'content': body})
 
         # wait for the response to come in
         response_future.result()

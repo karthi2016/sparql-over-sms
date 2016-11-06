@@ -1,5 +1,3 @@
-from processing.actions.sendresponse import SendResponse
 from processing.actions.runsparqlquery import RunSparqlQuery
 from processing.actions.runsparqlupdate import RunSparqlUpdate
 from processing.actions.updatemessage import UpdateMessage
-from processing.actions.awaitresponse import AwaitResponse

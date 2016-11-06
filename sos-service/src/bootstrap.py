@@ -1,10 +1,10 @@
+import tcelery
 from tornado.ioloop import IOLoop
 from tornado.web import Application
 from tornroutes import route
 from webapi import endpoints
 from persistence import database
 from persistence.models import modelset
-from tcelery import setup_nonblocking_producer
 
 
 def initialize_db():
@@ -28,5 +28,5 @@ if __name__ == "__main__":
     app.listen(port)
 
     print('The SPARQL over SMS service is listening on port {0}'.format(port))
-    setup_nonblocking_producer()
+    tcelery.setup_nonblocking_producer()
     IOLoop.current().start()

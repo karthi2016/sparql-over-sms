@@ -17,4 +17,5 @@ requests-futures==0.9.7
 SPARQLWrapper==1.7.6
 tornado==4.3
 tornado-celery==0.3.5
+tornado-redis==2.4.18
 tornroutes==0.5.1

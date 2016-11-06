@@ -1,4 +1,4 @@
-from processing.actions import RunSparqlQuery, SendResponse
+from processing.actions import RunSparqlQuery
 from processing.pipelines.basepipeline import Pipeline
 
 
@@ -8,8 +8,7 @@ class ReceiveSparqlQuery(Pipeline):
     description = 'Pipeline that handles incoming SPARQL queries'
 
     chain = [
-        RunSparqlQuery,
-        SendResponse
+        RunSparqlQuery
     ]
 
     @staticmethod

@@ -1,19 +1,19 @@
-from processing.actions import SendMessage
 from processing.pipelines.basepipeline import Pipeline
 from processing.filters import Base64Encode, GzipCompress
 
 
 class SendSparqlResponse(Pipeline):
-    """Sends a SPARQL query/update response"""
+    """Pipeline that sends a SPARQL query/update response"""
     name = 'SendSparqlResponse'
-    description = 'Sends a SPARQL query/update response'
+    description = 'Pipeline that sends a SPARQL query/update response'
 
     chain = [
         GzipCompress,
-        Base64Encode,
-        SendMessage
+        Base64Encode
     ]
 
-    @staticmethod
-    def execute(token):
-        return Pipeline.handle(SendSparqlResponse.chain, token)
+    def __init__(self, token):
+        self.token = token
+
+    def execute(self):
+        return Pipeline.handle(self.chain, self.token)

@@ -18,11 +18,11 @@ class AgentRepo:
         return agent
 
     def get_byaddress(self, address, create_if_nonexist=False):
-        type = determine_address_type(address)
+        address_type = determine_address_type(address)
         
-        if type == PHONENUMBER_ADDRESS:
+        if address_type == PHONENUMBER_ADDRESS:
             return self.get_byphonenumber(address, create_if_nonexist)                       
-        if type == HOSTNAME_ADDRESS:
+        if address_type == HOSTNAME_ADDRESS:
             return self.get_byhostname(address, create_if_nonexist)
 
         return None

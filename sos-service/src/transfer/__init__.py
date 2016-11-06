@@ -1,2 +1,1 @@
-from transfer.models import *
 
