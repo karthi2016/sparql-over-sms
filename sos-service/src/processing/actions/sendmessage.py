@@ -8,9 +8,15 @@ class SendMessage:
 
     @staticmethod
     def execute(token):
-        receiver = token.message.receiver
+        message = token.message
 
-        # determine transfer strategy
-        if HttpTransfer.is_supported(receiver):
-            HttpTransfer.send_single(receiver, token.message.get_body())
+        # compose content
+        correlationid = message.correlationid
+        category = message.category
+        position = 0
+        body = message.get_body()
+        content = "{0}{1}{2}{3}".format(correlationid, category, position, body)
+
+        if HttpTransfer.is_supported(message.receiver):
+            HttpTransfer.send_single(message.receiver, content)
 

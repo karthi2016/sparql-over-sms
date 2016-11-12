@@ -9,7 +9,7 @@ class RunSparqlQuery:
 
     @staticmethod
     def execute(token):
-        endpoint = "http://desktop-at8e6a4:3030/sos/query"
+        endpoint = "http://localhost:3020/sparql/"
 
         # initialize sparql endpoint
         sparql = SPARQLWrapper(endpoint)
@@ -17,7 +17,7 @@ class RunSparqlQuery:
         # prepare sparql update
         sparql.setQuery(token.message.body)
         sparql.method = 'POST'
-        sparql.returnFormat = 'application/rdf+xml'
+        sparql.returnFormat = 'rdf+xml'
 
         # return result un-altered
         result = sparql.query().convert()

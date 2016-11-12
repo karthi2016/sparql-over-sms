@@ -1,6 +1,5 @@
 from processing.actions.sendmessage import SendMessage
 from processing.pipelines.basepipeline import Pipeline
-from processing.filters import Base64Encode, GzipCompress
 
 
 class SendSparqlQuery(Pipeline):
@@ -9,8 +8,6 @@ class SendSparqlQuery(Pipeline):
     description = 'Pipeline that handles outgoing SPARQL queries'
 
     chain = [
-        GzipCompress,
-        Base64Encode,
         SendMessage
     ]
 

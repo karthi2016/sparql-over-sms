@@ -1,12 +1,11 @@
 from processing.actions.sendmessage import SendMessage
 from processing.pipelines.basepipeline import Pipeline
-from processing.filters import Base64Encode, GzipCompress
 
 
-class SendSparqlUpdate(Pipeline):
-    """Pipeline that handles outgoing SPARQL updates"""
-    name = 'SendSparqlUpdate'
-    description = 'Pipeline that handles outgoing SPARQL updates'
+class SendSparqlQueryResult(Pipeline):
+    """Pipeline that handles outgoing SPARQL results"""
+    name = 'SendSparqlQuery'
+    description = 'Pipeline that handles outgoing SPARQL results'
 
     chain = [
         SendMessage

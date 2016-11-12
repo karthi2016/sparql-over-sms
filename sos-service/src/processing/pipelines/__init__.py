@@ -2,6 +2,7 @@ from processing.pipelines.compressmessage import CompressMessage
 from processing.pipelines.decompressmessage import DecompressMessage
 from processing.pipelines.sendsparqlquery import SendSparqlQuery
 from processing.pipelines.sendsparqlupdate import SendSparqlUpdate
+from processing.pipelines.sendsparqlqueryresult import SendSparqlQueryResult
 from processing.pipelines.receivesparqlquery import ReceiveSparqlQuery
 from processing.pipelines.receivesparqlupdate import ReceiveSparqlUpdate
 from processing.pipelines.receivesparqlresponse import ReceiveSparqlResponse
