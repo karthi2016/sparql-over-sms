@@ -3,9 +3,9 @@ from SPARQLWrapper import SPARQLWrapper
 
 
 class RunSparqlQuery:
-    """Runs a SPARQL query against a triple store"""
+    """Runs a SPARQL-query against a triple store"""
     name = "RunSparqlQuery"
-    description = "Runs a SPARQL query against a triple store"
+    description = "Runs a SPARQL-query against a triple store"
 
     @staticmethod
     def execute(token):

@@ -3,14 +3,13 @@ from utilities.configuration import ConfigManager
 
 
 class RunSparqlUpdate:
-    """Runs a SPARQL update against a triple store"""
+    """Runs a SPARQL-update against a triple store"""
     name = "RunSparqlUpdate"
-    description = "Runs a SPARQL update against a triple store"
+    description = "Runs a SPARQL-update against a triple store"
 
     @staticmethod
     def execute(token):
-        configmanager = ConfigManager()
-        endpoint = configmanager.get_option("persistence", "triplestore", "query")
+        endpoint = "http://localhost:3020/sparql/update"
 
         # initialize sparql endpoint
         sparql = SPARQLWrapper(endpoint)
@@ -18,9 +17,8 @@ class RunSparqlUpdate:
         # prepare sparql update
         sparql.setQuery(token.message.body)
         sparql.method = 'POST'
-        sparql.returnFormat = 'json'
+        sparql.returnFormat = 'rdf+xml'
 
         # return result un-altered
-        token.result = sparql.query().convert()
-
-
+        result = sparql.query().convert()
+        token.result = result.toxml()
