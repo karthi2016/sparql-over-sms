@@ -1,4 +1,3 @@
-
 def extract_all(raw_message):
     metadata = extract_metadata(raw_message)
     body = extract_body(raw_message)

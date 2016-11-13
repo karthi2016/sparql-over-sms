@@ -3,4 +3,4 @@ from persistence.models.agent import Agent
 from persistence.models.message import Message
 from persistence.models.messagepart import MessagePart
 
-modelset = [Agent, Message, MessagePart]
+model_list = [Agent, Message, MessagePart]

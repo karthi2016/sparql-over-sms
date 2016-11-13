@@ -4,7 +4,7 @@ from persistence import agent_repo
 
 class HttpTransfer:
     """Transfers messages with HTTP"""
-    max_bodysize = 135
+    max_bodysize = 40 * 1000
 
     @staticmethod
     def send_single(receiver, body):

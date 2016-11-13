@@ -4,12 +4,12 @@ from tornado.web import Application
 from tornroutes import route
 from webapi import endpoints
 from persistence import database
-from persistence.models import modelset
+from persistence.models import model_list
 
 
 def initialize_db():
     database.connect()
-    for model in modelset:
+    for model in model_list:
         database.create_table(model, safe=True)
 
     database.close()

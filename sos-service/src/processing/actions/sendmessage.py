@@ -1,4 +1,4 @@
-from transfer.strategies import HttpTransfer
+from transfer import strategy_list
 
 
 class SendMessage:
@@ -12,11 +12,25 @@ class SendMessage:
 
         # compose content
         correlationid = message.correlationid
-        category = message.category
-        position = 0
+        category = str(message.category)
         body = message.get_body()
-        content = "{0}{1}{2}{3}".format(correlationid, category, position, body)
+        body_length = len(body)
 
-        if HttpTransfer.is_supported(message.receiver):
-            HttpTransfer.send_single(message.receiver, content)
+        strategy = None
+        for s in strategy_list:
+            if s.is_supported(message.receiver):
+                strategy = s
+                break
 
+        if strategy is None:
+            raise Exception("No transfer-strategy is supported by reciever (id: {0}).".format(message.receiver.id))
+
+        max_bodysize = strategy.max_bodysize
+        if body_length > max_bodysize:
+            bodies = [body[i:i + max_bodysize] for i in range(0, len(body), max_bodysize)]
+            contents = [''.join([correlationid, category, str(position), body]) for position, body in enumerate(bodies)]
+
+            strategy.send_multiple(message.receiver, contents)
+        else:
+            content = ''.join([correlationid, category, '0', body])
+            strategy.send_single(message.receiver, content)
