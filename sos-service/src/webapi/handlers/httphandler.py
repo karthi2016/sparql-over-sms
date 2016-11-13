@@ -1,6 +1,8 @@
 from tornado.web import RequestHandler
 from datetime import datetime, timedelta
 from tornado.ioloop import IOLoop
+from persistence import message_repo
+from utilities.messaging import to_response_category
 
 
 class HttpHandler(RequestHandler):
@@ -28,6 +30,16 @@ class HttpHandler(RequestHandler):
             callback(args)
         else:
             IOLoop.instance().add_timeout(timedelta(seconds=s_interval), self.asyncwait, check, s_interval, s_timeout, callback, args)
+
+    def write_responsetomessage(self, message):
+        correlationid = message.correlationid
+        responsecategory = to_response_category(message.category)
+
+        response = message_repo.get_bycorrelation(correlationid, responsecategory)
+
+        self.write(response.get_body())
+        self.set_header("Content-Type", "text/xml")
+        self.finish()
 
     def accepted(self):
         self.set_status(202)

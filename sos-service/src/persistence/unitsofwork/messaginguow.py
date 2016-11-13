@@ -1,3 +1,5 @@
+from utilities.messaging import to_response_category
+
 
 class MessagingUoW:
     """description of class"""
@@ -37,5 +39,12 @@ class MessagingUoW:
 
         expectedcount = max({part.position for part in messageparts})
         return len(messageparts) == expectedcount
+
+    def is_answered(self, message):
+        correlationid = message.correlationid
+        responsecategory = to_response_category(message.category)
+
+        response = self.messagerepo.get_bycorrelation(correlationid, responsecategory)
+        return response is not None
 
 

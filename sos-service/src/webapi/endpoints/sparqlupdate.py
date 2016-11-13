@@ -1,9 +1,9 @@
-from uuid import uuid4
-from tornado import gen
+from tornado.web import asynchronous
 from persistence import messaging_uow
 from processing import process_outgoingmessage
 from tornroutes import route
 from transfer.constants import MessageCategory
+from utilities.messaging.correlation import gen_correlationid
 from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest, timeout, servererror
 
@@ -11,7 +11,7 @@ from webapi.helpers import badrequest, timeout, servererror
 @route('/agent/([\w]+)/sparql/update')
 class SparqlUpdate(HttpHandler):
 
-    @gen.coroutine
+    @asynchronous
     def post(self, receiveraddress):
         update = self.get_parameter('update')
 
@@ -19,15 +19,16 @@ class SparqlUpdate(HttpHandler):
             raise badrequest('parameter "update" not provided')
 
         # persist so it can be processed in the background
-        correlationid = uuid4().hex[:3]
+        correlationid = gen_correlationid()
         message = messaging_uow.store_outgoing(receiveraddress, correlationid, MessageCategory.SPARQL_UPDATE, 0, update)
 
         try:
-            result = process_outgoingmessage.delay(message.id).get()
-        except TimeoutError:
-            raise timeout('the "process_outgoingmessage" operation has timed out')
-        except Exception:
-            raise servererror('the "process_outgoingmessage" operation failed')
+            outgoing = process_outgoingmessage.delay(message.id)
 
-        self.write(result)
-        self.set_status(200)
+            def check(): return outgoing.ready() and messaging_uow.is_answered(message)
+            self.asyncwait(check, 1, 30, self.write_responsetomessage, message)
+
+        except TimeoutError:
+            raise timeout('the incoming "SparqlUpdate" request has timed out')
+        except Exception:
+            raise servererror('the incoming "SparqlUpdate" request failed')

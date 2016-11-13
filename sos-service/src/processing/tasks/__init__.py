@@ -1,3 +1,2 @@
 from processing.tasks.processincoming import process_incomingmessage
 from processing.tasks.processoutgoing import process_outgoingmessage
-from processing.tasks.verifyconnection import verify_connection

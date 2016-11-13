@@ -1,16 +1,20 @@
 from processing.actions import RunSparqlQuery
+from processing.actions.createresponse import CreateResponse
 from processing.pipelines.basepipeline import Pipeline
 
 
 class ReceiveSparqlQuery(Pipeline):
-    """Pipeline that handles incoming SPARQL queries"""
+    """Pipeline that handles incoming SPARQL-queries"""
     name = 'ReceiveSparqlQuery'
-    description = 'Pipeline that handles incoming SPARQL queries'
+    description = 'Pipeline that handles incoming SPARQL-queries'
 
     chain = [
-        RunSparqlQuery
+        RunSparqlQuery,
+        CreateResponse
     ]
 
-    @staticmethod
-    def execute(token):
-        return Pipeline.handle(ReceiveSparqlQuery.chain, token)
+    def __init__(self, token):
+        self.token = token
+
+    def execute(self):
+        return Pipeline.handle(self.chain, self.token)

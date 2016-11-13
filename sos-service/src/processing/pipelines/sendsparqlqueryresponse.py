@@ -2,10 +2,10 @@ from processing.actions.sendmessage import SendMessage
 from processing.pipelines.basepipeline import Pipeline
 
 
-class SendSparqlQueryResult(Pipeline):
-    """Pipeline that handles outgoing SPARQL results"""
+class SendSparqlQueryResponse(Pipeline):
+    """Pipeline that handles outgoing SPARQL-query responses"""
     name = 'SendSparqlQuery'
-    description = 'Pipeline that handles outgoing SPARQL results'
+    description = 'Pipeline that handles outgoing SPARQL-query responses'
 
     chain = [
         SendMessage

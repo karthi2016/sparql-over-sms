@@ -1,0 +1,1 @@
+docker run -dt -p 3020:3020 onnovalkering/cliopatria
