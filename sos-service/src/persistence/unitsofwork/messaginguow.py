@@ -47,4 +47,6 @@ class MessagingUoW:
         response = self.messagerepo.get_bycorrelation(correlationid, responsecategory)
         return response is not None
 
-
+    def mark_processed(self, message):
+        message.processed = True
+        message.save()

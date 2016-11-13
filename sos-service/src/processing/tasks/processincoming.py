@@ -1,5 +1,5 @@
 from processing import celery
-from persistence import message_repo
+from persistence import message_repo, messaging_uow
 from processing.pipelines import DecompressMessage
 from transfer.constants.messagecategory import MessageCategory
 from processing.pipelines import ReceiveSparqlQuery, ReceiveSparqlUpdate
@@ -20,4 +20,5 @@ def process_incomingmessage(messageid):
     if message.category is MessageCategory.SPARQL_UPDATE:
         token = ReceiveSparqlUpdate(token).execute()
 
+    messaging_uow.mark_processed(message)
     return token

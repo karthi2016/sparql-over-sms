@@ -1,4 +1,4 @@
-from persistence import message_repo
+from persistence import message_repo, messaging_uow
 from processing import celery
 from processing.models import OutgoingPipelineToken
 from processing.pipelines import CompressMessage
@@ -16,13 +16,16 @@ def process_outgoingmessage(messageid):
 
     # call appropriate pipeline based on category
     if message.category is MessageCategory.SPARQL_QUERY:
-        return SendSparqlQuery(token).execute()
+        token = SendSparqlQuery(token).execute()
 
     if message.category is MessageCategory.SPARQL_UPDATE:
-        return SendSparqlUpdate(token).execute()
+        token = SendSparqlUpdate(token).execute()
 
     if message.category is MessageCategory.SPARQL_QUERY_RESPONSE:
-        return SendSparqlQueryResponse(token).execute()
+        token = SendSparqlQueryResponse(token).execute()
 
     if message.category is MessageCategory.SPARQL_UPDATE_RESPONSE:
-        return SendSparqlUpdateResponse(token).execute()
+        token = SendSparqlUpdateResponse(token).execute()
+
+    messaging_uow.mark_processed(message)
+    return token
