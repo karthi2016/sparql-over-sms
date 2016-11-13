@@ -20,7 +20,7 @@ class SparqlQuery(HttpHandler):
 
         # persist so it can be processed in the background
         correlationid = gen_correlationid()
-        message = messaging_uow.store_outgoing(receiveraddress, correlationid, MessageCategory.SPARQL_QUERY, 0, query)
+        message = messaging_uow.store_outgoing(receiveraddress, correlationid, MessageCategory.SPARQL_QUERY, query)
 
         try:
             outgoing = process_outgoingmessage.delay(message.id)

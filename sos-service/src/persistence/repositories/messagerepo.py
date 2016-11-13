@@ -26,8 +26,12 @@ class MessageRepo:
             message.save()
 
         # create message part for position/body
-        messagepart = MessagePart(message=message, position=position, body=body)
-        messagepart.save()
+        if int(position) > 0:
+            messagepart = MessagePart(message=message, position=position, body=body)
+            messagepart.save()
+        else:
+            message.body = body
+            message.save()
 
         return message
 

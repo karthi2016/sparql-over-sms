@@ -15,7 +15,7 @@ class RunSparqlUpdate:
         sparql = SPARQLWrapper(endpoint)
 
         # prepare sparql update
-        sparql.setQuery(token.message.body)
+        sparql.setQuery(token.message.get_body())
         sparql.method = 'POST'
         sparql.returnFormat = 'rdf+xml'
 

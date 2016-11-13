@@ -17,7 +17,6 @@ class CreateResponse:
         receiveraddress = message.sender.hostname
         category = to_response_category(message.category)
         body = token.result
-        position = 0
-        resultmessage = messaging_uow.store_outgoing(receiveraddress, correlationid, category, position, body)
+        resultmessage = messaging_uow.store_outgoing(receiveraddress, correlationid, category, body)
 
         process_outgoingmessage.delay(resultmessage.id)
