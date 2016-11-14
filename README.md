@@ -13,8 +13,11 @@ The development of SPARQL over SMS is based on multiple ICT4D cases, but it is a
 For example in the context of disaster management or the Internet of Things.
 
 Although the costs per transferred byte are relatively high for SMS messages, still some benefits apply.
-For instance, the infrastructure is already in place and has a global reach which even includes some rural areas of development countries.
-Also, the required hardware to be able to send SMS messages is widespread available and is relatively affordable.
+For instance, the infrastructure is already in place and has a global reach which even includes some rural areas of development countries. Also, the required hardware to be able to send SMS messages is widespread available and is relatively affordable.
+
+The paper that covers SPARQL over SMS:
+
+Onno Valkering, Victor de Boer, Gossa Lo, Romy Blankendaal, and Stefan Schlobach. **The Semantic Web in an SMS**. _Proceedings of 20th International Conference on Knowledge Engineering and Knowledge Management (EKAW 2016)_
 
 ## Features
 The features that are currently supported:
