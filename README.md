@@ -14,7 +14,7 @@ SPARQL over SMS is a solution for Web-like exchange of RDF data over low-bandwid
 
 The paper that covers SPARQL over SMS:
 
-Onno Valkering, Victor de Boer, Gossa Lo, Romy Blankendaal, and Stefan Schlobach. **The Semantic Web in an SMS**. _Proceedings of 20th International Conference on Knowledge Engineering and Knowledge Management (EKAW 2016)_
+Onno Valkering, Victor de Boer, Gossa Lô, Romy Blankendaal, and Stefan Schlobach. **The Semantic Web in an SMS**. _Proceedings of 20th International Conference on Knowledge Engineering and Knowledge Management (EKAW 2016)_
 
 ## Features
 The features that are currently supported:
