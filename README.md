@@ -1,54 +1,38 @@
 # SPARQL over SMS
 Efficient transfer of SPARQL queries and results over short-message networks.
 
-> The next version of SPARQL over SMS is currently under active development, a preview can be found in the 'develop' branch. This upcoming will version contains:
-
-> * Improved compression algorithm
-> * Additional reliability measurements 
-> * Comprehensive documentation
-
-> Scheduled for futher developments:
-
-> * Simplifying installation (perhaps docker?)
-> * Support for Bluetooth LE and other low-bandwidth networks
-> * Admin / Control Panel
+| master | develop |
+|:------:|:-------:|
+| [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/master.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/develop.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) |
+| [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/master.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) | [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/develop.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) |
 
 
-### Introduction
-SPARQL over SMS shows that data sharing according to Semantic Web practices is possible even in areas without a Web infrastructure. 
+## Introduction
+SPARQL over SMS shows that data sharing according to Semantic Web practices is possible even in areas without a Web infrastructure.
 The development of SPARQL over SMS is based on multiple ICT4D cases, but it is also applicable to low-bandwidth cases in general.
 For example in the context of disaster management or the Internet of Things.
 
-Although the costs per transferred byte are relatively high for SMS messages, still some benefits apply. 
-For instance, the infrastructure is already in place and has a global reach which even includes some rural areas of development countries. 
+Although the costs per transferred byte are relatively high for SMS messages, still some benefits apply.
+For instance, the infrastructure is already in place and has a global reach which even includes some rural areas of development countries.
 Also, the required hardware to be able to send SMS messages is widespread available and is relatively affordable.
 
-### Getting started
-To get SPARQL over SMS running within 5 minutes, run these commands on either Windows or Linux:
+## Features
+The features that are currently supported:
 
-```shell
-git clone https://github.com/onnovalkering/sparl-over-sms
-cd sparql-over-sms
+#### Networks:
+WiFi (HTTP), Cellular (SMS)
 
-pip3 install -r requirements.txt
-python3 src/bootstrap.py
-```
+#### SPARQL Query Forms:
+CONSTRUCT, ASK
 
-For further customization, please consult the [documentation](https://github.com/onnovalkering/sparql-over-sms/wiki).
+#### SPARQL Update Forms:
+INSERT DATA, DELETE DATA
 
-### Transfer rate
-The developed conversion module can translate SPARQL over HTTP requests to SMS messages and decodes these messages at the other end.
-The estimated number of triples that can be send per SMS are:
+## Requirements
+To be able to run SPARQL over SMS, at minimum, the following must be installed:
 
-| SMSes | Triples |
-| ----- | -----:|
-| 2 | 3 |
-| 4 | 9 |
-| 6 | 66 |
-| 8 | 116 |
-| 10 | 301 |
+- Python 3.4+
+- Java 1.8+
+- Redis 3.2+
 
-### Requirements
-For the use of SPARQL over SMS, the following are assumed to be installed:
-
-- Python 3.4.2+
+For the full set of features, a triple store is also required. Currently only [ClioPatria](https://github.com/ClioPatria/ClioPatria) is supported.

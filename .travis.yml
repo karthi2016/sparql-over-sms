@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.4"
+  - "3.5"
+before_install:
+  - "cd sos-service"
+  - "pip install --upgrade pip"
+install:
+  - "pip install -r requirements.txt"
+  - "pip install coveralls"
+script:
+  - "nosetests --with-coverage"
+after_success:
+  - "coveralls --rcfile=./../.coveragerc"
+notifications:
+  email: false

@@ -1,0 +1,32 @@
+{
+    "templates": [
+        {
+            "name": "default",
+            "persistence": {
+                "triplestore": {
+                    "type": "cliopatria",
+                    "shared": "true"
+                }
+            },
+            "processing": {
+                "taskqueue": {
+                    "type": "redis",
+                    "shared": "true"
+                },
+                "workers": {
+                    "count": "1"
+                }
+            }
+        }
+    ],
+    "instances": [
+        {
+            "name": "sos-instance01",
+            "template": "default"             
+        },
+        {
+            "name": "sos-instance02",
+            "template": "default"
+        }
+    ]
+}

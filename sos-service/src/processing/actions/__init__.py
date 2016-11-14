@@ -1,0 +1,3 @@
+from processing.actions.runsparqlquery import RunSparqlQuery
+from processing.actions.runsparqlupdate import RunSparqlUpdate
+from processing.actions.updatemessage import UpdateMessage
