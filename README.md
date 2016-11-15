@@ -32,7 +32,7 @@ INSERT DATA, DELETE DATA
 To be able to run SPARQL over SMS, at minimum, the following must be installed:
 
 - Python 3.4+
-- Java 1.8+
+- Java 1.7+
 - Redis 3.2+
 
 For the full set of features, a triple store is also required. Currently only [ClioPatria](https://github.com/ClioPatria/ClioPatria) is supported.
