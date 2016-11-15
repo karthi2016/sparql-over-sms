@@ -22,10 +22,7 @@ class RunSparqlQuery:
         # return result un-altered
         result = sparql.query().convert()
         if type(result) is rdflib.ConjunctiveGraph:
-            if len(result) <= 40:
-                token.result = result.serialize(format='nt').decode('utf-8')
-            else:
-                token.result = result.serialize(format='turtle').decode('utf-8')
+            token.result = result.serialize().decode('utf-8')
         else:
             token.result = result.toxml()
 

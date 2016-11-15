@@ -159,7 +159,6 @@ public class CLI {
     private static Model readInputFileAsModel(String inputFile, String type) {
         Model model = ModelFactory.createDefaultModel();
 
-        String extension = FilenameUtils.getExtension(inputFile);
         if (type.toUpperCase().equals("SPARQL")) {
             try {
                 byte[] encoded = Files.readAllBytes(Paths.get(inputFile));

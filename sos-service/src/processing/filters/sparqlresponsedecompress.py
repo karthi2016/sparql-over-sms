@@ -11,7 +11,8 @@ class SparqlResponseDecompress:
         message = token.message
         body = message.get_body()
 
-        decompressed_body = SoSCompression.decompress_sparqlresponse(body)[0].decode('utf-8')
+        decompressed_body_parts = SoSCompression.decompress_sparqlresponse(body)
+        decompressed_body = (b' '.join(decompressed_body_parts)).decode('utf-8')
 
         # re-assign compressed body
-        token.message.body = decompressed_body
+        token.message.body = ' '.join(decompressed_body.split())

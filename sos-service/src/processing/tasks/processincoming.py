@@ -1,6 +1,6 @@
 from processing import celery
 from persistence import message_repo, messaging_uow
-from processing.pipelines import DecompressSparqlMessage
+from processing.pipelines import DecompressSparqlMessage, DecompressSparqlResponseMessage
 from transfer.constants.messagecategory import MessageCategory
 from processing.pipelines import ReceiveSparqlQuery, ReceiveSparqlUpdate
 from processing.models import IncomingPipelineToken
@@ -19,6 +19,12 @@ def process_incomingmessage(messageid):
     if message.category is MessageCategory.SPARQL_UPDATE:
         token = DecompressSparqlMessage(token).execute()
         token = ReceiveSparqlUpdate(token).execute()
+
+    if message.category is MessageCategory.SPARQL_QUERY_RESPONSE:
+        token = DecompressSparqlResponseMessage(token).execute()
+
+    if message.category is MessageCategory.SPARQL_UPDATE_RESPONSE:
+        token = DecompressSparqlResponseMessage(token).execute()
 
     messaging_uow.mark_processed(message)
     return token

@@ -14,5 +14,6 @@ class SparqlDecompress:
         decompressed_body_parts = SoSCompression.decompress_sparql(body)
         decompressed_body = (b' '.join(decompressed_body_parts)).decode('utf-8')
 
-        # re-assign compressed body
-        token.message.body = ' '.join(decompressed_body.split())
+        # only if no errors occured
+        if not decompressed_body.startswith('org.apache.jena'):
+            token.message.body = ' '.join(decompressed_body.split())

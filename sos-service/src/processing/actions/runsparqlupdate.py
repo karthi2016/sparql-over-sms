@@ -1,5 +1,4 @@
 from SPARQLWrapper import SPARQLWrapper
-from utilities.configuration import ConfigManager
 
 
 class RunSparqlUpdate:

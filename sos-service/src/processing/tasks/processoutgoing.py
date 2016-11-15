@@ -16,10 +16,12 @@ def process_outgoingmessage(messageid):
     if message.category is MessageCategory.SPARQL_QUERY:
         token = CompressSparqlMessage(token).execute()
         token = SendSparqlQuery(token).execute()
+        messaging_uow.mark_processed(message)
 
     if message.category is MessageCategory.SPARQL_UPDATE:
         token = CompressSparqlMessage(token).execute()
         token = SendSparqlUpdate(token).execute()
+        messaging_uow.mark_processed(message)
 
     if message.category is MessageCategory.SPARQL_QUERY_RESPONSE:
         token = CompressSparqlResponseMessage(token).execute()
@@ -29,5 +31,4 @@ def process_outgoingmessage(messageid):
         token = CompressSparqlResponseMessage(token).execute()
         token = SendSparqlUpdateResponse(token).execute()
 
-    messaging_uow.mark_processed(message)
     return token

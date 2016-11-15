@@ -11,7 +11,9 @@ class SparqlCompress:
         message = token.message
         body = message.get_body()
 
-        compressed_body = SoSCompression.compress_sparql(body)[0].decode('utf-8')
+        compressed_body_parts = SoSCompression.decompress_sparql(body)
+        compressed_body = (b' '.join(compressed_body_parts)).decode('utf-8')
 
-        # re-assign compressed body
-        token.message.body = compressed_body
+        # only if no errors occured
+        if not compressed_body.startswith('org.apache.jena'):
+            token.message.body = ' '.join(compressed_body.split())
