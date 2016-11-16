@@ -4,10 +4,6 @@ python:
   - "3.4"
   - "3.5"
 
-jdk:
-  - "oraclejdk7"
-  - "oraclejdk8"
-
 before_install:
   - "mvn package -f ./sos-compression/pom.xml"
   - "pip install --upgrade pip"
