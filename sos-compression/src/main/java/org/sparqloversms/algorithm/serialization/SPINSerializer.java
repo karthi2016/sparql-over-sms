@@ -69,7 +69,7 @@ public class SPINSerializer implements Serializer {
         for (Statement s : statements) {
             String name = s.getObject().asLiteral().toString();
 
-            String replacement = mapping.getOrDefault(name, null);
+            String replacement = mapping.get(name);
             if (replacement == null) {
                 replacement = String.valueOf(Character.toChars(97 + counter++));
                 mapping.put(name, replacement);
