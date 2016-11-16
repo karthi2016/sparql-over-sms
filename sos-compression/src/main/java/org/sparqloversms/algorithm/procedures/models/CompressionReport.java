@@ -64,9 +64,4 @@ public class CompressionReport extends ProcedureReport {
     public String getOutput() {
         return encoderResult.getOutput();
     }
-
-//    public String toJSON() {
-//        PropertyFilter filter = (source, name, value) -> !"output".equals(name);
-//        return JSON.toJSONString(this, filter);
-//    }
 }

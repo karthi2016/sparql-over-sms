@@ -1,19 +1,27 @@
 language: python
+
 python:
   - "3.4"
   - "3.5"
+
+jdk:
+  - "oraclejdk7"
+  - "oraclejdk8"
+
 before_install:
-  - "java -version"
-  - "cd ./sos-compression"
-  - "mvn package"
-  - "cd ../sos-service"
+  - "mvn package -f ./sos-compression/pom.xml"
   - "pip install --upgrade pip"
+
 install:
+  - "cd ./sos-service"
   - "pip install -r requirements.txt"
   - "pip install coveralls"
+
 script:
   - "nosetests --with-coverage"
+
 after_success:
   - "coveralls --rcfile=./../.coveragerc"
+
 notifications:
   email: false
