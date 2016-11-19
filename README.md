@@ -48,7 +48,7 @@ $ docker run -dt --network "sparqloversms" -p 8888:8888 -name "sos-service" onno
 To run SPARQL over SMS locally, at minimum, the following must be installed:
 
 - Java 1.7+
-- Maven 3.0+
+- Maven 3.3+
 - Python 3.4+
 - Redis 3.2+
 
