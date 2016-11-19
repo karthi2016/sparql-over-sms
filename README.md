@@ -28,7 +28,21 @@ CONSTRUCT, ASK
 #### SPARQL Update Forms:
 INSERT DATA, DELETE DATA
 
-## Requirements
+## Getting Started
+To install and run SPARQL over SMS with default configuration:
+
+```
+$ git clone https://github.com/onnovalkering/sparql-over-sms.git && cd sparql-over-sms
+$ sudo ./sparqloversms.sh start
+```
+
+A dockerized version is also available:
+
+```
+$ docker run --net=host -t onnovalkering/sparql-over-sms
+```
+
+### Requirements
 To be able to run SPARQL over SMS, at minimum, the following must be installed:
 
 - Python 3.4+
