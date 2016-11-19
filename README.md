@@ -29,24 +29,27 @@ CONSTRUCT, ASK
 INSERT DATA, DELETE DATA
 
 ## Getting Started
-To install and run SPARQL over SMS with default configuration:
-
+To install and run SPARQL over SMS with the default configuration:
 ```
 $ git clone https://github.com/onnovalkering/sparql-over-sms.git && cd sparql-over-sms
-$ sudo ./sparqloversms.sh start
+$ chmod u+x sparqloversms.sh && ./sparqloversms.sh start
 ```
 
-A dockerized version is also available:
-
+A Docker setup is also possible:
 ```
-$ docker run --net=host -t onnovalkering/sparql-over-sms
+$ docker network create "sparqloversms"
+
+$ docker run -dt --network "sparqloversms" -p 6379:6379 -name "sos-taskqueue" redis
+$ docker run -dt --network "sparqloversms" -p 3020:3020 -name "sos-triplestore" onnovalkering/cliopatria
+$ docker run -dt --network "sparqloversms" -p 8888:8888 -name "sos-service" onnovalkering/sparql-over-sms
 ```
 
 ### Requirements
-To be able to run SPARQL over SMS, at minimum, the following must be installed:
+To run SPARQL over SMS locally, at minimum, the following must be installed:
 
-- Python 3.4+
 - Java 1.7+
+- Maven 3.3+
+- Python 3.4+
 - Redis 3.2+
 
 For the full set of features, a triple store is also required. Currently only [ClioPatria](https://github.com/ClioPatria/ClioPatria) is supported.
