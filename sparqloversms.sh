@@ -1,23 +1,29 @@
 #!/bin/bash
 args=("$@")
 
-script_dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-service_dir=$script_dir/sos-service
+root_dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+compression_dir=$root_dir/sos-compression
+service_dir=$root_dir/sos-service
 sosserver_py=$service_dir/src/sos_server.py
 sosworker_py=$service_dir/src/sos_worker.py
 
-function activate_venv {
-    cd $service_dir
-    
-    command -v virtualenv >/dev/null 2>&1 || { 
-        echo >&2 "I require virtualenv but it's not installed. Aborting.";
-        exit 1; 
-    }
+function check_installation {
+    commands=( "java" "mvn" "python3" "virtualenv" )
+    for c in "${commands[@]}"
+    do
+        command -v $c >/dev/null 2>&1 || { 
+            echo >&2 "I require '$c' but it's not installed. Aborting.";
+            exit 1; 
+        }
+    done
 
+    cd $compression_dir
+    mvn package -f "pom.xml" -Dmaven.test.skip=true
+
+    cd $service_dir
     if [ ! -d "venv-linux" ]; then
         virtualenv venv-linux        
     fi
-
     source "venv-linux/bin/activate"
 
     requirements=$(cat requirements.txt)
@@ -27,50 +33,48 @@ function activate_venv {
         pip3 install -r requirements.txt
         pip3 freeze > requirements.txt
     fi
+
+    export C_FORCE_ROOT='true'
+
+    cd $root_dir
 }
 
 function dockerstart_service {
-    activate_venv
-
-    export C_FORCE_ROOT='true'
+    check_installation
+    cd $service_dir
 
     python3 $sosworker_py START --background
     python3 $sosserver_py START
 }
 
 function start_service {
-    activate_venv
-
-    export C_FORCE_ROOT='true'
+    check_installation
+    cd $service_dir
 
     python3 $sosserver_py START --background
     python3 $sosworker_py START --background
-
-    echo Started SPARQL over SMS service.
 }
 
 function stop_service {
-    activate_venv
+    check_installation
+    cd $service_dir
 
     python3 $sosserver_py STOP
     python3 $sosworker_py STOP
-
-    echo Stopped SPARQL over SMS service.
 }
 
 function restart_sevice {
-    activate_venv
+    check_installation
+    cd $service_dir
 
     python3 $sosserver_py RESTART
     python3 $sosworker_py RESTART
-
-    echo Restarted SPARQL over SMS service.
 }
 
 shopt -s nocasematch
 case ${args[0]} in
     install)
-        activate_venv
+        check_installation
         ;;
     docker-start)
         dockerstart_service
@@ -80,12 +84,15 @@ case ${args[0]} in
         ;;
     start)
         start_service
+        echo Started SPARQL over SMS service.
         ;;
     stop)
         stop_service
+        echo Stopped SPARQL over SMS service.
         ;;
     restart)
         restart_sevice
+        echo Restarted SPARQL over SMS service.
         ;;
     *)
         echo $"Usage: $0 {install|docker-start|start|stop|restart}"
