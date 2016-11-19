@@ -32,10 +32,10 @@ function activate_venv {
 function start_service {
     activate_venv
 
-    export C_FORCE_ROOT="true"
+    export C_FORCE_ROOT='true'
 
     python3 $sosserver_py START --background
-    python3 $sosworker_py START
+    python3 $sosworker_py START --background
 
     echo Started SPARQL over SMS service.
 }
@@ -60,6 +60,15 @@ function restart_sevice {
 
 shopt -s nocasematch
 case ${args[0]} in
+    install)
+        activate_venv
+        ;;
+    docker-start)
+        start_service
+        while :; do
+            sleep 300
+        done
+        ;;
     start)
         start_service
         ;;
@@ -70,6 +79,6 @@ case ${args[0]} in
         restart_sevice
         ;;
     *)
-        echo $"Usage: $0 {start|stop|restart}"
+        echo $"Usage: $0 {install|docker-start|start|stop|restart}"
         exit 1
 esac
