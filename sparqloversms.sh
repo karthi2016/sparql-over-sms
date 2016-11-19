@@ -29,6 +29,15 @@ function activate_venv {
     fi
 }
 
+function dockerstart_service {
+    activate_venv
+
+    export C_FORCE_ROOT='true'
+
+    python3 $sosworker_py START --background
+    python3 $sosserver_py START
+}
+
 function start_service {
     activate_venv
 
@@ -64,7 +73,7 @@ case ${args[0]} in
         activate_venv
         ;;
     docker-start)
-        start_service
+        dockerstart_service
         while :; do
             sleep 300
         done
