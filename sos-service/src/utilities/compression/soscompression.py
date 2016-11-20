@@ -5,8 +5,8 @@ from utilities.interoperability import JarWrapper
 
 class SoSCompression:
     """Wrapper around the SoS compression method"""
-    jar_filepath = '..\\..\\sos-compression\\target\\sos-compression-1.0.jar'
-    knowledge_filepath = '..\\..\\sos-compression\\src\\main\\resources\\knowledge\\combined20.hdt'
+    jar_filepath = '../../sos-compression/target/sos-compression-1.0.jar'
+    knowledge_filepath = '../../sos-compression/src/main/resources/knowledge/combined20.hdt'
 
     @staticmethod
     def compress_sparql(input_body):

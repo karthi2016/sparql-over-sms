@@ -1,4 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper
+from utilities import configmanager
 
 
 class RunSparqlUpdate:
@@ -8,7 +9,11 @@ class RunSparqlUpdate:
 
     @staticmethod
     def execute(token):
-        endpoint = "http://localhost:3020/sparql/update"
+        triplestore_host = configmanager.get_config("triplestore_host")
+        if triplestore_host is None:
+            raise Exception("the 'triplestore_host' configuration is not set.")
+
+        endpoint = "http://{0}:3020/sparql/update".format(triplestore_host)
 
         # initialize sparql endpoint
         sparql = SPARQLWrapper(endpoint)

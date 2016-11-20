@@ -4,6 +4,8 @@ args=("$@")
 root_dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 compression_dir=$root_dir/sos-compression
 service_dir=$root_dir/sos-service
+service_src_dir=$service_dir/src
+sosservice_py=$service_dir/src/sos_service.py
 sosserver_py=$service_dir/src/sos_server.py
 sosworker_py=$service_dir/src/sos_worker.py
 
@@ -18,7 +20,9 @@ function check_installation {
     done
 
     cd $compression_dir
-    mvn package -f "pom.xml" -Dmaven.test.skip=true
+    if [ ! -d "target" ]; then
+        mvn package -f "pom.xml" -DskipTests
+    fi
 
     cd $service_dir
     if [ ! -d "venv-linux" ]; then
@@ -39,17 +43,30 @@ function check_installation {
     cd $root_dir
 }
 
-function dockerstart_service {
+function docker_service {
     check_installation
-    cd $service_dir
+    cd $service_src_dir
 
-    python3 $sosworker_py START --background
-    python3 $sosserver_py START
+    python3 $sosservice_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
+}
+
+function docker_server {
+    check_installation
+    cd $service_src_dir
+
+    python3 $sosserver_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
+}
+
+function docker_worker {
+    check_installation
+    cd $service_src_dir
+
+    python3 $sosworker_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
 }
 
 function start_service {
     check_installation
-    cd $service_dir
+    cd $service_src_dir
 
     python3 $sosserver_py START --background
     python3 $sosworker_py START --background
@@ -57,7 +74,7 @@ function start_service {
 
 function stop_service {
     check_installation
-    cd $service_dir
+    cd $service_src_dir
 
     python3 $sosserver_py STOP
     python3 $sosworker_py STOP
@@ -65,7 +82,7 @@ function stop_service {
 
 function restart_sevice {
     check_installation
-    cd $service_dir
+    cd $service_src_dir
 
     python3 $sosserver_py RESTART
     python3 $sosworker_py RESTART
@@ -76,15 +93,21 @@ case ${args[0]} in
     install)
         check_installation
         ;;
-    docker-start)
-        dockerstart_service
-        while :; do
-            sleep 300
-        done
+    docker)
+        docker_service
+        ;;
+    docker-server)
+        docker_server
+        ;;
+    docker-worker)
+        docker_worker
         ;;
     start)
         start_service
         echo Started SPARQL over SMS service.
+        while :; do
+            sleep 300
+        done        
         ;;
     stop)
         stop_service
@@ -95,6 +118,6 @@ case ${args[0]} in
         echo Restarted SPARQL over SMS service.
         ;;
     *)
-        echo $"Usage: $0 {install|docker-start|start|stop|restart}"
+        echo $"Usage: $0 {install|docker|docker-server|docker-worker|start|stop|restart}"
         exit 1
 esac
