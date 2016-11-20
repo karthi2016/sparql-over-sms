@@ -1,11 +1,14 @@
-FROM debian:jessie
+FROM bash:4.4
 MAINTAINER onno.valkering@gmail.com
 
 # install java and python
-RUN apt-get update && apt-get install -y \
-    openjdk-8-jdk \
+RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    apk update && apk add -f \
+    openjdk8 \
     python3 \
-    wget
+    python3-dev \
+    wget \
+    dos2unix@testing
 
 # install maven
 RUN wget http://apache.40b.nl/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz && \
@@ -19,9 +22,11 @@ RUN wget https://bootstrap.pypa.io/get-pip.py && \
     pip3 install virtualenv
 
 COPY . /
-RUN ./sparqloversms.sh install
+RUN chmod u+x sparqloversms.sh && \
+    dos2unix sparqloversms.sh && \
+    bash sparqloversms.sh install
 
+ENTRYPOINT ["bash", "sparqloversms.sh"]
 CMD ["docker"]
-ENTRYPOINT ["./sparqloversms.sh"]
 
 EXPOSE 8888
