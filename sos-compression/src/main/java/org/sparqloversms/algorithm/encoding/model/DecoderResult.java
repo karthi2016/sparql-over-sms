@@ -14,7 +14,12 @@ public class DecoderResult {
     /*-----------------------------------------------------------------------*/
 
     public void track(String name) {
-        tracker.put(name, tracker.getOrDefault(name, 0) + 1);
+        Integer current = tracker.get(name);
+        if (current == null) {
+            current = 0;
+        }
+
+        tracker.put(name, current + 1);
     }
 
     public HashMap<String, Integer> getTracker() {

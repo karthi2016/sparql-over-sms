@@ -98,7 +98,7 @@ public class CLI {
 
             ProcedureReport report;
             if (hasCompress) {
-                Model input = readInputFileAsModel(inputFile);
+                Model input = readInputFileAsModel(inputFile, type);
                 report = performCompression(type, input, knowledge);
             } else {
                 String input = readInputFileAsText(inputFile);
@@ -156,11 +156,10 @@ public class CLI {
         return report;
     }
 
-    private static Model readInputFileAsModel(String inputFile) {
+    private static Model readInputFileAsModel(String inputFile, String type) {
         Model model = ModelFactory.createDefaultModel();
 
-        String extension = FilenameUtils.getExtension(inputFile);
-        if (extension.toUpperCase().equals("SPARQL")) {
+        if (type.toUpperCase().equals("SPARQL")) {
             try {
                 byte[] encoded = Files.readAllBytes(Paths.get(inputFile));
                 String sparql = new String(encoded, Charset.defaultCharset());

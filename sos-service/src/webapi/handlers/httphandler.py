@@ -38,7 +38,7 @@ class HttpHandler(RequestHandler):
         response = message_repo.get_bycorrelation(correlationid, responsecategory)
 
         self.write(response.get_body())
-        self.set_header("Content-Type", "text/xml")
+        self.set_header("Content-Type", "text/turtle")
         self.finish()
 
     def accepted(self):
