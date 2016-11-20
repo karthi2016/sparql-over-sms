@@ -39,9 +39,9 @@ A Docker setup is also possible:
 ```
 $ docker network create "sparqloversms"
 
-$ docker run -dt --network "sparqloversms" -p 6379:6379 -name "sos-taskqueue" redis
-$ docker run -dt --network "sparqloversms" -p 3020:3020 -name "sos-triplestore" onnovalkering/cliopatria
-$ docker run -dt --network "sparqloversms" -p 8888:8888 -name "sos-service" onnovalkering/sparql-over-sms
+$ docker run -dt --network "sparqloversms" -p 6379:6379 --name "sos-taskqueue" redis
+$ docker run -dt --network "sparqloversms" -p 3020:3020 --name "sos-triplestore" onnovalkering/cliopatria
+$ docker run -dt --network "sparqloversms" -p 8888:8888 --name "sos-service" onnovalkering/sparql-over-sms
 ```
 
 ### Requirements
