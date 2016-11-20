@@ -19,9 +19,6 @@ class RunSparqlQuery:
         # initialize sparql endpoint
         sparql = SPARQLWrapper(endpoint)
 
-        print('query:')
-        print(token.message.get_body())
-
         # prepare sparql update
         sparql.setQuery(token.message.get_body())
         sparql.method = 'POST'
