@@ -3,7 +3,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application
 from tornroutes import route
 from utilities import configmanager
-from persistence import database
+from persistence import database, agent_repo
 from persistence.models import model_list
 
 
@@ -16,6 +16,11 @@ def initialize_db():
     database.connect()
     for model in model_list:
         database.create_table(model, safe=True)
+
+    _self = agent_repo.get_byname("~self", create_if_nonexist=True)
+    _self.hostname = 'localhost'
+    _self.save()
+
     database.close()
     return database
 
