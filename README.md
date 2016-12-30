@@ -5,6 +5,7 @@ Efficient transfer of SPARQL queries and results over short-message networks.
 |:------:|:-------:|
 | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/master.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/develop.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) |
 | [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/master.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) | [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/develop.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) |
+| [![Codacy Status](https://api.codacy.com/project/badge/Grade/32e3bdcf6983410095cf59e0183b8f58?branch=master)](https://www.codacy.com/app/onnovalkering/sparql-over-sms/dashboard?bid=4040554) | [![Codacy Status](https://api.codacy.com/project/badge/Grade/32e3bdcf6983410095cf59e0183b8f58?branch=develop)](https://www.codacy.com/app/onnovalkering/sparql-over-sms/dashboard?bid=4040553) |
 
 
 ## Introduction
