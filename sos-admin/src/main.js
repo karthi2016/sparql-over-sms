@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import BootstrapVue from 'bootstrap-vue';
 import App from './App';
 
 Vue.use(VueRouter);
+Vue.use(BootstrapVue);
 
 const Home = { template: '<div>home</div>' };
 const Foo = { template: '<div>foo</div>' };
