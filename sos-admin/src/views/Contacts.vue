@@ -1,7 +1,7 @@
 <template>
     <div id="contacts" class="row">
         <div class="col-md-12">
-            One of three columns
+            Contacts will be managable from this page.
         </div>
     </div>
 </template>

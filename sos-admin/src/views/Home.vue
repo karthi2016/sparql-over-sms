@@ -1,7 +1,9 @@
 <template>
     <div id="home" class="row">
         <div class="col-md-12">
-            One of three columns
+            <b-alert show="true" state="info">
+                The SPARQL over SMS administration client is still under development.
+            </b-alert>
         </div>
     </div>
 </template>
