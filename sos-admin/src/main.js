@@ -6,15 +6,15 @@ import App from './App';
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
 
-const Home = { template: '<div>home</div>' };
-const Foo = { template: '<div>foo</div>' };
-const Bar = { template: '<div>bar</div>' };
+const Home = require('./views/Home');
+const Contacts = require('./views/Contacts');
+const Messages = require('./views/Messages');
 
 const router = new VueRouter({
   routes: [
     { path: '/', component: Home },
-    { path: '/foo', component: Foo },
-    { path: '/bar', component: Bar },
+    { path: '/contacts', component: Contacts },
+    { path: '/messages', component: Messages },
   ],
 });
 
@@ -24,4 +24,4 @@ const app = new Vue({
   components: { App },
 });
 
-app.$mount('#wrapper');
+app.$mount('#appframe');

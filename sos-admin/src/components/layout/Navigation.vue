@@ -1,9 +1,13 @@
 <template>
-  <div class="navigation">
-    <router-link to="/">Home</router-link>
-    <router-link to="/foo">Foo</router-link>
-    <router-link to="/bar">Bar</router-link>
-  </div>
+  <nav class="navbar navbar-dark navbar-fixed-top bg-inverse">
+    <a class="navbar-brand" href="#">SPARQL over SMS</a>
+    <div id="navbar">
+      <nav class="nav navbar-nav float-xs-left">
+        <router-link class="nav-item nav-link" to="/contacts">Contacts</router-link>
+        <router-link class="nav-item nav-link" to="/messages">Messages</router-link>
+      </nav>
+    </div>
+  </nav>
 </template>
 
 <script>

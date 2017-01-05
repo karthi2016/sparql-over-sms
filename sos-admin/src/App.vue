@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <Navigation></Navigation>
-    <router-view></router-view>
+
+    <div id="wrapper" class="container-fluid">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -18,4 +21,8 @@
 
 <style lang="css">
   @import '../node_modules/bootstrap/dist/css/bootstrap.css';
+
+  #wrapper {
+    margin-top: 4rem;
+  }
 </style>
