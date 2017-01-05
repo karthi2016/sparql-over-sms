@@ -5,6 +5,7 @@
       <nav class="nav navbar-nav float-xs-left">
         <router-link class="nav-item nav-link" to="/contacts">Contacts</router-link>
         <router-link class="nav-item nav-link" to="/messages">Messages</router-link>
+        <router-link class="nav-item nav-link" to="/query">Query</router-link>
       </nav>
     </div>
   </nav>
@@ -17,5 +18,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+  .bg-inverse {
+    background-color: #263238 !important;
+  }
 </style>
