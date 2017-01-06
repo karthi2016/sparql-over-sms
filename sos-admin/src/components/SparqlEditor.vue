@@ -11,7 +11,7 @@
 
   SELECT * WHERE {
     ?sub ?pred ?obj .
-  } 
+  }
   LIMIT 10
   `.trim();
 
@@ -35,7 +35,7 @@
 </script>
 
 <style lang="scss">
-    #sparql-editor {
+  #sparql-editor {
 
-    }
+  }
 </style>

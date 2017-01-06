@@ -3,7 +3,7 @@
     <a class="navbar-brand" href="#">SPARQL over SMS</a>
     <div id="navbar">
       <nav class="nav navbar-nav float-xs-left">
-        <router-link class="nav-item nav-link" to="/contacts">Contacts</router-link>
+        <router-link class="nav-item nav-link" to="/agents">Agents</router-link>
         <router-link class="nav-item nav-link" to="/messages">Messages</router-link>
         <router-link class="nav-item nav-link" to="/query">Query</router-link>
       </nav>
