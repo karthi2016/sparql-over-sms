@@ -1,3 +1,4 @@
+from json import dumps
 from tornado.web import RequestHandler
 from datetime import datetime, timedelta
 from tornado.ioloop import IOLoop
@@ -9,13 +10,16 @@ class HttpHandler(RequestHandler):
     def data_received(self, chunk):
         pass
 
-    def get_parameter(self, key, single=True):
+    def get_parameter(self, key, single=True, default=None):
         if type(key) is not str:
             raise TypeError('String expected')
 
-        # prioritize query arguments over body arguments
-        arguments = [arg.decode('UTF-8') for arg in self.request.arguments.get(key, self.request.body_arguments.get(key, None))]
-        return arguments[0] if single else arguments
+        try:
+            # prioritize query arguments over body arguments
+            arguments = [arg.decode('UTF-8') for arg in self.request.arguments.get(key, self.request.body_arguments.get(key, None))]
+            return arguments[0] if single else arguments
+        except TypeError:
+            return default
 
     def asyncwait(self, check, s_interval, s_timeout, callback, args):
         if type(s_timeout) is int:
@@ -41,5 +45,24 @@ class HttpHandler(RequestHandler):
         self.set_header("Content-Type", "text/turtle")
         self.finish()
 
+    def write_dictasjson(self, dictionary):
+        self.write(dumps(dictionary))
+        self.set_header("Content-Type", "application/json")
+        self.finish()
+
+    def write_listasjson(self, listing):
+        self.write(dumps(listing))
+        self.set_header("Content-Type", "application/json")
+        self.finish()
+
     def accepted(self):
         self.set_status(202)
+        self.finish()
+
+    def notfound(self):
+        self.set_status(404)
+        self.finish()
+
+    def internalerror(self):
+        self.set_status(500)
+        self.finish()
