@@ -28,6 +28,10 @@ class AgentsEndpoint(HttpHandler):
 
         self.write_dictasjson(agent.as_dict())
 
+    def options(self):
+        self.set_status(204)
+        self.finish()
+
 
 @route('/agent/([0-9]+)')
 class AgentEndpoint(HttpHandler):
@@ -71,3 +75,7 @@ class AgentEndpoint(HttpHandler):
             return
 
         self.write_dictasjson(agent.as_dict())
+
+    def options(self, agentid):
+        self.set_status(204)
+        self.finish()
