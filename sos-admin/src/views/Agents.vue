@@ -33,11 +33,10 @@
           </tbody>
         </table>
       </div>
-
-      <AgentCreationModal v-if="showCreateModal" @save="agentCreated" @close="showCreateModal = false" />
-      <AgentDetailsModal v-if="showDetailModal" @save="agentUpdated" @close="showDetailModal = false" v-bind:agent="showDetailAgent" />
-
     </div>
+
+    <AgentCreationModal v-if="showCreateModal" @save="agentCreated" @close="showCreateModal = false" />
+    <AgentDetailsModal v-if="showDetailModal" @save="agentUpdated" @close="showDetailModal = false" v-bind:agent="showDetailAgent" />
   </div>
 </template>
 

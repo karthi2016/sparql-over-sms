@@ -33,43 +33,54 @@
               </table>
             </div>
         </div>
+
+        <MessageDetailsModal v-if="showDetailModal" @close="showDetailModal = false" v-bind:message="showDetailMessage" />
     </div>
 </template>
 
 <script>
-export default {
-  name: 'messages',
+  import MessageDetailsModal from '../components/modals/MessageDetailsModal';
 
-  data() {
-    return {
-      messages: [],
-    };
-  },
+  export default {
+    name: 'messages',
 
-  mounted() {
-    this.refreshMessages();
-  },
-
-  methods: {
-    refreshMessages() {
-      this.$http.get('http://localhost:8888/messages').then((response) => {
-        this.messages = response.body;
-      });
+    components: {
+      MessageDetailsModal,
     },
 
-    viewMessage(message) {
-      console.log(message);
+    data() {
+      return {
+        messages: [],
+        showDetailModal: false,
+        showDetailMessage: {},
+      };
     },
 
-    deleteMessage(message) {
-      const messageId = message.id;
-
-      this.$http.delete(`http://localhost:8888/message/${messageId}`).then(() => {
-        this.refreshMessages();
-      });
+    mounted() {
+      this.refreshMessages();
     },
-  },
-};
+
+    methods: {
+      refreshMessages() {
+        this.$http.get('http://localhost:8888/messages').then((response) => {
+          this.messages = response.body;
+        });
+      },
+
+      viewMessage(message) {
+        this.showDetailMessage = message;
+        this.showDetailModal = true;
+      },
+
+      deleteMessage(message) {
+        const messageId = message.id;
+
+        this.$http.delete(`http://localhost:8888/message/${messageId}`).then(() => {
+          this.refreshMessages();
+        });
+      },
+    },
+  };
 </script>
 
 <style lang="scss">
