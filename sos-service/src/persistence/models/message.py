@@ -29,8 +29,9 @@ class Message(BaseModel):
 
     def as_dict(self):
         return {
-            'id': self.get_id(),
+            'id': self.correlationid,
             'sender': self.sender.name,
             'reciever': self.receiver.name,
-            'category': self.category
+            'category': self.category,
+            'body': self.get_body()
         }

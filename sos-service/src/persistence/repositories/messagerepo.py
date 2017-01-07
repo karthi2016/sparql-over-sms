@@ -8,7 +8,7 @@ class MessageRepo:
         self.database = database
 
     def get_all(self, page, items_per_page):
-        return Message.select().order_by(Message.id).paginate(page, items_per_page)
+        return Message.select().order_by(Message.id.desc()).paginate(page, items_per_page)
 
     def get_byid(self, messageid):
         try:

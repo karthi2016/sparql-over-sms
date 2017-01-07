@@ -26,6 +26,7 @@ class HttpHandler(RequestHandler):
             body_arguments = request.body_arguments
 
         parameter = request.arguments.get(key, body_arguments.get(key, None))
+        parameter = parameter[0] if type(parameter) is list else parameter
         parameter = parameter.decode('UTF-8') if type(parameter) is bytes else parameter
 
         return parameter if parameter is not None else default
