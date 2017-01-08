@@ -1,3 +1,4 @@
+from rdflib import Graph
 from json import dumps, loads
 from tornado.web import RequestHandler
 from datetime import datetime, timedelta
@@ -50,8 +51,10 @@ class HttpHandler(RequestHandler):
         responsecategory = to_response_category(message.category)
 
         response = message_repo.get_bycorrelation(correlationid, responsecategory)
+        response_data = response.get_body()
+        response_graph = Graph().parse(data=response_data, format="turtle")
 
-        self.write(response.get_body())
+        self.write(response_graph.serialize(format="turtle"))
         self.set_header("Content-Type", "text/turtle")
         self.finish()
 
