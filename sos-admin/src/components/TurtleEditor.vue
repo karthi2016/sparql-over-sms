@@ -1,12 +1,12 @@
 <template>
-    <div id="sparql-editor">
+    <div id="turtle-editor">
         <codemirror v-model="value" :options="editorOption" :hint="true" @changed="valueChanged"></codemirror>
     </div>
 </template>
 
 <script>
   export default {
-    name: 'sparql-editor',
+    name: 'turtle-editor',
     props: ['value'],
 
     data() {
@@ -16,7 +16,7 @@
           styleActiveLine: true,
           lineNumbers: true,
           line: true,
-          mode: 'application/sparql-query',
+          mode: 'text/turtle',
           theme: 'material',
           extraKeys: { 'Ctrl-Space': 'autocomplete' },
         },
@@ -32,7 +32,10 @@
 </script>
 
 <style lang="scss">
-  #sparql-editor {
-
+  #turtle-editor {
+    .CodeMirror {
+      height: auto;
+      margin-bottom: 2em;
+    }
   }
 </style>

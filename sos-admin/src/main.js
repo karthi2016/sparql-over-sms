@@ -8,17 +8,15 @@ Vue.use(VueRouter);
 Vue.use(VueCodeMirror);
 Vue.use(VueResource);
 
-const Home = require('./views/Home');
+const Query = require('./views/Query');
 const Agents = require('./views/Agents');
 const Messages = require('./views/Messages');
-const Query = require('./views/Query');
 
 const router = new VueRouter({
   routes: [
-    { path: '/', component: Home },
+    { path: '/', component: Query },
     { path: '/agents', component: Agents },
     { path: '/messages', component: Messages },
-    { path: '/query', component: Query },
   ],
 });
 

@@ -5,7 +5,6 @@
       <nav class="nav navbar-nav float-xs-left">
         <router-link class="nav-item nav-link" to="/agents">Agents</router-link>
         <router-link class="nav-item nav-link" to="/messages">Messages</router-link>
-        <router-link class="nav-item nav-link" to="/query">Query</router-link>
       </nav>
     </div>
   </nav>
