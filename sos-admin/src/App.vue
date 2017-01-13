@@ -23,6 +23,6 @@
   @import '../node_modules/bootstrap/dist/css/bootstrap.css';
 
   #wrapper {
-    margin-top: 4rem;
+    margin-top: 1rem;
   }
 </style>
