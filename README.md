@@ -29,6 +29,11 @@ CONSTRUCT, ASK
 #### SPARQL Update Forms:
 INSERT DATA, DELETE DATA
 
+#### Administration:
+SPARQL GUI, Agents overview, Messages overview
+
+<img src="docs/images/sos-admin.png" alt="Drawing" style="width: 100px;"/>
+
 ## Getting Started
 To install and run SPARQL over SMS with the default configuration:
 ```
@@ -40,9 +45,9 @@ A Docker setup is also possible:
 ```
 $ docker network create "sparqloversms"
 
-$ docker run -dt --network "sparqloversms" -p 6379:6379 --name "sos-taskqueue" redis
-$ docker run -dt --network "sparqloversms" -p 3020:3020 --name "sos-triplestore" onnovalkering/cliopatria
-$ docker run -dt --network "sparqloversms" -p 8888:8888 --name "sos-service" onnovalkering/sparql-over-sms
+$ docker run -dt --network "sparqloversms" -p 6379:6379 -P --name "sos-taskqueue" redis
+$ docker run -dt --network "sparqloversms" -p 3020:3020 -P --name "sos-triplestore" onnovalkering/cliopatria
+$ docker run -dt --network "sparqloversms" -p 8888:8888 -P --name "sos-service" onnovalkering/sparql-over-sms
 ```
 
 ### Requirements
