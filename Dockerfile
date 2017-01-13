@@ -7,6 +7,7 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
     openjdk8 \
     python3 \
     python3-dev \
+    nodejs \
     wget \
     dos2unix@testing
 
@@ -22,11 +23,11 @@ RUN wget https://bootstrap.pypa.io/get-pip.py && \
     pip3 install virtualenv
 
 COPY . /
-RUN chmod u+x sparqloversms.sh && \
-    dos2unix sparqloversms.sh && \
-    bash sparqloversms.sh install
+RUN chmod u+x sparqloversms-docker.sh && \
+    dos2unix sparqloversms-docker.sh && \
+    bash sparqloversms-docker.sh install
 
-ENTRYPOINT ["bash", "sparqloversms.sh"]
-CMD ["docker"]
+ENTRYPOINT ["bash", "sparqloversms-docker.sh"]
+CMD ["start"]
 
-EXPOSE 8888
+EXPOSE 8888 8889

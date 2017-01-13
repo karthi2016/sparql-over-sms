@@ -7,6 +7,9 @@ class MessageRepo:
     def __init__(self, database):
         self.database = database
 
+    def get_all(self, page, items_per_page):
+        return Message.select().order_by(Message.id.desc()).paginate(page, items_per_page)
+
     def get_byid(self, messageid):
         try:
             return Message.get(id=messageid)
@@ -42,5 +45,10 @@ class MessageRepo:
 
         return db_message
 
+    def delete(self, message):
+        if message is int:
+            message = self.get_byid(message)
 
+        if message.delete_instance() > 0:
+            return message
 

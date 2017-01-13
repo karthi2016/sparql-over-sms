@@ -11,7 +11,7 @@ sosserver_py=$service_dir/src/sos_server.py
 sosworker_py=$service_dir/src/sos_worker.py
 
 function check_installation {
-    commands=( "java" "mvn" "python3" "virtualenv" )
+    commands=( "java" "mvn" "python3" "virtualenv" "npm" )
     for c in "${commands[@]}"
     do
         command -v $c >/dev/null 2>&1 || { 
@@ -24,6 +24,11 @@ function check_installation {
     if [ ! -d "target" ]; then
         mvn package -f "pom.xml" -DskipTests
     fi
+
+    cd $admin_dir
+    if [ ! -d "node_modules" ]; then
+        npm install
+    fi    
 
     cd $service_dir
     if [ ! -d "env" ]; then
@@ -44,27 +49,11 @@ function check_installation {
     cd $root_dir
 }
 
-function check_ui_installation {
-    commands=( "npm" )
-    for c in "${commands[@]}"
-    do
-        command -v $c >/dev/null 2>&1 || { 
-            echo >&2 "I require '$c' but it's not installed. Aborting.";
-            exit 1; 
-        }
-    done
-
-    cd $admin_dir
-    if [ ! -d "node_modules" ]; then
-        npm install
-    fi
-
-    cd $root_dir
-}
-
 function docker_service {
     check_installation
-    check_ui_installation
+
+    cd $admin_dir
+    npm run dev &
 
     cd $service_src_dir
     python3 $sosservice_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
@@ -72,40 +61,23 @@ function docker_service {
 
 function docker_server {
     check_installation
-    cd $service_src_dir
 
+    cd $service_src_dir
     python3 $sosserver_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
 }
 
 function docker_worker {
     check_installation
-    cd $service_src_dir
 
+    cd $service_src_dir
     python3 $sosworker_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
 }
 
-function start_service {
+function docker_admin {
     check_installation
-    cd $service_src_dir
 
-    python3 $sosserver_py START --background
-    python3 $sosworker_py START --background
-}
-
-function stop_service {
-    check_installation
-    cd $service_src_dir
-
-    python3 $sosserver_py STOP
-    python3 $sosworker_py STOP
-}
-
-function restart_sevice {
-    check_installation
-    cd $service_src_dir
-
-    python3 $sosserver_py RESTART
-    python3 $sosworker_py RESTART
+    cd $admin_dir
+    npm run dev
 }
 
 shopt -s nocasematch
@@ -113,31 +85,19 @@ case ${args[0]} in
     install)
         check_installation
         ;;
-    docker)
+    start)
         docker_service
-        ;;
-    docker-server)
+        ;;        
+    server-only)
         docker_server
         ;;
-    docker-worker)
+    worker-only)
         docker_worker
         ;;
-    start)
-        start_service
-        echo Started SPARQL over SMS service.
-        while :; do
-            sleep 300
-        done        
-        ;;
-    stop)
-        stop_service
-        echo Stopped SPARQL over SMS service.
-        ;;
-    restart)
-        restart_sevice
-        echo Restarted SPARQL over SMS service.
+    admin-only)
+        docker_admin
         ;;
     *)
-        echo $"Usage: $0 {install|docker|docker-server|docker-worker|start|stop|restart}"
+        echo $"Usage: $0 {install|start|server-only|worker-only|admin-only}"
         exit 1
 esac

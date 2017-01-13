@@ -26,3 +26,12 @@ class Message(BaseModel):
         messageparts = sorted(self.parts, key=lambda x: x.position)
         body = ''.join([part.body for part in messageparts])
         return body
+
+    def as_dict(self):
+        return {
+            'id': self.correlationid,
+            'sender': self.sender.name,
+            'reciever': self.receiver.name,
+            'category': self.category,
+            'body': self.get_body()
+        }

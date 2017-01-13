@@ -27,5 +27,3 @@ class RunSparqlQuery:
             token.result = result.serialize().decode('utf-8')
         else:
             token.result = result.toxml()
-
-
