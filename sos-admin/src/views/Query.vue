@@ -53,7 +53,8 @@
   import SparqlEditor from '../components/SparqlEditor';
   import TurtleEditor from '../components/TurtleEditor';
 
-  const defaultReceiver = 'localhost';
+  const defaultReceiver = '~self';
+  const defaultAccept = 'text/turtle';
 
   export default {
     name: 'query',
@@ -67,7 +68,7 @@
       return {
         sparql: SparqlEditor.getDefaultState(),
         receiver: defaultReceiver,
-        accept: 'text/turtle',
+        accept: defaultAccept,
         result: null,
       };
     },
@@ -127,7 +128,7 @@
       reset() {
         this.sparql = SparqlEditor.getDefaultState();
         this.receiver = defaultReceiver;
-        this.accept = 'text/turtle';
+        this.accept = defaultAccept;
         this.result = null;
       },
     },
