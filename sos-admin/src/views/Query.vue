@@ -16,6 +16,20 @@
             </div>
           </div>
         </div>
+        <div class="col-md-12" v-if="sparql.parser.isQuery">
+          <div class="form-group row">
+            <label for="query-accept" class="col-xs-3 col-lg-2 col-form-label">Accept</label>
+            <div class="col-xs-9 col-lg-10">
+              <select class="form-control" id="query-accept" v-model="accept">
+                <option value="text/turtle">Turtle</option>
+                <option value="application/rdf+xml">RDF/XML</option>
+                <option value="application/ld+json">JSON-LD</option>
+                <option value="application/n-triples">N-Triples</option>
+                <option value="text/n3">Notation3</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row">
           <div class="col-md-12">
@@ -34,114 +48,90 @@
 </template>
 
 <script>
-import 'vue-toast/dist/vue-toast.min.css';
-import VueToast from 'vue-toast';
-import SparqlEditor from '../components/SparqlEditor';
-import TurtleEditor from '../components/TurtleEditor';
+  import 'vue-toast/dist/vue-toast.min.css';
+  import VueToast from 'vue-toast';
+  import SparqlEditor from '../components/SparqlEditor';
+  import TurtleEditor from '../components/TurtleEditor';
 
-const defaultSparqlValue = `
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  const defaultReceiver = 'localhost';
 
-CONSTRUCT {
-  ?subject ?predicate ?object
-}
-WHERE {
-  ?subject ?predicate ?object .
-}
-LIMIT 10
-`.trim();
-
-const defaultSparql = {
-  value: defaultSparqlValue,
-  parser: {
-    valid: true,
-    errorMessage: '',
-    type: 'CONSTRUCT',
-  },
-};
-
-const defaultReceiver = 'localhost';
-const supportedTypes = ['CONSTRUCT', 'ASK', 'UPDATE'];
-
-export default {
-  name: 'query',
-  components: {
-    SparqlEditor,
-    TurtleEditor,
-    VueToast,
-  },
-
-  data() {
-    return {
-      sparql: defaultSparql,
-      receiver: defaultReceiver,
-      result: null,
-    };
-  },
-
-  computed: {
-    showResults() {
-      return this.result !== null;
-    },
-  },
-
-  mounted() {
-    const toaster = this.$refs.toast;
-    toaster.setOptions({ position: 'bottom right' });
-  },
-
-  methods: {
-    send() {
-      if (!this.sparql.parser.valid) {
-        this.toast('SPARQL query not send. Please see parser error message.', 'warning');
-      }
-
-      const queryType = this.sparql.parser.type.toUpperCase() || '';
-      const index = supportedTypes.findIndex(type => queryType === type);
-      if (index === -1) {
-        this.toast(`SPARQL query not send. Type "${queryType}" is not supported.`, 'warning');
-      }
-
-      if (queryType === 'UPDATE') {
-        this.sendUpdate(this.sparql.value, this.receiver);
-      } else {
-        this.sendQuery(this.sparql.value, this.receiver);
-      }
+  export default {
+    name: 'query',
+    components: {
+      SparqlEditor,
+      TurtleEditor,
+      VueToast,
     },
 
-    sendQuery(sparql, receiver) {
-      this.$http.get(`http://localhost:8888/agent/${receiver}/sparql?query=${encodeURI(sparql)}`).then((response) => {
-        this.result = response.body;
-      }, (response) => {
-        this.toast(`SPARQL Query failed (${response.statusText}).`, 'error');
-      });
-
-      this.toast(`SPARQL Query send to ${receiver}.`, 'info');
+    data() {
+      return {
+        sparql: SparqlEditor.getDefaultState(),
+        receiver: defaultReceiver,
+        accept: 'text/turtle',
+        result: null,
+      };
     },
 
-    sendUpdate(sparql, receiver) {
-      this.$http.post(`http://localhost:8888/agent/${receiver}/sparql/update`, { update: sparql }).then((response) => {
-        this.result = response.body;
-      }, (response) => {
-        this.toast(`SPARQL Update failed (${response.statusText}).`, 'error');
-      });
-
-      this.toast(`SPARQL Update send to ${receiver}.`, 'info');
+    computed: {
+      showResults() {
+        return this.result !== null;
+      },
     },
 
-    toast(message, type) {
+    mounted() {
       const toaster = this.$refs.toast;
-      toaster.showToast(message, { theme: type });
+      toaster.setOptions({ position: 'bottom right' });
     },
 
-    reset() {
-      this.sparql = defaultSparql;
-      this.receiver = defaultReceiver;
-      this.result = null;
+    methods: {
+      send() {
+        if (!this.sparql.parser.valid) {
+          this.toast('SPARQL query not send. Please see parser error message.', 'warning');
+        }
+
+        if (this.sparql.parser.isQuery) {
+          this.sendQuery(this.sparql.value, this.receiver);
+        } else if (this.sparql.parser.isUpdate) {
+          this.sendUpdate(this.sparql.value, this.receiver);
+        } else {
+          this.toast(`SPARQL query not send. Type "${this.sparql.parser.type}" is not supported.`, 'warning');
+        }
+      },
+
+      sendQuery(sparql, receiver) {
+        const url = `http://localhost:8888/agent/${receiver}/sparql?query=${encodeURI(sparql)}`;
+        this.$http.get(url, { headers: { Accept: this.accept } }).then((response) => {
+          this.result = response.body;
+        }, (response) => {
+          this.toast(`SPARQL Query failed (${response.statusText}).`, 'error');
+        });
+
+        this.toast(`SPARQL Query send to ${receiver}.`, 'info');
+      },
+
+      sendUpdate(sparql, receiver) {
+        this.$http.post(`http://localhost:8888/agent/${receiver}/sparql/update`, { update: sparql }).then((response) => {
+          this.result = response.body;
+        }, (response) => {
+          this.toast(`SPARQL Update failed (${response.statusText}).`, 'error');
+        });
+
+        this.toast(`SPARQL Update send to ${receiver}.`, 'info');
+      },
+
+      toast(message, type) {
+        const toaster = this.$refs.toast;
+        toaster.showToast(message, { theme: type });
+      },
+
+      reset() {
+        this.sparql = SparqlEditor.getDefaultState();
+        this.receiver = defaultReceiver;
+        this.accept = 'text/turtle';
+        this.result = null;
+      },
     },
-  },
-};
+  };
 </script>
 
 <style lang="scss">
