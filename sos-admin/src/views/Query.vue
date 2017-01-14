@@ -15,20 +15,11 @@
               <input class="form-control" type="text" id="query-receiver" v-model="receiver" />
             </div>
           </div>
-          <div class="form-group row">
-            <label for="query-receiver" class="col-xs-3 col-lg-2 col-form-label">Type</label>
-            <div class="col-xs-9 col-lg-10">
-            <select class="form-control" id="query-type">
-              <option>Query</option>
-              <option>Update</option>
-            </select>
-            </div>
-          </div>
         </div>
       </div>
       <div class="row">
           <div class="col-md-12">
-              <SparqlEditor v-model="query" />
+              <SparqlEditor v-model="sparql" />
               <br />
           </div>
       </div>
@@ -37,14 +28,18 @@
           <TurtleEditor v-model="result" v-if="showResults" />
         </div>
       </div>
+
+      <vue-toast class="toast-wrapper" ref='toast'></vue-toast>
     </div>
 </template>
 
 <script>
+import 'vue-toast/dist/vue-toast.min.css';
+import VueToast from 'vue-toast';
 import SparqlEditor from '../components/SparqlEditor';
 import TurtleEditor from '../components/TurtleEditor';
 
-const defaultQuery = `
+const defaultSparqlValue = `
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
@@ -57,18 +52,29 @@ WHERE {
 LIMIT 10
 `.trim();
 
+const defaultSparql = {
+  value: defaultSparqlValue,
+  parser: {
+    valid: true,
+    errorMessage: '',
+    type: 'CONSTRUCT',
+  },
+};
+
 const defaultReceiver = 'localhost';
+const supportedTypes = ['CONSTRUCT', 'ASK', 'UPDATE'];
 
 export default {
   name: 'query',
   components: {
     SparqlEditor,
     TurtleEditor,
+    VueToast,
   },
 
   data() {
     return {
-      query: defaultQuery,
+      sparql: defaultSparql,
       receiver: defaultReceiver,
       result: null,
     };
@@ -80,15 +86,57 @@ export default {
     },
   },
 
+  mounted() {
+    const toaster = this.$refs.toast;
+    toaster.setOptions({ position: 'bottom right' });
+  },
+
   methods: {
     send() {
-      this.$http.get(`http://localhost:8888/agent/${this.receiver}/sparql?query=${encodeURI(this.query)}`).then((response) => {
+      if (!this.sparql.parser.valid) {
+        this.toast('SPARQL query not send. Please see parser error message.', 'warning');
+      }
+
+      const queryType = this.sparql.parser.type.toUpperCase() || '';
+      const index = supportedTypes.findIndex(type => queryType === type);
+      if (index === -1) {
+        this.toast(`SPARQL query not send. Type "${queryType}" is not supported.`, 'warning');
+      }
+
+      if (queryType === 'UPDATE') {
+        this.sendUpdate(this.sparql.value, this.receiver);
+      } else {
+        this.sendQuery(this.sparql.value, this.receiver);
+      }
+    },
+
+    sendQuery(sparql, receiver) {
+      this.$http.get(`http://localhost:8888/agent/${receiver}/sparql?query=${encodeURI(sparql)}`).then((response) => {
         this.result = response.body;
+      }, (response) => {
+        this.toast(`SPARQL Query failed (${response.statusText}).`, 'error');
       });
+
+      this.toast(`SPARQL Query send to ${receiver}.`, 'info');
+    },
+
+    sendUpdate(sparql, receiver) {
+      this.$http.post(`http://localhost:8888/agent/${receiver}/sparql/update`, { update: sparql }).then((response) => {
+        this.result = response.body;
+      }, (response) => {
+        this.toast(`SPARQL Update failed (${response.statusText}).`, 'error');
+      });
+
+      this.toast(`SPARQL Update send to ${receiver}.`, 'info');
+    },
+
+    toast(message, type) {
+      const toaster = this.$refs.toast;
+      toaster.showToast(message, { theme: type });
     },
 
     reset() {
-      this.query = defaultQuery;
+      this.sparql = defaultSparql;
       this.receiver = defaultReceiver;
       this.result = null;
     },
@@ -97,7 +145,7 @@ export default {
 </script>
 
 <style lang="scss">
-    #query {
+  #query {
 
-    }
+  }
 </style>
