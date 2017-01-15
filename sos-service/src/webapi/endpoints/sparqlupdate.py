@@ -8,7 +8,7 @@ from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest, timeout, servererror
 
 
-@route('/agent/([\w]+)/sparql/update')
+@route('/agent/([+|~]?\w+)/sparql/update')
 class SparqlUpdate(HttpHandler):
 
     @asynchronous

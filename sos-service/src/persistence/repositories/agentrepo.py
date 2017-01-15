@@ -34,6 +34,8 @@ class AgentRepo:
             return self.get_byphonenumber(address, create_if_nonexist)                       
         if address_type == HOSTNAME_ADDRESS:
             return self.get_byhostname(address, create_if_nonexist)
+        if address_type == NAME_ADDRESS:
+            return self.get_byname(address)
 
         return None
 

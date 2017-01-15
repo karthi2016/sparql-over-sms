@@ -2,6 +2,7 @@
 UNRECOGNIZED_ADDRESS = 'UA'
 PHONENUMBER_ADDRESS = 'PA'
 HOSTNAME_ADDRESS = 'HA'
+NAME_ADDRESS = 'NA'
 
 
 def determine_address_type(address):
@@ -10,6 +11,9 @@ def determine_address_type(address):
 
     if is_hostname_address(address):
         return HOSTNAME_ADDRESS
+
+    if is_name_address(address):
+        return NAME_ADDRESS
 
     # not regocognized, default to hostname if..
     if ' ' not in address:
@@ -25,3 +29,7 @@ def is_phonenumber_address(address):
 def is_hostname_address(address):
     characters = set(address)
     return ('.' in characters or ':' in characters) and ' ' not in characters
+
+
+def is_name_address(address):
+    return address[0] == '~'
