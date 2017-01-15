@@ -100,7 +100,7 @@
       },
 
       sendQuery(sparql, receiver) {
-        const url = `http://localhost:8888/agent/${receiver}/sparql?query=${encodeURI(sparql)}`;
+        const url = `http://localhost:8888/agent/${receiver}/sparql?query=${encodeURIComponent(sparql)}`;
         this.$http.get(url, { headers: { Accept: this.accept } }).then((response) => {
           this.result = response.body;
         }, (response) => {
