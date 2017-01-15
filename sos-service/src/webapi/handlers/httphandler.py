@@ -1,9 +1,9 @@
-from rdflib import Graph
 from json import dumps, loads
 from tornado.web import RequestHandler
 from datetime import datetime, timedelta
 from tornado.ioloop import IOLoop
 from persistence import message_repo
+from utilities.conversion import convertrdf_bymimetype
 from utilities.messaging import to_response_category
 
 
@@ -50,12 +50,12 @@ class HttpHandler(RequestHandler):
         correlationid = message.correlationid
         responsecategory = to_response_category(message.category)
 
+        request_accept = self.request.headers.get('Accept', 'text/turtle')
         response = message_repo.get_bycorrelation(correlationid, responsecategory)
-        response_data = response.get_body()
-        response_graph = Graph().parse(data=response_data, format="turtle")
+        response_body = convertrdf_bymimetype(response.get_body(), request_accept)
 
-        self.write(response_graph.serialize(format="turtle"))
-        self.set_header("Content-Type", "text/turtle")
+        self.write(response_body)
+        self.set_header("Content-Type", request_accept)
         self.finish()
 
     def write_dictasjson(self, dictionary):
