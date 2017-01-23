@@ -8,6 +8,14 @@ Vue.use(VueRouter);
 Vue.use(VueCodeMirror);
 Vue.use(VueResource);
 
+require('codemirror/addon/lint/lint.js');
+require('codemirror/addon/lint/lint.css');
+require('codemirror/mode/xml/xml.js');
+require('codemirror/mode/javascript/javascript.js');
+require('codemirror/mode/ntriples/ntriples.js');
+require('codemirror/mode/turtle/turtle.js');
+require('codemirror/mode/sparql/sparql.js');
+
 const Query = require('./views/Query');
 const Agents = require('./views/Agents');
 const Messages = require('./views/Messages');

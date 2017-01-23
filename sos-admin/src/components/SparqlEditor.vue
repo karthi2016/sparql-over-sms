@@ -1,15 +1,38 @@
 <template>
     <div id="sparql-editor">
         <codemirror v-model="value.value" :options="editorOption" :hint="true" @changed="valueChanged"></codemirror>
-        <div v-if="parser.errorMessage" class="alert alert-danger" role="alert">
-          {{parser.errorMessage}}
-        </div>
     </div>
 </template>
 
 <script>
   import _ from 'lodash';
   import sparqljs from 'sparqljs';
+  import { CodeMirror } from 'vue-codemirror';
+
+  CodeMirror.registerHelper('lint', 'sparql', (text) => {
+    const errors = [];
+    const linter = new sparqljs.Parser();
+
+    try {
+      linter.parse(text);
+    } catch (e) {
+      const loc = e.hash.loc;
+      const str = e.message;
+
+      console.log(e.hash);
+
+      errors.push({
+        // eslint-disable-next-line
+        from: CodeMirror.Pos(loc.first_line - 1, loc.first_column),
+        // eslint-disable-next-line
+        to: CodeMirror.Pos(loc.last_line - 1, loc.last_column),
+        message: str,
+      });
+    }
+
+    return errors;
+  });
+
 
   const queryTypes = ['CONSTRUCT', 'ASK'];
   const updateTypes = ['UPDATE'];
@@ -62,7 +85,9 @@
           styleActiveLine: true,
           lineNumbers: true,
           line: true,
-          mode: 'application/sparql-query',
+          gutters: ['CodeMirror-lint-markers'],
+          lint: true,
+          mode: 'sparql',
           theme: 'material',
           extraKeys: { 'Ctrl-Space': 'autocomplete' },
         },
@@ -82,7 +107,6 @@
 
           this.parser.valid = true;
           this.parser.type = (query.type || query.queryType || '').toUpperCase();
-          this.parser.errorMessage = '';
           this.parser.isQuery = queryTypes.findIndex(type => type === query.queryType) >= 0;
           this.parser.isUpdate = updateTypes.findIndex(type => type === query.type) >= 0;
         } catch (e) {

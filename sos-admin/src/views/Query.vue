@@ -37,9 +37,9 @@
               <br />
           </div>
       </div>
-      <div class="row">
+      <div class="row" v-show="showResults">
         <div class="col-md-12">
-          <TurtleEditor v-model="result" v-if="showResults" />
+          <TurtleEditor v-model="result" :mime="resultMime" />
         </div>
       </div>
 
@@ -70,6 +70,7 @@
         receiver: defaultReceiver,
         accept: defaultAccept,
         result: null,
+        resultMime: defaultAccept,
       };
     },
 
@@ -102,7 +103,14 @@
       sendQuery(sparql, receiver) {
         const url = `http://localhost:8888/agent/${receiver}/sparql?query=${encodeURIComponent(sparql)}`;
         this.$http.get(url, { headers: { Accept: this.accept } }).then((response) => {
-          this.result = response.body;
+          // eslint-disable-next-line
+          const reader = new FileReader();
+          reader.addEventListener('loadend', () => {
+            this.result = reader.result;
+            this.resultMime = response.headers.map['Content-Type'] || defaultAccept;
+          });
+
+          reader.readAsText(response.bodyBlob);
         }, (response) => {
           this.toast(`SPARQL Query failed (${response.statusText}).`, 'error');
         });
