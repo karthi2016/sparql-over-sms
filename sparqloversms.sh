@@ -5,7 +5,6 @@ root_dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 compression_dir=$root_dir/sos-compression
 service_dir=$root_dir/sos-service
 service_src_dir=$service_dir/src
-admin_dir=$root_dir/sos-admin
 sosservice_py=$service_dir/src/sos_service.py
 sosserver_py=$service_dir/src/sos_server.py
 sosworker_py=$service_dir/src/sos_worker.py
@@ -44,46 +43,6 @@ function check_installation {
     cd $root_dir
 }
 
-function check_ui_installation {
-    commands=( "npm" )
-    for c in "${commands[@]}"
-    do
-        command -v $c >/dev/null 2>&1 || { 
-            echo >&2 "I require '$c' but it's not installed. Aborting.";
-            exit 1; 
-        }
-    done
-
-    cd $admin_dir
-    if [ ! -d "node_modules" ]; then
-        npm install
-    fi
-
-    cd $root_dir
-}
-
-function docker_service {
-    check_installation
-    check_ui_installation
-
-    cd $service_src_dir
-    python3 $sosservice_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
-}
-
-function docker_server {
-    check_installation
-    cd $service_src_dir
-
-    python3 $sosserver_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
-}
-
-function docker_worker {
-    check_installation
-    cd $service_src_dir
-
-    python3 $sosworker_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
-}
-
 function start_service {
     check_installation
     cd $service_src_dir
@@ -113,15 +72,6 @@ case ${args[0]} in
     install)
         check_installation
         ;;
-    docker)
-        docker_service
-        ;;
-    docker-server)
-        docker_server
-        ;;
-    docker-worker)
-        docker_worker
-        ;;
     start)
         start_service
         echo Started SPARQL over SMS service.
@@ -138,6 +88,6 @@ case ${args[0]} in
         echo Restarted SPARQL over SMS service.
         ;;
     *)
-        echo $"Usage: $0 {install|docker|docker-server|docker-worker|start|stop|restart}"
+        echo $"Usage: $0 {install|start|stop|restart}"
         exit 1
 esac
