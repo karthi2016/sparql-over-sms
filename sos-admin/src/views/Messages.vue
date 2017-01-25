@@ -23,7 +23,7 @@
                     <td>{{message.id}}</td>
                     <td>{{message.sender}}</td>
                     <td>{{message.reciever}}</td>
-                    <td>{{message.category}}</td>
+                    <td>{{messageCategories[message.category]}}</td>
                     <td>
                       <button v-on:click="viewMessage(message)" class="btn btn-sm btn-outline-info">Details</button>
                       <button v-on:click="deleteMessage(message)" class="btn btn-sm btn-outline-warning">Delete</button>
@@ -53,6 +53,16 @@
         messages: [],
         showDetailModal: false,
         showDetailMessage: {},
+        messageCategories: {
+          0: 'User',
+          1: 'User resp.',
+          2: 'System',
+          3: 'System resp.',
+          4: 'Query',
+          5: 'Query resp.',
+          6: 'Update',
+          7: 'Update resp.',
+        },
       };
     },
 
