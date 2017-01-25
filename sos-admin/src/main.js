@@ -2,11 +2,13 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueCodeMirror from 'vue-codemirror';
 import VueResource from 'vue-resource';
+import VeeValidate from 'vee-validate';
 import App from './App';
 
 Vue.use(VueRouter);
 Vue.use(VueCodeMirror);
 Vue.use(VueResource);
+Vue.use(VeeValidate);
 
 require('codemirror/addon/lint/lint.js');
 require('codemirror/addon/lint/lint.css');
