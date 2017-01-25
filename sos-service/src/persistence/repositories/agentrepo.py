@@ -1,5 +1,6 @@
 from datetime import datetime
 from persistence.models import Agent
+from utilities.generators import generate_agent_name
 from utilities.messaging.addresses import *
 
 
@@ -61,7 +62,7 @@ class AgentRepo:
         agent = Agent()
         
         if name is not None:
-            agent.name = name
+            agent.name = generate_agent_name()
         if hostname is not None:
             agent.hostname = hostname
         if phonenumber is not None:
