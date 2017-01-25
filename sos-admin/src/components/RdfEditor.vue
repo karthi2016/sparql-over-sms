@@ -1,6 +1,6 @@
 <template>
-    <div id="turtle-editor">
-        <codemirror v-model="value" :options="editorOption" :hint="true" @changed="valueChanged" ref="turtleEditor"></codemirror>
+    <div id="rdf-editor">
+        <codemirror v-model="value" :options="editorOption" :hint="true" @changed="valueChanged" ref="rdfEditor"></codemirror>
     </div>
 </template>
 
@@ -15,12 +15,15 @@
 
   export default {
     name: 'turtle-editor',
-    props: ['value', 'mime'],
+    props: ['value', 'mime', 'readOnly'],
 
     watch: {
-      mime(mimeValue) {
-        const editor = this.$refs.turtleEditor.editor;
-        editor.setOption('mode', modes[mimeValue]);
+      mime(value) {
+        this.setEditorOption('mode', modes[value]);
+      },
+
+      readOnly(value) {
+        this.setEditorOption('readOnly', value);
       },
     },
 
@@ -28,7 +31,6 @@
       return {
         editorOption: {
           tabSize: 4,
-          readOnly: true,
           styleActiveLine: true,
           lineNumbers: true,
           line: true,
@@ -39,9 +41,23 @@
       };
     },
 
+    mounted() {
+      if (this.readOnly) {
+        this.setEditorOption('readOnly', this.readOnly);
+      }
+      if (this.mime) {
+        this.setEditorOption('mode', modes[this.mime]);
+      }
+    },
+
     methods: {
       valueChanged(value) {
         this.$emit('input', value);
+      },
+
+      setEditorOption(key, value) {
+        const editor = this.$refs.rdfEditor.editor;
+        editor.setOption(key, value);
       },
     },
   };

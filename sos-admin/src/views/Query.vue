@@ -39,7 +39,7 @@
       </div>
       <div class="row" v-show="showResults">
         <div class="col-md-12">
-          <TurtleEditor v-model="result" :mime="resultMime" />
+          <RdfEditor v-model="result" :mime="resultMime" />
         </div>
       </div>
 
@@ -50,8 +50,8 @@
 <script>
   import 'vue-toast/dist/vue-toast.min.css';
   import VueToast from 'vue-toast';
+  import RdfEditor from '../components/RdfEditor';
   import SparqlEditor from '../components/SparqlEditor';
-  import TurtleEditor from '../components/TurtleEditor';
 
   const defaultReceiver = '~self';
   const defaultAccept = 'text/turtle';
@@ -60,7 +60,7 @@
     name: 'query',
     components: {
       SparqlEditor,
-      TurtleEditor,
+      RdfEditor,
       VueToast,
     },
 

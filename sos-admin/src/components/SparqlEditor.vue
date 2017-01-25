@@ -19,8 +19,6 @@
       const loc = e.hash.loc;
       const str = e.message;
 
-      console.log(e.hash);
-
       errors.push({
         // eslint-disable-next-line
         from: CodeMirror.Pos(loc.first_line - 1, loc.first_column),
