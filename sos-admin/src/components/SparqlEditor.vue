@@ -1,6 +1,6 @@
 <template>
     <div id="sparql-editor">
-        <codemirror v-model="value.value" :options="editorOption" :hint="true" @changed="valueChanged"></codemirror>
+        <codemirror v-model="value.value" :options="editorOption" :hint="true" @changed="valueChanged" ref="sparqlEditor"></codemirror>
     </div>
 </template>
 
@@ -63,10 +63,20 @@
 
   export default {
     name: 'sparql-editor',
-    props: ['value'],
+    props: ['value', 'readOnly', 'lint'],
 
     getDefaultState() {
       return _.cloneDeep(defaultState);
+    },
+
+    watch: {
+      readOnly(value) {
+        this.setEditorOption('readOnly', value);
+      },
+
+      lint(value) {
+        this.setEditorOption('lint', value);
+      },
     },
 
     data() {
@@ -84,7 +94,6 @@
           lineNumbers: true,
           line: true,
           gutters: ['CodeMirror-lint-markers'],
-          lint: true,
           mode: 'sparql',
           theme: 'material',
           extraKeys: { 'Ctrl-Space': 'autocomplete' },
@@ -113,6 +122,20 @@
 
         this.$emit('input', { value, parser: this.parser });
       },
+
+      setEditorOption(key, value) {
+        const editor = this.$refs.sparqlEditor.editor;
+        editor.setOption(key, value);
+      },
+    },
+
+    mounted() {
+      if (this.readOnly) {
+        this.setEditorOption('readOnly', this.readOnly);
+      }
+      if (this.lint) {
+        this.setEditorOption('lint', this.lint);
+      }
     },
   };
 </script>

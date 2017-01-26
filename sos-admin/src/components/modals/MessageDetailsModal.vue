@@ -13,8 +13,30 @@
           <div class="modal-body">
             <slot name="body">
               <div class="form-group">
-                <label for="exampleTextarea">Content</label>
-                <textarea class="form-control" id="exampleTextarea" rows="10" v-model="message.body" disabled></textarea>
+                <ul class="nav nav-tabs">
+                  <li class="nav-item">
+                    <a class="nav-link" @click="activateTab('information')" :class="{ 'active': isInformationTabActive}">Information</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" @click="activateTab('request')" :class="{ 'active': isRequestTabActive}">Request</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" @click="activateTab('response')" :class="{ 'active': isResponseTabActive}">Response</a>
+                  </li>
+                </ul>
+
+                <div v-show="isInformationTabActive">
+                  information
+                </div>
+
+                <div v-if="isRequestTabActive">
+                  <SparqlEditor v-model="sparqlEditorModel" readOnly="true" />
+                </div>
+
+                <div v-if="isResponseTabActive">
+                  <RdfEditor v-model="message.body" readOnly="true" />
+                </div>
+
               </div>
             </slot>
           </div>
@@ -31,10 +53,48 @@
 </template>
 
 <script>
+  import RdfEditor from '../RdfEditor';
+  import SparqlEditor from '../SparqlEditor';
+
   export default {
     props: ['message'],
 
+    components: {
+      RdfEditor,
+      SparqlEditor,
+    },
+
+    computed: {
+      sparqlEditorModel() {
+        return {
+          value: this.message.body,
+        };
+      },
+
+      isInformationTabActive() {
+        return this.activeTab === 'information';
+      },
+
+      isRequestTabActive() {
+        return this.activeTab === 'request';
+      },
+
+      isResponseTabActive() {
+        return this.activeTab === 'response';
+      },
+    },
+
+    data() {
+      return {
+        activeTab: 'information',
+      };
+    },
+
     methods: {
+      activateTab(name) {
+        this.activeTab = name;
+      },
+
       close() {
         this.$emit('close');
       },
@@ -44,4 +104,13 @@
 
 <style lang="scss">
   @import '../../assets/styles/modals.scss';
+
+  .modal-body {
+    max-width: 1100px;
+    max-height: 600px;
+
+    .nav-tabs {
+      margin-bottom: 1em;
+    }
+  }
 </style>

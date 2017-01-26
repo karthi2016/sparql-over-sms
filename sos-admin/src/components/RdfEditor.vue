@@ -34,6 +34,7 @@
           styleActiveLine: true,
           lineNumbers: true,
           line: true,
+          gutters: ['CodeMirror-lint-markers'],
           mode: 'turtle',
           theme: 'material',
           extraKeys: { 'Ctrl-Space': 'autocomplete' },

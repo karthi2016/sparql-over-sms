@@ -33,7 +33,7 @@
       </div>
       <div class="row">
           <div class="col-md-12">
-              <SparqlEditor v-model="sparql" />
+              <SparqlEditor v-model="sparql" lint="true" />
               <br />
           </div>
       </div>
