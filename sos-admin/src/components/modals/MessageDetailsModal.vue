@@ -20,13 +20,13 @@
                   <li class="nav-item">
                     <a class="nav-link" @click="activateTab('request')" :class="{ 'active': isRequestTabActive}">Request</a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item" v-if="hasResponse">
                     <a class="nav-link" @click="activateTab('response')" :class="{ 'active': isResponseTabActive}">Response</a>
                   </li>
                 </ul>
 
                 <div v-show="isInformationTabActive">
-                  information
+                  Not yet available.
                 </div>
 
                 <div v-if="isRequestTabActive">
@@ -34,7 +34,7 @@
                 </div>
 
                 <div v-if="isResponseTabActive">
-                  <RdfEditor v-model="message.body" readOnly="true" />
+                  <RdfEditor v-model="responseMessage.body" readOnly="true" />
                 </div>
 
               </div>
@@ -82,12 +82,23 @@
       isResponseTabActive() {
         return this.activeTab === 'response';
       },
+
+      hasResponse() {
+        return this.responseMessage && this.responseMessage.id;
+      },
     },
 
     data() {
       return {
         activeTab: 'information',
+        responseMessage: undefined,
       };
+    },
+
+    mounted() {
+      this.$http.get(`http://localhost:8888/message/${this.message.id}/response`).then((response) => {
+        this.responseMessage = response.body;
+      });
     },
 
     methods: {
