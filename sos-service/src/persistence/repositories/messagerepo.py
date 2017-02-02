@@ -4,11 +4,17 @@ from persistence.models import Message, MessagePart
 class MessageRepo:
     """description of class"""
 
+    # outgoing categories are even numbers < 10
+    outgoing = [i for i in range(0, 10, 2)]
+    # incoming categories are even numbers < 10
+    incoming = [i for i in range(1, 10, 2)]
+
     def __init__(self, database):
         self.database = database
 
     def get_total(self):
         return (Message.select()
+                .where(Message.category << self.outgoing)
                 .count())
 
     def get_all(self, page, items_per_page):
@@ -17,11 +23,9 @@ class MessageRepo:
                 .paginate(page, items_per_page))
 
     def get_all_outgoing(self, page, items_per_page):
-        # outgoing categories are even numbers < 10
-        outgoing = [i for i in range(0, 10, 2)]
 
         return (Message.select()
-                .where(Message.category << outgoing)
+                .where(Message.category << self.outgoing)
                 .order_by(Message.id.desc())
                 .paginate(page, items_per_page))
 
@@ -38,24 +42,18 @@ class MessageRepo:
             return None
 
     def get_outgoing_bycorrelation(self, correlationid):
-        # outgoing categories are even numbers < 10
-        outgoing = [i for i in range(0, 10, 2)]
-
         try:
             query = (Message.select()
-                     .where(Message.correlationid == correlationid, Message.category << outgoing))
+                     .where(Message.correlationid == correlationid, Message.category << self.outgoing))
 
             return query.get()
         except Message.DoesNotExist:
             return None
 
     def get_incoming_bycorrelation(self, correlationid):
-        # incoming categories are even numbers < 10
-        incoming = [i for i in range(1, 10, 2)]
-
         try:
             query = (Message.select()
-                     .where(Message.correlationid == correlationid, Message.category << incoming))
+                     .where(Message.correlationid == correlationid, Message.category << self.incoming))
 
             return query.get()
         except Message.DoesNotExist:

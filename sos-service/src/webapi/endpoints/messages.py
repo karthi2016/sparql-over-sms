@@ -16,10 +16,11 @@ class MessagesEndpoint(HttpHandler):
         messages_list = [message.as_dict() for message in messages]
         messages_total = message_repo.get_total()
 
+        page_total = ceil(messages_total / items)
         messages_response = {
             'message': messages_list,
             'page': page,
-            'page_total': ceil(messages_total / items),
+            'page_total': page_total,
             'items_page': items,
             'items_total': messages_total,
         }

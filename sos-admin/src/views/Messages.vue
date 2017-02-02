@@ -95,11 +95,16 @@
         this.$http.get(`http://localhost:8888/messages?page=${this.page}&items=${this.items}`).then((response) => {
           const result = response.body;
 
-          this.messages = result.message;
+          if (result.page > result.page_total) {
+            this.page = result.page_total;
+            this.refreshMessages();
+          }
+
           this.page = result.page;
           this.totalPages = result.page_total;
           this.itemsPerPage = result.items_page;
           this.totalItems = result.items_total;
+          this.messages = result.message;
         });
       },
 
