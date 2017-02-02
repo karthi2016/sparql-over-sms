@@ -67,8 +67,9 @@
         this.lastUpdate = 0;
 
         const wpAgent = Object.assign({}, this.agent);
-        wpAgent.name = wpAgent.name.substring(1);
-        wpAgent.phonenumber = wpAgent.phonenumber.substring(1);
+        wpAgent.name = (wpAgent.name || '').substring(1);
+        wpAgent.phonenumber = (wpAgent.phonenumber || '').substring(1);
+
         return wpAgent;
       },
 
@@ -98,7 +99,11 @@
       },
 
       save() {
-        this.$http.patch(`http://localhost:8888/agent/${this.agent.id}`, this.wpAgent).then(() => {
+        const agent = Object.assign({}, this.wpAgent);
+        agent.name = `~${agent.name}`;
+        agent.phonenumber = `+${agent.phonenumber}`;
+
+        this.$http.patch(`http://localhost:8888/agent/${agent.id}`, agent).then(() => {
           this.$emit('save');
         });
       },
