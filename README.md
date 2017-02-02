@@ -28,11 +28,11 @@ CONSTRUCT, ASK
 INSERT DATA, DELETE DATA
 
 #### Administration:
-SPARQL GUI, Agents overview, Messages overview
+SPARQL editor/viewer, Agents management, Messages management
 
 <img src="docs/images/sos-admin.png" alt="Drawing" style="width: 100px;"/>
 
-## Getting Started
+## Getting started
 To install and run SPARQL over SMS with the default configuration:
 ```
 $ git clone https://github.com/onnovalkering/sparql-over-sms.git && cd sparql-over-sms
