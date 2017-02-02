@@ -99,12 +99,18 @@
       },
 
       save() {
-        const agent = Object.assign({}, this.wpAgent);
-        agent.name = `~${agent.name}`;
-        agent.phonenumber = `+${agent.phonenumber}`;
+        this.$validator.validateAll().then((success) => {
+          if (!success) {
+            return;
+          }
 
-        this.$http.patch(`http://localhost:8888/agent/${agent.id}`, agent).then(() => {
-          this.$emit('save');
+          const agent = Object.assign({}, this.wpAgent);
+          agent.name = `~${agent.name}`;
+          agent.phonenumber = (agent.phonenumber.length > 0) ? `+${agent.phonenumber}` : '';
+
+          this.$http.patch(`http://localhost:8888/agent/${agent.id}`, agent).then(() => {
+            this.$emit('save');
+          });
         });
       },
     },
