@@ -1,5 +1,5 @@
 from tornroutes import route
-
+from math import ceil
 from utilities.conversion import convertrdf_bymimetype
 from webapi.handlers import HttpHandler
 from persistence import message_repo
@@ -9,13 +9,22 @@ from persistence import message_repo
 class MessagesEndpoint(HttpHandler):
 
     def get(self):
-        page = self.get_parameter('page', default=1)
-        items = self.get_parameter('items', default=25)
+        page = int(self.get_parameter('page', default=1))
+        items = int(self.get_parameter('items', default=25))
 
-        messages = message_repo.get_all_outgoing(int(page), int(items))
+        messages = message_repo.get_all_outgoing(page, items)
         messages_list = [message.as_dict() for message in messages]
+        messages_total = message_repo.get_total()
 
-        self.write_listasjson(messages_list)
+        messages_response = {
+            'message': messages_list,
+            'page': page,
+            'page_total': ceil(messages_total / items),
+            'items_page': items,
+            'items_total': messages_total,
+        }
+
+        self.write_listasjson(messages_response)
 
     def options(self):
         self.set_status(204)

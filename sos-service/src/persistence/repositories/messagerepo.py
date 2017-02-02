@@ -7,6 +7,10 @@ class MessageRepo:
     def __init__(self, database):
         self.database = database
 
+    def get_total(self):
+        return (Message.select()
+                .count())
+
     def get_all(self, page, items_per_page):
         return (Message.select()
                 .order_by(Message.id.desc())
