@@ -10,7 +10,7 @@ class MessagesEndpoint(HttpHandler):
 
     def get(self):
         page = int(self.get_parameter('page', default=1))
-        items = int(self.get_parameter('items', default=25))
+        items = int(self.get_parameter('items', default=15))
 
         messages = message_repo.get_all_outgoing(page, items)
         messages_list = [message.as_dict() for message in messages]
