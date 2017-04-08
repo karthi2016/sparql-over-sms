@@ -61,8 +61,7 @@ class AgentRepo:
     def create(self, name=None, hostname=None, phonenumber=None):
         agent = Agent()
         
-        if name is None:
-            agent.name = generate_agent_name()
+        agent.name = name if name is not None else generate_agent_name()
         if hostname is not None:
             agent.hostname = hostname
         if phonenumber is not None:
