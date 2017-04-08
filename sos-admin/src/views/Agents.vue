@@ -32,6 +32,21 @@
             </tr>
           </tbody>
         </table>
+        <ul class="pagination justify-content-end" v-if="page > 0 && totalPages > 1">
+          <li class="page-item" :class="{ 'disabled': page == 1 }">
+            <a class="page-link" v-on:click="navigate(page - 1)">Previous</a>
+          </li>
+
+          <li class="page-item" v-for="n in this.totalPages" :class="{ 'active': n == page }">
+            <a class="page-link" v-on:click="navigate(n)">
+              {{ n }}
+            </a>
+          </li>
+
+          <li class="page-item" :class="{ 'disabled': page == totalPages }">
+            <a class="page-link" v-on:click="navigate(page + 1)">Next</a>
+          </li>
+        </ul>        
       </div>
     </div>
 
@@ -55,6 +70,10 @@
     data() {
       return {
         agents: [],
+        page: 1,
+        items: 15,
+        total: 0,
+        totalPages: 1,
         showCreateModal: false,
         showDetailModal: false,
         showDetailAgent: {},
@@ -66,9 +85,25 @@
     },
 
     methods: {
+      navigate(page) {
+        this.page = page;
+        this.refreshAgents();
+      },
+
       refreshAgents() {
-        this.$http.get('http://localhost:8888/agents').then((response) => {
-          this.agents = response.body;
+        this.$http.get(`http://localhost:8888/agents?page=${this.page}&items=${this.items}`).then((response) => {
+          const result = response.body;
+
+          if (result.page > result.page_total) {
+            this.page = result.page_total;
+            this.refreshAgents();
+          }
+
+          this.page = result.page;
+          this.totalPages = result.page_total;
+          this.itemsPerPage = result.items_page;
+          this.totalItems = result.items_total;
+          this.agents = result.agents;
         });
       },
 
@@ -104,6 +139,22 @@
 
 <style lang="scss">
   #agents {
+    .page-item {
 
+      &.disable {
+        cursor: default;
+      }
+
+      &.active {
+        .page-link {
+          cursor: default;
+          pointer-events: none;
+        }
+      }
+
+      .page-link {
+        cursor: pointer !important;
+      }
+    }
   }
 </style>

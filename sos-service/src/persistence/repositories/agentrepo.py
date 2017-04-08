@@ -10,6 +10,10 @@ class AgentRepo:
     def __init__(self, database):
         self.database = database
 
+    def get_total(self):
+        return (Agent.select()
+                .count())
+
     def get_all(self, page, items_per_page):
         return Agent.select().order_by(Agent.id).paginate(page, items_per_page)
 
