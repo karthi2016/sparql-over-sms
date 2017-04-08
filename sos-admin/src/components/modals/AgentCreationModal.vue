@@ -81,6 +81,7 @@
             return;
           }
 
+          this.wpAgent.name = `~${this.wpAgent.name}`;
           this.$http.post('http://localhost:8888/agents', this.wpAgent).then(() => {
             this.$emit('save');
           });
