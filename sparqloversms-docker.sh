@@ -5,12 +5,13 @@ root_dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 compression_dir=$root_dir/sos-compression
 service_dir=$root_dir/sos-service
 service_src_dir=$service_dir/src
+admin_dir=$root_dir/sos-admin
 sosservice_py=$service_dir/src/sos_service.py
 sosserver_py=$service_dir/src/sos_server.py
 sosworker_py=$service_dir/src/sos_worker.py
 
 function check_installation {
-    commands=( "java" "mvn" "python3" "virtualenv" )
+    commands=( "java" "mvn" "python3" "virtualenv" "npm" )
     for c in "${commands[@]}"
     do
         command -v $c >/dev/null 2>&1 || { 
@@ -23,6 +24,11 @@ function check_installation {
     if [ ! -d "target" ]; then
         mvn package -f "pom.xml" -DskipTests
     fi
+
+    cd $admin_dir
+    if [ ! -d "node_modules" ]; then
+        npm install
+    fi    
 
     cd $service_dir
     if [ ! -d "env" ]; then
@@ -43,28 +49,35 @@ function check_installation {
     cd $root_dir
 }
 
-function start_service {
+function docker_service {
     check_installation
-    cd $service_src_dir
 
-    python3 $sosserver_py START --background
-    python3 $sosworker_py START --background
+    cd $admin_dir
+    npm run dev &
+
+    cd $service_src_dir
+    python3 $sosservice_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
 }
 
-function stop_service {
+function docker_server {
     check_installation
-    cd $service_src_dir
 
-    python3 $sosserver_py STOP
-    python3 $sosworker_py STOP
+    cd $service_src_dir
+    python3 $sosserver_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
 }
 
-function restart_sevice {
+function docker_worker {
     check_installation
-    cd $service_src_dir
 
-    python3 $sosserver_py RESTART
-    python3 $sosworker_py RESTART
+    cd $service_src_dir
+    python3 $sosworker_py START --triplestore=sos-triplestore --taskqueue=sos-taskqueue
+}
+
+function docker_admin {
+    check_installation
+
+    cd $admin_dir
+    npm run dev
 }
 
 shopt -s nocasematch
@@ -73,21 +86,18 @@ case ${args[0]} in
         check_installation
         ;;
     start)
-        start_service
-        echo Started SPARQL over SMS service.
-        while :; do
-            sleep 300
-        done        
+        docker_service
+        ;;        
+    server-only)
+        docker_server
         ;;
-    stop)
-        stop_service
-        echo Stopped SPARQL over SMS service.
+    worker-only)
+        docker_worker
         ;;
-    restart)
-        restart_sevice
-        echo Restarted SPARQL over SMS service.
+    admin-only)
+        docker_admin
         ;;
     *)
-        echo $"Usage: $0 {install|start|stop|restart}"
+        echo $"Usage: $0 {install|start|server-only|worker-only|admin-only}"
         exit 1
 esac

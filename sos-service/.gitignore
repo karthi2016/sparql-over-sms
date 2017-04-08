@@ -68,6 +68,7 @@ target/
 *.pyproj
 *.sln
 .vs/
+.vscode
 
 # Custom
 venv/

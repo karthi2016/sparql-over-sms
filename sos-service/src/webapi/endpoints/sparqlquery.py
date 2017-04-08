@@ -8,7 +8,7 @@ from webapi.handlers import HttpHandler
 from webapi.helpers import badrequest, timeout, servererror
 
 
-@route('/agent/([\w]+)/sparql')
+@route('/agent/([+|~]?\w+)/sparql')
 class SparqlQuery(HttpHandler):
 
     @asynchronous

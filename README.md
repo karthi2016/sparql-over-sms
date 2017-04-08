@@ -6,7 +6,6 @@ Efficient transfer of SPARQL queries and results over short-message networks.
 | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/master.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) | [![Build Status](https://img.shields.io/travis/onnovalkering/sparql-over-sms/develop.svg)](https://travis-ci.org/onnovalkering/sparql-over-sms) |
 | [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/master.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) | [![Coverage Status](https://img.shields.io/coveralls/onnovalkering/sparql-over-sms/develop.svg)](https://coveralls.io/github/onnovalkering/sparql-over-sms) |
 
-
 ## Introduction
 Many ICT applications and services, including those from the Semantic Web, rely on the Web for the exchange of data. Most rural areas of developing countries are not reached by the Web and its possibilities, while at the same time the ability to share knowledge has been identified as a key enabler for development. To make widespread knowledge sharing possible in these rural areas, the notion of the Web has to be downscaled based on the specific low-resource infrastructure in place. 
 
@@ -28,7 +27,12 @@ CONSTRUCT, ASK
 #### SPARQL Update Forms:
 INSERT DATA, DELETE DATA
 
-## Getting Started
+#### Administration:
+SPARQL editor/viewer, Agents management, Messages management
+
+<img src="docs/images/sos-admin.png" alt="Drawing" style="width: 100px;"/>
+
+## Getting started
 To install and run SPARQL over SMS with the default configuration:
 ```
 $ git clone https://github.com/onnovalkering/sparql-over-sms.git && cd sparql-over-sms
@@ -39,9 +43,9 @@ A Docker setup is also possible:
 ```
 $ docker network create "sparqloversms"
 
-$ docker run -dt --network "sparqloversms" -p 6379:6379 --name "sos-taskqueue" redis
-$ docker run -dt --network "sparqloversms" -p 3020:3020 --name "sos-triplestore" onnovalkering/cliopatria
-$ docker run -dt --network "sparqloversms" -p 8888:8888 --name "sos-service" onnovalkering/sparql-over-sms
+$ docker run -dt --network "sparqloversms" -p 6379:6379 -P --name "sos-taskqueue" redis
+$ docker run -dt --network "sparqloversms" -p 3020:3020 -P --name "sos-triplestore" onnovalkering/cliopatria
+$ docker run -dt --network "sparqloversms" -p 8888:8888 -P --name "sos-service" onnovalkering/sparql-over-sms
 ```
 
 ### Requirements

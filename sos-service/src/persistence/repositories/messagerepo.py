@@ -4,8 +4,30 @@ from persistence.models import Message, MessagePart
 class MessageRepo:
     """description of class"""
 
+    # outgoing categories are even numbers < 10
+    outgoing = [i for i in range(0, 10, 2)]
+    # incoming categories are even numbers < 10
+    incoming = [i for i in range(1, 10, 2)]
+
     def __init__(self, database):
         self.database = database
+
+    def get_total(self):
+        return (Message.select()
+                .where(Message.category << self.outgoing)
+                .count())
+
+    def get_all(self, page, items_per_page):
+        return (Message.select()
+                .order_by(Message.id.desc())
+                .paginate(page, items_per_page))
+
+    def get_all_outgoing(self, page, items_per_page):
+
+        return (Message.select()
+                .where(Message.category << self.outgoing)
+                .order_by(Message.id.desc())
+                .paginate(page, items_per_page))
 
     def get_byid(self, messageid):
         try:
@@ -16,6 +38,24 @@ class MessageRepo:
     def get_bycorrelation(self, correlationid, category):
         try:
             return Message.get(correlationid=correlationid, category=category)
+        except Message.DoesNotExist:
+            return None
+
+    def get_outgoing_bycorrelation(self, correlationid):
+        try:
+            query = (Message.select()
+                     .where(Message.correlationid == correlationid, Message.category << self.outgoing))
+
+            return query.get()
+        except Message.DoesNotExist:
+            return None
+
+    def get_incoming_bycorrelation(self, correlationid):
+        try:
+            query = (Message.select()
+                     .where(Message.correlationid == correlationid, Message.category << self.incoming))
+
+            return query.get()
         except Message.DoesNotExist:
             return None
 
@@ -42,5 +82,10 @@ class MessageRepo:
 
         return db_message
 
+    def delete(self, message):
+        if message is int:
+            message = self.get_byid(message)
 
+        if message.delete_instance() > 0:
+            return message
 

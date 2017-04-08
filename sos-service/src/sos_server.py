@@ -35,6 +35,7 @@ def run(port, taskqueue_host, triplestore_host):
     configmanager.set_config('taskqueue_host', taskqueue_host)
     configmanager.set_config('triplestore_host', triplestore_host)
 
+    # noinspection PyUnresolvedReferences
     from webapi import endpoints
 
     db = initialize_db()
