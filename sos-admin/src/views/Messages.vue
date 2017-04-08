@@ -67,7 +67,7 @@
       return {
         messages: [],
         page: 1,
-        items: 25,
+        items: 15,
         total: 0,
         totalPages: 1,
         showDetailModal: false,
